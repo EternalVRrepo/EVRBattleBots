@@ -4,10 +4,19 @@ ModelImporter:
   serializedVersion: 16
   fileIDToRecycleName:
     100000: //RootNode
+    100002: Hexagon
+    100004: Hexagon_Collision
     400000: //RootNode
+    400002: Hexagon
+    400004: Hexagon_Collision
     2300000: //RootNode
+    2300002: Hexagon
+    2300004: Hexagon_Collision
     3300000: //RootNode
+    3300002: Hexagon
+    3300004: Hexagon_Collision
     4300000: Hexagon
+    4300002: Hexagon_Collision
     7400000: Take 001
     9500000: //RootNode
   materials:
