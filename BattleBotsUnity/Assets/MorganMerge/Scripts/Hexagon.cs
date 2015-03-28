@@ -1,6 +1,6 @@
 ﻿/////////////////////////////////////////////////////////////////////////////////
 //
-//	Hexagon.cs
+//	BoardManager.cs
 //	© EternalVR, All Rights Reserved
 //
 //	description:	This class is instantiated by the BoardManager and holds all the 
@@ -17,106 +17,44 @@ using System.Collections;
 [ExecuteInEditMode]
 [System.Serializable]
 public class Hexagon : MonoBehaviour {
-	
-	public Material[] typeMaterials;				//List of materials for viewing type of hexagon
-	public int HexHeight;							//The height of this hexagon
-	public int ViewMode = 0;						//0 is type mode, 1 is texture mode
-	public BoardUnit OccupiedUnit = null;			//What unit occupies this space
-	public int HexRow;								//The row in the grid this hexagon occupies
-	public int HexColumn;							//The column in the grid this hexagon occupies
-	public int z {									//Z coordinate derived from x and y to get cubic coordinates
+
+	public int HexRow;
+	public int HexColumn;
+	public int z {
 		get {
 			return (-HexRow - HexColumn);
 		}
 	}
-	public HexType CurrentHexType {					//The current type of hexagon using Hexagon.HexagonType
-		get { return currentHexType; }
-		set { 
-			//			Debug.Log (value);
-			currentHexType = value;
-		}
-	}
-	public Material CurrentBrushTexture {			//The current material on this hexagon 
-		get { return currentBrushTexture; } 
-		set { currentBrushTexture = value; }
-	}
-	public Vector3 UnitAnchorPoint {				//Where the unit on this hexagon is placed
-		get {
-			return transform.position + new Vector3(0, renderer.bounds.size.y, 0);
-		}
-	}
 
-	[SerializeField]
-	protected HexType currentHexType;				//What type of hexagon this is using Hexagon.HexType
-	[SerializeField]
-	protected Material currentBrushTexture;			//Texture currently assigned to this hex
-	protected bool highlighted;						//If this hexagon is currently highlighted
-
+	//Possible types of hexagons
 	public enum HexType {
 		Normal = 0,				//Can be walked on normally
 		Impassable = 1,			//Terrain that can't be walked on but can be seen/attacked over
 		WalledImpassable = 2,	//Terrain that can't be walked over and cant be seen/attacked over
 		Null = 3,				//Empty block, remove it from the map
 	}
-
-	/// <summary>
-	/// 
-	/// </summary>
-	void Start() {
-		if (gameObject.layer != 10) {
-			Debug.LogError ("Hexagon prefab must be assigned Layer 10 with the name \"Hexagon\"");
-		}
+	[SerializeField]
+	protected HexType currentHexType = HexType.Normal;
+	public HexType CurrentHexType {
+		get { return currentHexType; }
+		set { currentHexType = value; }
 	}
 
-	/// <summary>
-	/// Constructor given HexagonData
-	/// </summary>
-	public Hexagon(HexagonData h) {
-		HexRow = h.HexRow;
-		HexHeight = h.HexHeight;
-		CurrentHexType = h.CurrentHexType;
-		CurrentBrushTexture = h.CurrentBrushTexture;
-		typeMaterials = h.typeMaterials;
-		HexHeight = h.HexHeight;
+	[SerializeField]
+	protected Material currentBrushTexture; //Texture currently assigned to this hex
+	public Material CurrentBrushTexture {
+		get { return currentBrushTexture; } 
+		set { currentBrushTexture = value; }
 	}
 
-	/// <summary>
-	/// Setup a hexagon using hexagon data manually
-	/// </summary>
-	public void SetupHexagon(HexagonData h) {
-		HexRow = h.HexRow;
-		HexHeight = h.HexHeight;
-		CurrentHexType = h.CurrentHexType;
-		CurrentBrushTexture = h.CurrentBrushTexture;
-		typeMaterials = h.typeMaterials;
-		HexHeight = h.HexHeight;
-		SetToType (); //TODO: needs to set to texture whenever that happens
-	}
+	public Material[] typeMaterials; //List of materials
 
-	/// <summary>
-	/// Removes the unit occupying this hexagon
-	/// </summary>
-	public void RemoveUnit(BoardUnit u) {
-		if (OccupiedUnit == u)
-			OccupiedUnit = null;
-		else Debug.LogError ("Trying to remove a unit from " + name + " that doesn't exist");
-	}
+	//The height of this hexagon
+	public int HexHeight;
 
-	/// <summary>
-	/// Adds a unit to this hexagon
-	/// </summary>
-	public void AddUnit(BoardUnit u) {
-		OccupiedUnit = u;
-	}
+	public int ViewMode = 0; //0 is type mode, 1 is texture mode
 
-#if UNITY_EDITOR
-	/// <summary>
-	/// Updates the type of a hexagon
-	/// </summary>
 	public void SetToType() {
-		if (CurrentHexType == HexType.Null) {
-			renderer.enabled = true;
-		}
 		if (highlighted) {
 			Highlight ();
 			return;
@@ -136,14 +74,7 @@ public class Hexagon : MonoBehaviour {
 		ViewMode = 0;
 	}
 
-	/// <summary>
-	/// Updates the texture of a hexagon
-	/// </summary>
 	public void SetToTexture() {
-		if (CurrentHexType == HexType.Null) {
-			renderer.enabled = false;
-			return;
-		}
 		if (highlighted) {
 			Highlight();
 			return;
@@ -160,19 +91,13 @@ public class Hexagon : MonoBehaviour {
 		renderer.material = CurrentBrushTexture;
 		ViewMode = 1;
 	}
-#endif
 
-	/// <summary>
-	/// Highlight this hexagon
-	/// </summary>
+	protected bool highlighted;
 	public void Highlight() {
 		highlighted = true;
 		renderer.material = typeMaterials[4];
 	}
 
-	/// <summary>
-	/// stops highlighting this hexagon
-	/// </summary>
 	public void StopHighlight() {
 		highlighted = false;
 		if (ViewMode == 0)
