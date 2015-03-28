@@ -51,6 +51,7 @@
      <Compile Include="Assets\Imported\Utility\ExtraPrimitives\Editor\_3dsMeshPostprocessor.js" />
      <None Include="Assets\Plugins\donotdelete.txt" />
      <None Include="Assets\Imported\Shaders\Toon Shading\Sources\Shaders\Toony-Basic.shader" />
+     <None Include="Assets\Data.shader" />
      <None Include="Assets\Imported\Image Effects (Pro Only)\_Sources\Shaders\GlowConeTap.shader" />
      <None Include="Assets\BattleBots\Shaders\Wireframe.shader" />
      <None Include="Assets\Plugins\Android\assets\donotdelete.txt" />
@@ -73,6 +74,7 @@
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\Vegetation.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\VertexAnimation.shader" />
      <None Include="Assets\Imported\Environment Packages\Skyboxes\_skybox info.txt" />
+     <None Include="Assets\ValueNoise.shader" />
      <None Include="Assets\BattleBots\Shaders\WorldSpacePanner\AlphaBlendWorldSpacePanner.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\Cubemaps.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\Refraction.shader" />
