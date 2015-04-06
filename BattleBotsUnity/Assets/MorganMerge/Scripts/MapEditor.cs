@@ -22,7 +22,15 @@ using UnityEditor;
 [System.Serializable]
 public class MapEditor : MonoBehaviour {
 
-	public GameObject HexPrefab; 											//Pulled from Resources at grid creation
+	public GameObject hexPrefab; 											//Pulled from Resources at grid creation
+	public GameObject HexPrefab {											//Getter incase MapEditor prefab is reset and hexPrefab doesnt get initialized when trying to load
+		get {
+			if (hexPrefab == null) 
+				hexPrefab = Resources.Load ("HexPrefab") as GameObject;
+			return hexPrefab;
+		}
+		set { hexPrefab = value; }
+	}
 	public int GridHexRows = 6;												//How many rows to generate or have been generated
 	public int GridHexColumns = 6;											//How many columns to generate or have been generated
 	public bool initialized;												//If the grid has been initialized (check for saving map)
@@ -31,6 +39,7 @@ public class MapEditor : MonoBehaviour {
 	public List<Material> textures = new List<Material>();					//Textures to be painted
 	public Material newTexture; 											//Texture to be added to list of textures
 	public Hexagon.HexType CurrentBrushType = Hexagon.HexType.Normal;		//Current type of HexType being brushed on
+	public Hexagon.SpawnType CurrentBrushSpawn = Hexagon.SpawnType.None;	//What type of spawn we are applying to the map
 	public int textureBrushIndex = 0;										//Index of the texture being brushed on
 	public bool inDebug = false;											//Debug mode in editor
 	public bool collapse = false; 											//Collapse flag for debugging the array
@@ -232,7 +241,8 @@ public class MapEditor : MonoBehaviour {
 	/// Saves the map, overwriting the currently selected save
 	/// </summary>
 	public void SaveMap() {
-		Map m = new Map();
+//		Map m = new Map();
+		Map m = ScriptableObject.CreateInstance <Map>();
 		m.SaveIndex = mapSliderIndex;
 		m.GridWidth = GridHexColumns;
 		m.GridHeight = GridHexRows;
@@ -315,6 +325,11 @@ public class MapEditor : MonoBehaviour {
 				h.SetToTexture();
 			}
 		}
+		else if (mode == 2) {
+			foreach (Hexagon h in HexagonArray) {
+				h.SetToSpawn();
+			}
+		}
 	}
 	
 	/// <summary>
@@ -359,6 +374,9 @@ public class MapEditor : MonoBehaviour {
 							return;
 						}
 						CurrentlySelectedHexagon.CurrentBrushTexture = (textures[textureBrushIndex]);
+					}
+					else if (hexTypeMode == 2) {
+						CurrentlySelectedHexagon.CurrentSpawnType = CurrentBrushSpawn; 
 					}
 				}
 			}

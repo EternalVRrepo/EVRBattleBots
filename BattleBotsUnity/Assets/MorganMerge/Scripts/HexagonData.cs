@@ -18,14 +18,16 @@ public class HexagonData : ScriptableObject {
 	public int HexRow;
 	public int HexColumn;
 	public Hexagon.HexType CurrentHexType;
+	public Hexagon.SpawnType CurrentSpawnType;
 	public Material CurrentBrushTexture;
 	public int HexHeight;
 	public Material[] typeMaterials; //List of materials
 
-	public HexagonData(Hexagon h) {
+	public void CreateHexagonData(Hexagon h) {
 		HexRow = h.HexRow;
 		HexHeight = h.HexHeight;
 		CurrentHexType = h.CurrentHexType;
+		CurrentSpawnType = h.CurrentSpawnType;
 		CurrentBrushTexture = h.CurrentBrushTexture;
 		typeMaterials = h.typeMaterials;
 		HexHeight = h.HexHeight;

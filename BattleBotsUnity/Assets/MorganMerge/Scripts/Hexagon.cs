@@ -14,7 +14,6 @@
 using UnityEngine;
 using System.Collections;
 
-[ExecuteInEditMode]
 [System.Serializable]
 public class Hexagon : MonoBehaviour {
 	
@@ -24,6 +23,8 @@ public class Hexagon : MonoBehaviour {
 	public BoardUnit OccupiedUnit = null;			//What unit occupies this space
 	public int HexRow;								//The row in the grid this hexagon occupies
 	public int HexColumn;							//The column in the grid this hexagon occupies
+	public int CurrentDistance = -1;				//Current distance for board manager from the currently selected hexagon
+	public SpawnType CurrentSpawnType;				//What kind of spawning used on this hexagon
 	public int z {									//Z coordinate derived from x and y to get cubic coordinates
 		get {
 			return (-HexRow - HexColumn);
@@ -51,12 +52,25 @@ public class Hexagon : MonoBehaviour {
 	[SerializeField]
 	protected Material currentBrushTexture;			//Texture currently assigned to this hex
 	protected bool highlighted;						//If this hexagon is currently highlighted
+	protected GameObject LOSCollider;				//The collider used for checking LOS with raycasts
 
 	public enum HexType {
 		Normal = 0,				//Can be walked on normally
 		Impassable = 1,			//Terrain that can't be walked on but can be seen/attacked over
 		WalledImpassable = 2,	//Terrain that can't be walked over and cant be seen/attacked over
 		Null = 3,				//Empty block, remove it from the map
+	}
+	public enum SpawnType {
+		None = 0,				//No spawning here
+		Player = 1,				//Player units spawn here
+		Enemy = 2				//Enemy units spawn here
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	void Awake() {
+		CurrentDistance = -1;
 	}
 
 	/// <summary>
@@ -75,6 +89,7 @@ public class Hexagon : MonoBehaviour {
 		HexRow = h.HexRow;
 		HexHeight = h.HexHeight;
 		CurrentHexType = h.CurrentHexType;
+		CurrentSpawnType = h.CurrentSpawnType;
 		CurrentBrushTexture = h.CurrentBrushTexture;
 		typeMaterials = h.typeMaterials;
 		HexHeight = h.HexHeight;
@@ -87,6 +102,7 @@ public class Hexagon : MonoBehaviour {
 		HexRow = h.HexRow;
 		HexHeight = h.HexHeight;
 		CurrentHexType = h.CurrentHexType;
+		CurrentSpawnType = h.CurrentSpawnType;
 		CurrentBrushTexture = h.CurrentBrushTexture;
 		typeMaterials = h.typeMaterials;
 		HexHeight = h.HexHeight;
@@ -107,6 +123,31 @@ public class Hexagon : MonoBehaviour {
 	/// </summary>
 	public void AddUnit(BoardUnit u) {
 		OccupiedUnit = u;
+	}
+
+	/// <summary>
+	/// Disables the LOS collider.
+	/// </summary>
+	public void DisableLOSCollider () {
+		if (LOSCollider == null)
+			LOSCollider = transform.FindChild ("LOSCollider").gameObject;
+		LOSCollider.SetActive (false);
+	}
+
+	/// <summary>
+	/// enables the LOS collider.
+	/// </summary>
+	public void EnableLOSCollider () {
+		if (LOSCollider == null)
+			LOSCollider = transform.FindChild ("LOSCollider").gameObject;
+		LOSCollider.SetActive (true);
+	}
+
+	public bool InLOS() {
+		if (LOSCollider == null)
+			LOSCollider = transform.FindChild ("LOSCollider").gameObject;
+
+		return !LOSCollider.activeSelf;
 	}
 
 #if UNITY_EDITOR
@@ -160,6 +201,26 @@ public class Hexagon : MonoBehaviour {
 		renderer.material = CurrentBrushTexture;
 		ViewMode = 1;
 	}
+
+	/// <summary>
+	/// Updates textures of hexagon to display what kind of spawn is used 
+	/// </summary>
+	public void SetToSpawn() {
+		if (CurrentHexType == HexType.Null) {
+			renderer.enabled = false;
+			return;
+		}
+		if (CurrentSpawnType == SpawnType.None) {
+			renderer.material = typeMaterials[0];
+		}
+		else if (CurrentSpawnType == SpawnType.Player) {
+			renderer.material = typeMaterials[5];
+		}
+		else if (CurrentSpawnType == SpawnType.Enemy) {
+			renderer.material = typeMaterials[6];
+		}
+		ViewMode = 2;
+	}
 #endif
 
 	/// <summary>
@@ -179,5 +240,7 @@ public class Hexagon : MonoBehaviour {
 			SetToType ();
 		else if (ViewMode == 1)
 			SetToTexture ();
+		else if (ViewMode == 2) 
+			SetToSpawn();
 	}
 }

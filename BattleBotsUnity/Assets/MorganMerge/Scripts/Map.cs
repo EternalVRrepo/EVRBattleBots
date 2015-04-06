@@ -19,10 +19,12 @@ using UnityEditor;
 public class Map : ScriptableObject {
 
 	[SerializeField]
-	protected HexagonData[] map;			//The HexagonData stored to this map
-	public int GridWidth;					//Width of this map
-	public int GridHeight;					//Heigh of this map
-	public int SaveIndex;					//Where in the BoardManager this map is saved
+	protected HexagonData[] map;								//The HexagonData stored to this map
+	public int GridWidth;										//Width of this map
+	public int GridHeight;										//Heigh of this map
+	public int SaveIndex;										//Where in the BoardManager this map is saved
+	public List<Vector2> PlayerSpawns = new List<Vector2>();	//Spawn point hexagons for players team
+	public List<Vector2> EnemySpawns = new List<Vector2>(); 	//Spawn point hexagons for enemy team
 
 	/// <summary>
 	/// Setup the hexagons of this map using the HexagonData class
@@ -31,11 +33,21 @@ public class Map : ScriptableObject {
 		map = new HexagonData[GridWidth*GridHeight];
 		for (int x=0; x<GridWidth; x++) {
 			for (int y=0; y<GridHeight; y++) {
-				HexagonData h = new HexagonData(newHexagons[y * GridWidth + x]);
+//				HexagonData h = new HexagonData(newHexagons[y * GridWidth + x]);
+				HexagonData h = ScriptableObject.CreateInstance <HexagonData>();
+				h.CreateHexagonData (newHexagons[y * GridWidth + x]);
 				map[y * GridWidth + x] = h;
+				if (h.CurrentSpawnType == Hexagon.SpawnType.Player)
+					PlayerSpawns.Add (new Vector2(x,y));
+				else if (h.CurrentSpawnType == Hexagon.SpawnType.Enemy)
+					EnemySpawns.Add (new Vector2(x,y));
 				EditorUtility.SetDirty (this);	
 			}
 		}
+		if (PlayerSpawns.Count < 4)
+			Debug.LogWarning ("Less than 4 Player Spawns on map, add more");
+		if (EnemySpawns.Count < 4)
+			Debug.LogWarning ("Less than 4 Enemy Spawn on map, add more");
 	}
 
 	/// <summary>

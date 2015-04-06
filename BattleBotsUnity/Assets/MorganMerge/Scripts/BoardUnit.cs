@@ -12,11 +12,12 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public abstract class BoardUnit : MonoBehaviour {
 
-	[SerializeField]
-	private Hexagon currentlyOccupiedHexagon;
+	public int MoveDistance; //How far we can move in 1 turn
+	public int remainingMoveDistance; //How far left we can move this turn
 	public Hexagon CurrentlyOccupiedHexagon {
 		get { return currentlyOccupiedHexagon; }
 		set { currentlyOccupiedHexagon = value; }
@@ -33,9 +34,27 @@ public abstract class BoardUnit : MonoBehaviour {
 			return CurrentlyOccupiedHexagon.HexColumn;
 		}
 	}
+	private AbilityActivator abilityActivator;
+	public AbilityActivator AbilityActivator {
+		get {
+			if (abilityActivator == null) 
+				abilityActivator = GetComponent<AbilityActivator>();
+			return abilityActivator;
+		}
+	}
 
-	abstract public void IssueCommand(Hexagon hex);
+	[SerializeField]
+	private Hexagon currentlyOccupiedHexagon;
+
 	abstract public void Spawn(Hexagon hex);
+	abstract public void IssueMovement(Hexagon hex);
+
+	/// <summary>
+	/// Initialize unit for start turn, reset movement and things like that
+	/// </summary>
+	public void StartTurn() {
+		remainingMoveDistance = MoveDistance;
+	}
 
 	/// <summary>
 	/// Moves this Unit from the current hexagon to a new hexagon
