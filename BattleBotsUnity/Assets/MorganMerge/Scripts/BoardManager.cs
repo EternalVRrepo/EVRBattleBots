@@ -1,4 +1,4 @@
-﻿ /////////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////////
 //
 //	BoardManager.cs
 //	© EternalVR, All Rights Reserved
@@ -166,7 +166,259 @@ public class BoardManager : MonoBehaviour {
 		HexagonArray = new Hexagon[GridHexColumns*GridHexRows];
 	}
 
+	#region CombatMethods
 
+	public List<Hexagon> HighlightedHexagons = new List<Hexagon>(); //List of hexagons being highlighted right now
+	
+	protected Queue<Hexagon> frontier = new Queue<Hexagon>(); //We need two queues to switch between as we go through each layer of frontier, to keep track of distance
+	protected Queue<Hexagon> distanceQueue = new Queue<Hexagon>();
+	protected List<Hexagon> visited = new List<Hexagon>();
+
+	/// <summary>
+	/// Highlights hexagons within currentMoveDistance from currentlyOccupiedHexagon using a Breadth First Search
+	/// </summary>
+	public void HighlightMovement (int currentMoveDistance, Hexagon currentlyOccupiedHexagon)
+	{
+		visited.Clear ();
+		frontier.Clear ();
+		distanceQueue.Clear ();
+		frontier.Enqueue (currentlyOccupiedHexagon); //Starting hex
+
+		Queue<Hexagon> activeQueue = frontier;
+		Queue<Hexagon> inactiveQueue = distanceQueue;
+
+		int d = 1;
+		while (activeQueue.Count > 0 && currentMoveDistance > 0) { //Breadth first search
+			Hexagon curr = activeQueue.Dequeue ();
+			foreach (Hexagon h in GetNeighborsMovement(curr)) {
+				if (!visited.Contains (h)) {
+					h.CurrentDistance = d;
+					inactiveQueue.Enqueue (h);
+					visited.Add (h);
+				}
+			}
+
+			if (activeQueue.Count == 0) { //Switching between active and inactive queues to track distance
+				d++;
+				Queue<Hexagon> t = activeQueue;
+				activeQueue = inactiveQueue;
+				inactiveQueue = t;
+				currentMoveDistance--;
+			}
+		}
+		currentlyOccupiedHexagon.CurrentDistance = 0;
+		visited.Remove (currentlyOccupiedHexagon);
+		foreach (Hexagon h in visited) { //Highlight the hexagons we found
+			h.Highlight();
+			HighlightedHexagons.Add (h);
+		}
+
+	}
+
+	/// <summary>
+	/// Finishes the movement highlighting.
+	/// </summary>
+	public void FinishMovement() {
+		foreach (Hexagon h in HighlightedHexagons) {
+			h.CurrentDistance = -1;
+			h.StopHighlight ();
+		}
+	}
+
+	/// <summary>
+	/// Returns a list of all hexagons neighboring the passed start hexagon
+	/// </summary>
+	protected List<Hexagon> GetNeighborsMovement(Hexagon start) {
+		List<Hexagon> NeighborHexList = new List<Hexagon>();
+		int ArrayHexRow = start.HexRow;
+		int ArrayHexColumn = start.HexColumn;
+		Hexagon h;
+
+		//The formula for the 6 neighboring hexagons, also checks if they can be moved to
+		if (HexagonMoveable(h = GetHexagonFromArray(ArrayHexRow, ArrayHexColumn-1)) && h.HexRow == ArrayHexRow && h.HexColumn == ArrayHexColumn-1)
+			NeighborHexList.Add (h);
+		if (HexagonMoveable(h = GetHexagonFromArray(ArrayHexRow+1, ArrayHexColumn-1)) && h.HexRow == ArrayHexRow+1 && h.HexColumn == ArrayHexColumn-1)
+			NeighborHexList.Add (h);
+		if (HexagonMoveable(h = GetHexagonFromArray(ArrayHexRow+1, ArrayHexColumn)) && h.HexRow == ArrayHexRow+1 && h.HexColumn == ArrayHexColumn)
+			NeighborHexList.Add (h);
+		if (HexagonMoveable(h = GetHexagonFromArray(ArrayHexRow, ArrayHexColumn+1)) && h.HexRow == ArrayHexRow && h.HexColumn == ArrayHexColumn+1)
+			NeighborHexList.Add (h);
+		if (HexagonMoveable(h = GetHexagonFromArray(ArrayHexRow-1, ArrayHexColumn+1)) && h.HexRow == ArrayHexRow-1 && h.HexColumn == ArrayHexColumn+1) 
+			NeighborHexList.Add (h);
+		if (HexagonMoveable(h = GetHexagonFromArray(ArrayHexRow-1, ArrayHexColumn)) && h.HexRow == ArrayHexRow-1 && h.HexColumn == ArrayHexColumn)
+			NeighborHexList.Add (h);
+
+		return NeighborHexList;
+	}
+
+	/// <summary>
+	/// Check if hexagon can be cast on with the current ability
+	/// </summary>
+	protected bool HexagonCastable(Hexagon hex, AbilityDescription.TargetType targetType) {
+		if (hex == null)
+			return false;
+
+		if (hex.CurrentHexType == Hexagon.HexType.Null)
+			return false;
+
+		switch(targetType) {
+		case AbilityDescription.TargetType.TargetAlly: {
+				if (hex.OccupiedUnit is PlayerControlledBoardUnit)
+					return true;
+				break;
+			}
+		case AbilityDescription.TargetType.TargetEnemy: {
+				if (hex.OccupiedUnit is NonControlledBoardUnit) 
+					return true;
+				break;
+			}
+		case AbilityDescription.TargetType.TargetUnit: {
+				if (hex.OccupiedUnit is NonControlledBoardUnit || hex.OccupiedUnit is PlayerControlledBoardUnit)
+					return true;
+				break;
+			}
+		case AbilityDescription.TargetType.TargetHexagon: {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/// <summary>
+	/// Check if the hexagon can be moved onto 
+	/// </summary>
+	protected bool HexagonMoveable(Hexagon hex) {
+		if (hex == null)
+			return false;
+
+		if (hex.CurrentHexType == Hexagon.HexType.Null)
+			return false;
+
+		if (hex.CurrentHexType == Hexagon.HexType.Impassable)
+			return false;
+
+		if (hex.CurrentHexType == Hexagon.HexType.WalledImpassable)
+			return false;
+
+		return true;
+	}
+
+	/// <summary>
+	/// Highlights hexagons for an ability
+	/// </summary>
+	public void HighlightAbility(Hexagon currentHexagon, AbilityDescription ability) {
+		HighlightLOSNeighbors(currentHexagon, ability.castRange, ability.AbilityTargetType);
+	}
+
+	/// <summary>
+	/// Highlights all the hexagons in a distance of the designated type
+	/// </summary>
+	public void HighlightLOSNeighbors(Hexagon currentlyOccupiedHexagon, int distance, AbilityDescription.TargetType targetType) {
+		visited.Clear ();
+		frontier.Clear ();
+		distanceQueue.Clear ();
+		frontier.Enqueue (currentlyOccupiedHexagon); //Starting hex
+		visited.Add (currentlyOccupiedHexagon);
+		currentlyOccupiedHexagon.DisableLOSCollider();
+
+		Queue<Hexagon> activeQueue = frontier;
+		Queue<Hexagon> inactiveQueue = distanceQueue;
+
+		while (activeQueue.Count > 0 && distance > 0) { //Breadth first search
+			Hexagon curr = activeQueue.Dequeue ();
+			foreach (Hexagon h in GetNeighborsAbilityCast(curr)) {		
+				if (inLOS(currentlyOccupiedHexagon, h) && !visited.Contains (h)) {
+					inactiveQueue.Enqueue (h);
+					visited.Add (h);
+				}
+			}
+			
+			if (activeQueue.Count == 0) { //Switching between active and inactive queues to track distance
+				Queue<Hexagon> t = activeQueue;
+				activeQueue = inactiveQueue;
+				inactiveQueue = t;
+				distance--;
+			}
+		}
+
+		foreach (Hexagon h in visited) { //Highlight the hexagons we found
+			if (HexagonCastable (h, targetType)) {
+				h.Highlight();
+				HighlightedHexagons.Add (h);
+			}
+			else h.EnableLOSCollider(); //If we cant cast on this hex, reenable the collider so we know its not a valid target
+		}
+	}
+
+	/// <summary>
+	/// Checks if a destination hexagon is in LOS of the source, it checks for a collider, if it exists it disables the collider
+	/// so that it doesnt block future raycasts, and also indicates that the box is in LOS
+	/// </summary>
+	protected bool inLOS(Hexagon source, Hexagon destination) {
+		RaycastHit hit;
+		if (Physics.Linecast(source.transform.position, destination.transform.position, out hit, 1 << 11)) {
+			if (hit.transform.parent.GetComponent<Hexagon>() && LOSHexagon(hit.transform.parent.GetComponent<Hexagon>())) {
+				destination.DisableLOSCollider();
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/// <summary>
+	/// Finishes the ability highlighting.
+	/// </summary>
+	public void FinishAbility() {
+		foreach (Hexagon h in HighlightedHexagons) {
+			h.EnableLOSCollider();
+			h.StopHighlight ();
+		}
+	}
+
+	/// <summary>
+	/// Check if a hexagon can be seen over/through
+	/// </summary>
+	protected bool LOSHexagon(Hexagon h) {
+		if (h.CurrentHexType == Hexagon.HexType.Null) 
+			return true;
+
+		if (h.CurrentHexType == Hexagon.HexType.Normal) 
+			return true;
+
+		if (h.CurrentHexType == Hexagon.HexType.Impassable) 
+			return true;
+
+		return false;
+	}
+
+	/// <summary>
+	/// Returns a list of all hexagons neighboring the passed start hexagon
+	/// </summary>
+	protected List<Hexagon> GetNeighborsAbilityCast(Hexagon start) {
+		List<Hexagon> NeighborHexList = new List<Hexagon>();
+		int ArrayHexRow = start.HexRow;
+		int ArrayHexColumn = start.HexColumn;
+		Hexagon h;
+		
+		//The formula for the 6 neighboring hexagons, also checks if they can be moved to
+		if ((h = GetHexagonFromArray(ArrayHexRow, ArrayHexColumn-1)) && h.HexRow == ArrayHexRow && h.HexColumn == ArrayHexColumn-1)
+			NeighborHexList.Add (h);
+		if ((h = GetHexagonFromArray(ArrayHexRow+1, ArrayHexColumn-1)) && h.HexRow == ArrayHexRow+1 && h.HexColumn == ArrayHexColumn-1)
+			NeighborHexList.Add (h);
+		if ((h = GetHexagonFromArray(ArrayHexRow+1, ArrayHexColumn)) && h.HexRow == ArrayHexRow+1 && h.HexColumn == ArrayHexColumn)
+			NeighborHexList.Add (h);
+		if ((h = GetHexagonFromArray(ArrayHexRow, ArrayHexColumn+1)) && h.HexRow == ArrayHexRow && h.HexColumn == ArrayHexColumn+1)
+			NeighborHexList.Add (h);
+		if ((h = GetHexagonFromArray(ArrayHexRow-1, ArrayHexColumn+1)) && h.HexRow == ArrayHexRow-1 && h.HexColumn == ArrayHexColumn+1) 
+			NeighborHexList.Add (h);
+		if ((h = GetHexagonFromArray(ArrayHexRow-1, ArrayHexColumn)) && h.HexRow == ArrayHexRow-1 && h.HexColumn == ArrayHexColumn)
+			NeighborHexList.Add (h);
+
+		return NeighborHexList;
+	}
+
+	#endregion
 
 
 //	protected List<Hexagon> HighlightedHexagonList = new List<Hexagon>(); 	//List of currently highlighted hexagons
@@ -242,50 +494,6 @@ public class BoardManager : MonoBehaviour {
 //		return (Mathf.Abs(hex1.HexRow - hex2.HexRow) 
 //		        + Mathf.Abs (hex1.HexRow + hex1.HexColumn - hex2.HexRow - hex2.HexColumn)
 //		        + Mathf.Abs (hex1.HexColumn - hex2.HexColumn)) / 2; 
-//	}
-
-/// <summary>
-/// Highlights neighbors to a certain hexagon
-/// </summary>
-//	public void HighlightNeighbors(int ArrayHexRow, int ArrayHexColumn) {
-//		foreach (Hexagon curr in HighlightedHexagonList) {
-//			if (curr != null)
-//				curr.StopHighlight();
-//		}
-//
-//		Hexagon h;
-//		HighlightedHexagonList.Clear ();
-//
-//		if (HexagonHighlightable(h = GetHexagonFromArray(ArrayHexRow, ArrayHexColumn-1)) && h.HexRow == ArrayHexRow && h.HexColumn == ArrayHexColumn-1)
-//			HighlightedHexagonList.Add (h);
-//		if (HexagonHighlightable(h = GetHexagonFromArray(ArrayHexRow+1, ArrayHexColumn-1)) && h.HexRow == ArrayHexRow+1 && h.HexColumn == ArrayHexColumn-1)
-//			HighlightedHexagonList.Add (h);
-//		if (HexagonHighlightable(h = GetHexagonFromArray(ArrayHexRow+1, ArrayHexColumn)) && h.HexRow == ArrayHexRow+1 && h.HexColumn == ArrayHexColumn)
-//			HighlightedHexagonList.Add (h);
-//		if (HexagonHighlightable(h = GetHexagonFromArray(ArrayHexRow, ArrayHexColumn+1)) && h.HexRow == ArrayHexRow && h.HexColumn == ArrayHexColumn+1)
-//			HighlightedHexagonList.Add (h);
-//		if (HexagonHighlightable(h = GetHexagonFromArray(ArrayHexRow-1, ArrayHexColumn+1)) && h.HexRow == ArrayHexRow-1 && h.HexColumn == ArrayHexColumn+1) 
-//			HighlightedHexagonList.Add (h);
-//		if (HexagonHighlightable(h = GetHexagonFromArray(ArrayHexRow-1, ArrayHexColumn)) && h.HexRow == ArrayHexRow-1 && h.HexColumn == ArrayHexColumn)
-//			HighlightedHexagonList.Add (h);
-//
-//		foreach (Hexagon curr in HighlightedHexagonList) {
-//			if (curr != null)
-//				curr.Highlight();
-//		}
-//	}
-
-/// <summary>
-/// Check if the hexagon can/should be highlighted
-/// </summary>
-//	protected bool HexagonHighlightable(Hexagon hex) {
-//		if (hex == null)
-//			return false;
-//
-//		if (hex.CurrentHexType == Hexagon.HexType.Null)
-//			return false;
-//
-//		return true;
 //	}
 
 #if UNITY_EDITOR	

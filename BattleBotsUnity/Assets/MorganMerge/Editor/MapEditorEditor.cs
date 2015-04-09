@@ -19,7 +19,8 @@ using System.Collections.Generic;
 public class MapEditorEditor : Editor {
 	
 	public string[] currentBrushStrings = new string[]{ "Normal", "Impassable", "Imp-Walled", "Null" };
-	public string[] hexTypeModeStrings = new string[]{ "HexTypeMode", "HexTextureMode" };
+	public string[] hexTypeModeStrings = new string[]{ "HexTypeMode", "HexTextureMode", "SpawnMode" };
+	public string[] currentSpawnStrings = new string[]{ "None", "Player", "Enemy" };
 
 	MapEditor mapEditor;
 
@@ -60,7 +61,7 @@ public class MapEditorEditor : Editor {
 
 		EditorGUILayout.LabelField ("Brush and View Mode");
 		EditorGUILayout.BeginHorizontal();
-		mapEditor.HexTypeMode = GUILayout.SelectionGrid (mapEditor.HexTypeMode, hexTypeModeStrings, 2);
+		mapEditor.HexTypeMode = GUILayout.SelectionGrid (mapEditor.HexTypeMode, hexTypeModeStrings, 3);
 		EditorGUILayout.EndHorizontal();
 
 		EditorGUILayout.Space ();
@@ -87,6 +88,10 @@ public class MapEditorEditor : Editor {
 		if (mapEditor.newTexture != null)
 			mapEditor.AddNewTexture ();
 		EditorGUILayout.EndHorizontal ();
+
+		EditorGUILayout.Space ();
+		EditorGUILayout.LabelField("Hexagon Spawn Type Brush (TODO: Needs Textures)");
+		mapEditor.CurrentBrushSpawn = (Hexagon.SpawnType)GUILayout.SelectionGrid ((int)mapEditor.CurrentBrushSpawn, currentSpawnStrings, 3);
 
 		EditorGUILayout.BeginHorizontal();
 		if (GUILayout.Button ((mapEditor.boardManager.Maps[mapEditor.mapSliderIndex] != null) ? "Load Map" : "", GUILayout.Width (150))) {
