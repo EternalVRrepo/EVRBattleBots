@@ -41,35 +41,33 @@ public class MapEditorEditor : Editor {
 		EditorGUILayout.Space ();
 		if (mapEditor.transform.childCount == 0) //If there are no hexagons, it is not initialized
 			mapEditor.initialized = false;
-		if (mapEditor.recreateConfirmation) {
-			if (GUILayout.Button("Are you sure, this will reset the board.")) {
-				mapEditor.recreateConfirmation = false;
-				mapEditor.Recreate();
-			}
-		}
 		else if(GUILayout.Button(mapEditor.initialized ? "Recreate Grid" : "Create Grid")) //Button to recreate grid
 		{
-			if (!mapEditor.initialized)
-				mapEditor.Recreate();
-			else mapEditor.recreateConfirmation = true;
+			mapEditor.Recreate();
 		}
-//		if (mapEditor.transform.childCount < mapEditor.ArrayLength()) { //Error if the hexagons have been tampered with in a nonpermitted way
-//			Debug.LogError ("Do not manually delete Hexagons, flag them as impassable or null.\nUndo the deletion or recreate the grid to continue.");
-//			GUILayout.Label("A hexagon is missing from the grid, undo its deletion\nor reset the grid to continue");
-//			return;
-//		}
+		if (mapEditor.transform.childCount < mapEditor.GetArrayLength()) { //Error if the hexagons have been tampered with in a nonpermitted way
+			Debug.LogError ("Do not manually delete Hexagons, flag them as impassable or null.\nUndo the deletion or recreate the grid to continue.");
+			GUILayout.Label("A hexagon is missing from the grid, undo its deletion\nor reset the grid to continue");
+			return;
+		}
 
 		EditorGUILayout.LabelField ("Brush and View Mode");
 		EditorGUILayout.BeginHorizontal();
 		mapEditor.HexTypeMode = GUILayout.SelectionGrid (mapEditor.HexTypeMode, hexTypeModeStrings, 3);
 		EditorGUILayout.EndHorizontal();
 
-		EditorGUILayout.Space ();
-		EditorGUILayout.LabelField("Hexagon Type Brush (TODO: Needs Textures)");
-		mapEditor.CurrentBrushType = (Hexagon.HexType)GUILayout.SelectionGrid ((int)mapEditor.CurrentBrushType, currentBrushStrings, 4);
-
-		EditorGUILayout.Space ();
+		if (mapEditor.HexTypeMode == 0) {
+			EditorGUILayout.BeginHorizontal ();
+			EditorGUILayout.LabelField("Hexagon Type Brush (TODO: Needs Textures)");
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.BeginHorizontal ();
+			mapEditor.CurrentBrushType = (Hexagon.HexType)GUILayout.SelectionGrid ((int)mapEditor.CurrentBrushType, currentBrushStrings, 4);
+			EditorGUILayout.EndHorizontal();
+		}
+		else if (mapEditor.HexTypeMode == 1) {
+		EditorGUILayout.BeginHorizontal ();
 		EditorGUILayout.LabelField ("Hexagon Texture Brush");
+		EditorGUILayout.EndHorizontal();
 //		if (boardManager.textures.Count == 0) {
 //			EditorGUILayout.LabelField ("\tDrag materials below to start using them");
 //		}
@@ -88,11 +86,15 @@ public class MapEditorEditor : Editor {
 		if (mapEditor.newTexture != null)
 			mapEditor.AddNewTexture ();
 		EditorGUILayout.EndHorizontal ();
-
+		}
+		else if (mapEditor.HexTypeMode == 2) {
 		EditorGUILayout.Space ();
 		EditorGUILayout.LabelField("Hexagon Spawn Type Brush (TODO: Needs Textures)");
 		mapEditor.CurrentBrushSpawn = (Hexagon.SpawnType)GUILayout.SelectionGrid ((int)mapEditor.CurrentBrushSpawn, currentSpawnStrings, 3);
+		}
 
+		EditorGUILayout.Space ();
+		EditorGUILayout.Separator ();
 		EditorGUILayout.BeginHorizontal();
 		if (GUILayout.Button ((mapEditor.boardManager.Maps[mapEditor.mapSliderIndex] != null) ? "Load Map" : "", GUILayout.Width (150))) {
 			if (mapEditor.boardManager.Maps[mapEditor.mapSliderIndex] != null) {				
@@ -134,6 +136,7 @@ public class MapEditorEditor : Editor {
 			ShowList (serializedObject.FindProperty("HexagonArray"), mapEditor.collapse);
 			serializedObject.ApplyModifiedProperties();
 		}
+		
 		serializedObject.ApplyModifiedProperties();
 	}
 
