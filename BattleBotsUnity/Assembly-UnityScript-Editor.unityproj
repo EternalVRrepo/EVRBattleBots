@@ -19,7 +19,7 @@
 	<DebugType>full</DebugType>
 	<Optimize>false</Optimize>
 	<OutputPath>Temp\bin\Debug\</OutputPath>
-	<DefineConstants>DEBUG;TRACE;UNITY_4_6_3;UNITY_4_6;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_AUDIO_FMOD;ENABLE_TERRAIN;ENABLE_SUBSTANCE;ENABLE_GENERICS;INCLUDE_IL2CPP;INCLUDE_WP8SUPPORT;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_4_6_FEATURES;INCLUDE_WP_BLUE_SUPPORT;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;UNITY5_SCRIPTING_IN_UNITY4;ENABLE_CACHING;ENABLE_CLOTH;UNITY_ANDROID_API;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_MONO;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN;UNITY_TEAM_LICENSE;UNITY_PRO_LICENSE;ENABLE_DUCK_TYPING</DefineConstants>
+	<DefineConstants>DEBUG;TRACE;UNITY_4_6_3;UNITY_4_6;UNITY_STANDALONE_WIN;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_AUDIO_FMOD;UNITY_STANDALONE;ENABLE_TERRAIN;ENABLE_SUBSTANCE;ENABLE_GENERICS;INCLUDE_IL2CPP;INCLUDE_WP8SUPPORT;ENABLE_MOVIES;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_4_6_FEATURES;INCLUDE_WP_BLUE_SUPPORT;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;UNITY5_SCRIPTING_IN_UNITY4;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_DUCK_TYPING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_MONO;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN;UNITY_TEAM_LICENSE;UNITY_PRO_LICENSE</DefineConstants>
 	<ErrorReport>prompt</ErrorReport>
 	<WarningLevel>4</WarningLevel>
 	<NoWarn>0169</NoWarn>
@@ -47,16 +47,20 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Imported\Image Effects (Pro Only)\Editor\Image Effects\BloomEditor.js" />
-     <Compile Include="Assets\Imported\Utility\ExtraPrimitives\Editor\ExtraPrimitives.js" />
-     <Compile Include="Assets\Imported\Utility\ExtraPrimitives\Editor\_3dsMeshPostprocessor.js" />
+     <Compile Include="Assets\Imported\ProCore\ProGroups\Scripts\Editor\ProGroups_Window.js" />
      <None Include="Assets\Plugins\donotdelete.txt" />
      <None Include="Assets\Imported\Shaders\Toon Shading\Sources\Shaders\Toony-Basic.shader" />
      <None Include="Assets\BattleBots\Shaders\Data.shader" />
      <None Include="Assets\Imported\Image Effects (Pro Only)\_Sources\Shaders\GlowConeTap.shader" />
      <None Include="Assets\BattleBots\Shaders\Wireframe.shader" />
+     <None Include="Assets\Imported\ProCore\ProBuilder\About\changelog.txt" />
      <None Include="Assets\Plugins\Android\assets\donotdelete.txt" />
+     <None Include="Assets\Imported\ProCore\ProBuilder\Shader\VertexBillboard.shader" />
+     <None Include="Assets\Imported\ProCore\ProBuilder\Shader\DiffuseVertexColor.shader" />
+     <None Include="Assets\Imported\ProCore\ProGroups\About\changelog.txt" />
      <None Include="Assets\Plugins\Android\res\values-de\strings.xml" />
      <None Include="Assets\Plugins\x86_64\donotdelete.txt" />
+     <None Include="Assets\Imported\ProCore\ProBuilder\Shader\DiffuseVertexColorTransparency.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\LightCone.shader" />
      <None Include="Assets\Imported\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\MobileBloom.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Readme.txt" />
@@ -65,6 +69,7 @@
      <None Include="Assets\Plugins\Android\res\values\assets.xml" />
      <None Include="Assets\BattleBots\Shaders\SelfIlluminated.shader" />
      <None Include="Assets\Plugins\Android\res\raw\efigs.fnt" />
+     <None Include="Assets\Imported\ProCore\ProBuilder\About\pc_AboutEntry_ProBuilder.txt" />
      <None Include="Assets\Plugins\Android\res\values-en-rGB\strings.xml" />
      <None Include="Assets\Plugins\Android\res\values\styles.xml" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\MaterialPlatform.shader" />
@@ -80,7 +85,7 @@
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\Refraction.shader" />
      <None Include="Assets\Imported\Shaders\Toon Shading\Sources\Shaders\Toony-BasicOutline.shader" />
      <None Include="Assets\OVR\Moonlight\Shaders\Unlit Crosshair.shader" />
-     <None Include="Assets\Imported\Utility\PrimitivePlus\Documentation\ReadMe.txt" />
+     <None Include="Assets\Imported\ProCore\ProGroups\About\pc_AboutEntry_ProGroups.txt" />
      <None Include="Assets\OVR\Shaders\Unlit Transparent HUD.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\Parallax.shader" />
      <None Include="Assets\Imported\AlphaExample\DiffuseEmissive.shader" />
@@ -89,6 +94,8 @@
      <None Include="Assets\Plugins\Android\res\values-es\strings.xml" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\LightWrapping.shader" />
      <None Include="Assets\Imported\AlphaExample\AlphaEmissiveDiffuse.shader" />
+     <None Include="Assets\Imported\ProCore\ProBuilder\Shader\UnlitColor.shader" />
+     <None Include="Assets\Imported\ProCore\ProBuilder\API Examples\Instantiation\README.txt" />
      <None Include="Assets\Imported\Shaders\Toon Shading\Sources\Shaders\Toony-LightedOutline.shader" />
      <None Include="Assets\Imported\Shaders\Toon Shading\Sources\Shaders\Toony-Lighted.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\VertexColorRounding.shader" />
@@ -105,18 +112,37 @@
      <None Include="Assets\Plugins\Android\res\values-ko\strings.xml" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\PixelRotator.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\CustomLighting.shader" />
+     <None Include="Assets\Imported\ProCore\ProBuilder\Shader\UnlitColor-Overlay.shader" />
      <None Include="Assets\Plugins\Android\res\values-v11\styles.xml" />
+     <None Include="Assets\Imported\ProCore\ProBuilder\Shader\DiffuseVertexColorEmission.shader" />
      <None Include="Assets\Plugins\Android\res\values-de\assets.xml" />
      <None Include="Assets\Plugins\Android\res\values-es\assets.xml" />
      <None Include="Assets\Plugins\Android\res\values\strings.xml" />
      <None Include="Assets\BattleBots\Shaders\Dissolve\DissolveShader.shader" />
+     <None Include="Assets\Imported\ProCore\Shared\About\README.txt" />
      <None Include="Assets\Plugins\Android\res\values-it\strings.xml" />
+     <None Include="Assets\Imported\ProCore\ProBuilder\About\Credits.txt" />
      <None Include="Assets\Plugins\Android\res\values-v14\styles.xml" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.3/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.UI">
  <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.3/Editor/UnityEditor.UI.dll</HintPath>
+ </Reference>
+ <Reference Include="ProBuilderCore">
+ <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/ProBuilder/Classes/ProBuilderCore.dll</HintPath>
+ </Reference>
+ <Reference Include="ProBuilderMeshOps">
+ <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/ProBuilder/Classes/ProBuilderMeshOps.dll</HintPath>
+ </Reference>
+ <Reference Include="ProBuilderEditor">
+ <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/ProBuilder/Editor/ProBuilderEditor.dll</HintPath>
+ </Reference>
+ <Reference Include="ProCore">
+ <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/Shared/Code/ProCore.dll</HintPath>
+ </Reference>
+ <Reference Include="SixBySeven">
+ <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/Shared/Code/SixBySeven.dll</HintPath>
  </Reference>
  <Reference Include="ShaderForge">
  <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/Shaders/ShaderForge/Editor/Code/ShaderForge.dll</HintPath>

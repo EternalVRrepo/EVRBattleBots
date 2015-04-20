@@ -9,7 +9,7 @@ using System.Collections;
 public class MyHeroController3rdPerson : MonoBehaviour
 {
 	public float forwardSpeed = 3f, jumpSpeed = 15f;
-	public Transform cameraController;
+	public Transform CenterEyeAnhor;
 	public Transform OVRCamera, OVRCenterAnchor;
 	public Transform cameraRig;
 	float airSpeed;
@@ -21,7 +21,9 @@ public class MyHeroController3rdPerson : MonoBehaviour
 	Animator animator;
 
 	GameObject thirdPersonCameraLockPivot; //For Third Person Camera Lock, a cached transform set to the base of the character
-	GameObject thirdPersonCameraDummyObject; //Used For A Forward Camera Direction Not Influenced By The Roll & Tilt Of Headtracking. 
+
+	//Used For A Forward Camera Direction Not Influenced By The Roll & Tilt Of Headtracking. 
+	GameObject thirdPersonCameraDummyObject; 
 	
 	void Start ()
 	{
@@ -36,12 +38,23 @@ public class MyHeroController3rdPerson : MonoBehaviour
 
 		//Set Up Rig
 		if (thirdPersonCameraLockPivot == null) {
-			thirdPersonCameraDummyObject = new GameObject ("thirdPersonCameraDummyObject"); //Create Dummy Object
-			thirdPersonCameraLockPivot = new GameObject ("thirdPersonCameraLockPivot"); //Create Pivot
-			thirdPersonCameraLockPivot.transform.position = transform.position + new Vector3 (0, character.height / 2, 0); //Set Pivot in center of the character
-			cameraRig.position = new Vector3 (transform.position.x, transform.position.y + 2, transform.position.z - 4f); //Move Camera To Perspective
-			cameraRig.parent = thirdPersonCameraLockPivot.transform; //Parents Camera to Pivot
-		}
+			//Create Dummy Object
+			thirdPersonCameraDummyObject = new GameObject ("thirdPersonCameraDummyObject"); 
+			//Create Pivot
+			thirdPersonCameraLockPivot = new GameObject ("thirdPersonCameraLockPivot");
+			//Set Pivot in center of the character
+			thirdPersonCameraLockPivot.transform.position = transform.position + new Vector3 (0, character.height / 2, 0); 
+			//Move Camera To Perspective
+			cameraRig.position = new Vector3 (transform.position.x, transform.position.y + 2, transform.position.z - 4f); 
+			//Parents Camera to Pivot
+			cameraRig.parent = thirdPersonCameraLockPivot.transform;
+		}	
+	}
+
+	void FixedUpdate ()
+	{
+		CameraSetUp ();
+		Move ();
 	}
 
 	//The Camera Rig
@@ -49,17 +62,19 @@ public class MyHeroController3rdPerson : MonoBehaviour
 	{
 		//Keep Pivot On Character's Center
 		thirdPersonCameraLockPivot.transform.position = Vector3.Lerp (thirdPersonCameraLockPivot.transform.position, transform.position + new Vector3 (0, character.height / 2, 0), Time.deltaTime * 10);
-		
-		//Set Up Dummmy Object
-		thirdPersonCameraDummyObject.transform.position = cameraController.position; //Set Position
-		thirdPersonCameraDummyObject.transform.forward = cameraController.forward; //Sets Forward Direction
-		thirdPersonCameraDummyObject.transform.eulerAngles = new Vector3 (0, thirdPersonCameraDummyObject.transform.eulerAngles.y, 0); //Removed Roll & Tilt
-	}
+//		cameraRig.rotation = Quaternion.RotateTowards (cameraRig.rotation, transform.rotation, Time.deltaTime);
 
-	void FixedUpdate ()
-	{
-		CameraSetUp ();
-		Move ();
+
+		//Set Up Dummmy Object
+		//Set Position
+		thirdPersonCameraDummyObject.transform.position = CenterEyeAnhor.position; 
+		//Sets Forward Direction
+		thirdPersonCameraDummyObject.transform.forward = CenterEyeAnhor.forward;
+
+		thirdPersonCameraDummyObject.transform.eulerAngles = new Vector3 (0, thirdPersonCameraDummyObject.transform.eulerAngles.y, 0); //Removed Roll & Tilt
+
+//		thirdPersonCameraLockPivot.transform.rotation *= Quaternion.Euler (0, CenterEyeAnhor.eulerAngles.y, 0);
+
 	}
 
 	void Update ()
@@ -84,10 +99,11 @@ public class MyHeroController3rdPerson : MonoBehaviour
 		if (Mathf.Round (xJoystick) != 0 || Mathf.Round (yJoystick) != 0) {
 
 			//Player Rotation Lock To Camera Y-Axis
-			transform.rotation = Quaternion.Euler (0, cameraController.eulerAngles.y, 0);
+			transform.rotation = Quaternion.Euler (0, CenterEyeAnhor.eulerAngles.y, 0);
 
 			//Rotate Towards Joystick Direction
 			transform.rotation *= Quaternion.LookRotation (new Vector3 (xJoystick, 0, yJoystick), Vector3.up);
+
 
 			//Move Towards Joystick Direction
 			movement = new Vector3 (thirdPersonCameraDummyObject.transform.forward.x * yJoystick * forwardSpeed, 0, thirdPersonCameraDummyObject.transform.forward.z * yJoystick * forwardSpeed);
