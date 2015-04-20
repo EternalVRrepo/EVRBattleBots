@@ -13,7 +13,9 @@ public class Hover : MonoBehaviour
 	[HideInInspector]
 	public Vector3
 		startPosition;
-	
+
+	public PlatformManager platformManager;
+
 	CharacterCustomizerManager CCManager;
 
 	public enum hoverType
@@ -61,10 +63,10 @@ public class Hover : MonoBehaviour
 				//Trigger Events
 				if (timer > 2f || Input.GetMouseButton (0)) {
 					//Set Manager To Be Aware This Character Is Selected And Just Incase Sets Last Character To Inactive
-					if (CCManager.currentlySelectedCharacter != this) {
+					if (CCManager.currentlySelectedCharacter != platformManager && platformManager.CurrentlyDisplayedPartyUnit != null) {
 						if (CCManager.currentlySelectedCharacter != null) 
 							CCManager.currentlySelectedCharacter.isActive = false;
-						CCManager.currentlySelectedCharacter = this;
+						CCManager.currentlySelectedCharacter = platformManager;
 						isActive = true;
 					}
 				}
@@ -77,7 +79,7 @@ public class Hover : MonoBehaviour
 				gameObject.renderer.material.SetColor ("_TintColor", Color.Lerp (gameObject.renderer.material.GetColor ("_TintColor"), characterSelectionStartColor, Time.deltaTime * 1.5f));
 				//Trigger Events
 				if (timer > 2f) {
-					Debug.Log ("exitAnim");
+//					Debug.Log ("exitAnim");
 				}
 			}
 		}

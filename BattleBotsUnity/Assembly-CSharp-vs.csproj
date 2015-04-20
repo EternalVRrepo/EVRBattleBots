@@ -10,7 +10,7 @@
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
 	<AssemblyName>Assembly-CSharp</AssemblyName>
-	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+	<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
 	<FileAlignment>512</FileAlignment>
 	<BaseDirectory>Assets</BaseDirectory>
   </PropertyGroup>
@@ -39,16 +39,42 @@
 	<Reference Include="System.Core" />
 	<Reference Include="System.Xml.Linq" />
 	<Reference Include="UnityEngine">
-	  <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>D:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>D:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\BattleBots\Effects\Bullet\Scripts\Explosion.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Animation\pingPongAnimation.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Combat\AI\CombatAIManager.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Combat\AI\EnemyUnitInfo.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Combat\Ability\AbilityActivator.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Combat\Ability\AbilityDescription.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Combat\Ability\AbilityHit.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Combat\Ability\StatusEffect.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Combat\Map.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Combat\MapEditor.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Combat\Units\BoardUnit.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Combat\Units\NonPlayerControlledBoardUnit.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Combat\Units\PlayerControlledBoardUnit.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Customization\PowerUp.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Customization\Talent.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Customization\TalentTree.cs" />
      <Compile Include="Assets\BattleBots\Scripts\GUI\UnitUIManager.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Hexagon\Hexagon.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Hexagon\HexagonData.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Managers\BoardManager.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Managers\CombatManager.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Managers\CustomizationManager.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Managers\GameManager.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\OpenWorld\PartyUnit.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Pathfinding\AStarSearch.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Pathfinding\HeapPriorityQueue.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Pathfinding\IPriorityQueue.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Pathfinding\IPriorityQueueNode.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Pathfinding\Location.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Player\Archive\PlayerMovement.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Player\Archive\TinpetMovement.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Player\Archive\WeaponController.cs" />
@@ -59,42 +85,26 @@
      <Compile Include="Assets\BattleBots\Scripts\Player\Features\HeroStats.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Player\Features\Projectile.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Player\Features\StateManager.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\RXSolutionFixer.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Utility\FPSDisplay.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Utility\LevelManager.cs" />
      <Compile Include="Assets\CharacterCustomization\Scripts\CharacterCustomizerManager.cs" />
      <Compile Include="Assets\CharacterCustomization\Scripts\GazeInputModule.cs" />
      <Compile Include="Assets\CharacterCustomization\Scripts\Hover.cs" />
+     <Compile Include="Assets\CharacterCustomization\Scripts\PlatformManager.cs" />
      <Compile Include="Assets\CharacterCustomization\Scripts\moveRightCheck.cs" />
      <Compile Include="Assets\Imported\Image Effects (Pro Only)\GlowEffect.cs" />
      <Compile Include="Assets\Imported\Image Effects (Pro Only)\ImageEffectBase.cs" />
      <Compile Include="Assets\Imported\Image Effects (Pro Only)\ImageEffects.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\API Examples\Instantiation\ProBuilderInstantiate.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\API Examples\Runtime Editing\Materials\pb_Selection.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\API Examples\Runtime Editing\RuntimeEdit.cs" />
      <Compile Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Scripts\EditorLabel.cs" />
      <Compile Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Scripts\EnableCameraDepthInForward.cs" />
-     <Compile Include="Assets\OVR\Moonlight\Scripts\OVROverlay.cs" />
-     <Compile Include="Assets\OVR\Moonlight\Scripts\OVRPlatformMenu.cs" />
-     <Compile Include="Assets\OVR\Moonlight\Scripts\OVRPostRender.cs" />
-     <Compile Include="Assets\OVR\Moonlight\Scripts\OVRTouchpad.cs" />
-     <Compile Include="Assets\OVR\Moonlight\Scripts\OVRVolumeControl.cs" />
-     <Compile Include="Assets\OVR\Moonlight\Scripts\Utils\OVRChromaticAberration.cs" />
-     <Compile Include="Assets\OVR\Moonlight\Scripts\Utils\OVRDebugGraph.cs" />
-     <Compile Include="Assets\OVR\Moonlight\Scripts\Utils\OVRDebugUtils.cs" />
-     <Compile Include="Assets\OVR\Moonlight\Scripts\Utils\OVRGameUtils.cs" />
-     <Compile Include="Assets\OVR\Moonlight\Scripts\Utils\OVRInputControl.cs" />
-     <Compile Include="Assets\OVR\Moonlight\Scripts\Utils\OVRMathUtils.cs" />
-     <Compile Include="Assets\OVR\Moonlight\Scripts\Utils\OVRModeParms.cs" />
-     <Compile Include="Assets\OVR\Moonlight\Scripts\Utils\OVRMonoscopic.cs" />
-     <Compile Include="Assets\OVR\Moonlight\Scripts\Utils\OVRResetOrientation.cs" />
-     <Compile Include="Assets\OVR\Moonlight\Scripts\Utils\OVRTimeWarpUtils.cs" />
-     <Compile Include="Assets\OVR\Moonlight\Scripts\Utils\OVRWaitCursor.cs" />
      <Compile Include="Assets\OVR\Scripts\OVRCameraRig.cs" />
      <Compile Include="Assets\OVR\Scripts\OVRCommon.cs" />
      <Compile Include="Assets\OVR\Scripts\OVRDisplay.cs" />
      <Compile Include="Assets\OVR\Scripts\OVRManager.cs" />
      <Compile Include="Assets\OVR\Scripts\OVRPluginEvent.cs" />
      <Compile Include="Assets\OVR\Scripts\OVRTracker.cs" />
+     <Compile Include="Assets\OVR\Scripts\OVRUnityVersionChecker.cs" />
      <Compile Include="Assets\OVR\Scripts\OvrCapi.cs" />
      <Compile Include="Assets\OVR\Scripts\Util\OVRCrosshair.cs" />
      <Compile Include="Assets\OVR\Scripts\Util\OVRGUI.cs" />
@@ -104,20 +114,14 @@
      <Compile Include="Assets\OVR\Scripts\Util\OVRPlayerController.cs" />
      <Compile Include="Assets\OVR\Scripts\Util\OVRScreenFade.cs" />
      <Compile Include="Assets\OVR\Scripts\Util\OVRUGUI.cs" />
-     <Compile Include="Assets\OVR\Scripts\Util\OVRVisionGuide.cs" />
      <None Include="Assets\Plugins\donotdelete.txt" />
      <None Include="Assets\Imported\Shaders\Toon Shading\Sources\Shaders\Toony-Basic.shader" />
      <None Include="Assets\BattleBots\Shaders\Data.shader" />
      <None Include="Assets\Imported\Image Effects (Pro Only)\_Sources\Shaders\GlowConeTap.shader" />
      <None Include="Assets\BattleBots\Shaders\Wireframe.shader" />
-     <None Include="Assets\Imported\ProCore\ProBuilder\About\changelog.txt" />
      <None Include="Assets\Plugins\Android\assets\donotdelete.txt" />
-     <None Include="Assets\Imported\ProCore\ProBuilder\Shader\VertexBillboard.shader" />
-     <None Include="Assets\Imported\ProCore\ProBuilder\Shader\DiffuseVertexColor.shader" />
-     <None Include="Assets\Imported\ProCore\ProGroups\About\changelog.txt" />
      <None Include="Assets\Plugins\Android\res\values-de\strings.xml" />
      <None Include="Assets\Plugins\x86_64\donotdelete.txt" />
-     <None Include="Assets\Imported\ProCore\ProBuilder\Shader\DiffuseVertexColorTransparency.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\LightCone.shader" />
      <None Include="Assets\Imported\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\MobileBloom.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Readme.txt" />
@@ -126,7 +130,6 @@
      <None Include="Assets\Plugins\Android\res\values\assets.xml" />
      <None Include="Assets\BattleBots\Shaders\SelfIlluminated.shader" />
      <None Include="Assets\Plugins\Android\res\raw\efigs.fnt" />
-     <None Include="Assets\Imported\ProCore\ProBuilder\About\pc_AboutEntry_ProBuilder.txt" />
      <None Include="Assets\Plugins\Android\res\values-en-rGB\strings.xml" />
      <None Include="Assets\Plugins\Android\res\values\styles.xml" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\MaterialPlatform.shader" />
@@ -141,8 +144,6 @@
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\Cubemaps.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\Refraction.shader" />
      <None Include="Assets\Imported\Shaders\Toon Shading\Sources\Shaders\Toony-BasicOutline.shader" />
-     <None Include="Assets\OVR\Moonlight\Shaders\Unlit Crosshair.shader" />
-     <None Include="Assets\Imported\ProCore\ProGroups\About\pc_AboutEntry_ProGroups.txt" />
      <None Include="Assets\OVR\Shaders\Unlit Transparent HUD.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\Parallax.shader" />
      <None Include="Assets\Imported\AlphaExample\DiffuseEmissive.shader" />
@@ -151,8 +152,6 @@
      <None Include="Assets\Plugins\Android\res\values-es\strings.xml" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\LightWrapping.shader" />
      <None Include="Assets\Imported\AlphaExample\AlphaEmissiveDiffuse.shader" />
-     <None Include="Assets\Imported\ProCore\ProBuilder\Shader\UnlitColor.shader" />
-     <None Include="Assets\Imported\ProCore\ProBuilder\API Examples\Instantiation\README.txt" />
      <None Include="Assets\Imported\Shaders\Toon Shading\Sources\Shaders\Toony-LightedOutline.shader" />
      <None Include="Assets\Imported\Shaders\Toon Shading\Sources\Shaders\Toony-Lighted.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\VertexColorRounding.shader" />
@@ -160,7 +159,6 @@
      <None Include="Assets\Plugins\Android\res\values-en-rGB\assets.xml" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\TessellationDisplacement.shader" />
      <None Include="Assets\BattleBots\Shaders\EmissiveSplit\Glow.shader" />
-     <None Include="Assets\OVR\Moonlight\Materials\GlobalMenu\OVRCutoutRamp.shader" />
      <None Include="Assets\Plugins\Android\res\values-fr\assets.xml" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\Tiles.shader" />
      <None Include="Assets\OVR\Shaders\OVRGUIShader.shader" />
@@ -169,31 +167,15 @@
      <None Include="Assets\Plugins\Android\res\values-ko\strings.xml" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\PixelRotator.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\CustomLighting.shader" />
-     <None Include="Assets\Imported\ProCore\ProBuilder\Shader\UnlitColor-Overlay.shader" />
      <None Include="Assets\Plugins\Android\res\values-v11\styles.xml" />
-     <None Include="Assets\Imported\ProCore\ProBuilder\Shader\DiffuseVertexColorEmission.shader" />
      <None Include="Assets\Plugins\Android\res\values-de\assets.xml" />
      <None Include="Assets\Plugins\Android\res\values-es\assets.xml" />
      <None Include="Assets\Plugins\Android\res\values\strings.xml" />
      <None Include="Assets\BattleBots\Shaders\Dissolve\DissolveShader.shader" />
-     <None Include="Assets\Imported\ProCore\Shared\About\README.txt" />
      <None Include="Assets\Plugins\Android\res\values-it\strings.xml" />
-     <None Include="Assets\Imported\ProCore\ProBuilder\About\Credits.txt" />
      <None Include="Assets\Plugins\Android\res\values-v14\styles.xml" />
  <Reference Include="UnityEngine.UI">
- <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.3/UnityEngine.UI.dll</HintPath>
- </Reference>
- <Reference Include="ProBuilderCore">
- <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/ProBuilder/Classes/ProBuilderCore.dll</HintPath>
- </Reference>
- <Reference Include="ProBuilderMeshOps">
- <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/ProBuilder/Classes/ProBuilderMeshOps.dll</HintPath>
- </Reference>
- <Reference Include="ProCore">
- <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/Shared/Code/ProCore.dll</HintPath>
- </Reference>
- <Reference Include="SixBySeven">
- <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/Shared/Code/SixBySeven.dll</HintPath>
+ <HintPath>D:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.3/UnityEngine.UI.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

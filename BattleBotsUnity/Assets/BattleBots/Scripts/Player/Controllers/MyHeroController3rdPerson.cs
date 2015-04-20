@@ -9,7 +9,7 @@ using System.Collections;
 public class MyHeroController3rdPerson : MonoBehaviour
 {
 	public float forwardSpeed = 3f, jumpSpeed = 15f;
-	public Transform CenterEyeAnhor;
+	public Transform CenterEyeAnchor;
 	public Transform OVRCamera, OVRCenterAnchor;
 	public Transform cameraRig;
 	float airSpeed;
@@ -27,6 +27,7 @@ public class MyHeroController3rdPerson : MonoBehaviour
 	
 	void Start ()
 	{
+		Debug.Log ("ASDASDASDASD");
 		//Get Components
 		character = transform.GetComponent<CharacterController> ();
 		animator = transform.GetComponentInChildren<Animator> ();
@@ -67,9 +68,9 @@ public class MyHeroController3rdPerson : MonoBehaviour
 
 		//Set Up Dummmy Object
 		//Set Position
-		thirdPersonCameraDummyObject.transform.position = CenterEyeAnhor.position; 
+		thirdPersonCameraDummyObject.transform.position = CenterEyeAnchor.position; 
 		//Sets Forward Direction
-		thirdPersonCameraDummyObject.transform.forward = CenterEyeAnhor.forward;
+		thirdPersonCameraDummyObject.transform.forward = CenterEyeAnchor.forward;
 
 		thirdPersonCameraDummyObject.transform.eulerAngles = new Vector3 (0, thirdPersonCameraDummyObject.transform.eulerAngles.y, 0); //Removed Roll & Tilt
 
@@ -99,7 +100,7 @@ public class MyHeroController3rdPerson : MonoBehaviour
 		if (Mathf.Round (xJoystick) != 0 || Mathf.Round (yJoystick) != 0) {
 
 			//Player Rotation Lock To Camera Y-Axis
-			transform.rotation = Quaternion.Euler (0, CenterEyeAnhor.eulerAngles.y, 0);
+			transform.rotation = Quaternion.Euler (0, CenterEyeAnchor.eulerAngles.y, 0);
 
 			//Rotate Towards Joystick Direction
 			transform.rotation *= Quaternion.LookRotation (new Vector3 (xJoystick, 0, yJoystick), Vector3.up);

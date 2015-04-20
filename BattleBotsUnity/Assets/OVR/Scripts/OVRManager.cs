@@ -135,8 +135,8 @@ public class OVRManager : MonoBehaviour
 				{
 					ipd = ipd,
 					eyeHeight = eyeHeight,
-					eyeDepth = 0.0805f, //TODO: Load from profile
-					neckHeight = eyeHeight - 0.075f, // TODO: Load from profile
+					eyeDepth = 0f, //TODO
+					neckHeight = 0.0f, // TODO
 				};
 #endif
 				_profileIsCached = true;
@@ -213,7 +213,7 @@ public class OVRManager : MonoBehaviour
 	{
 		get {
 #if !UNITY_ANDROID || UNITY_EDITOR
-			return capiHmd.GetHSWDisplayState().Displayed;
+			return (capiHmd.GetHSWDisplayState().Displayed != 0);
 #else
 			return false;
 #endif
@@ -391,28 +391,14 @@ public class OVRManager : MonoBehaviour
 	private static WaitForEndOfFrame waitForEndOfFrame = new WaitForEndOfFrame();
 
 #if UNITY_ANDROID && !UNITY_EDITOR
-	// Get this from Unity on startup so we can call Activity java functions.
+	// Get this from Unity on startup so we can call Activity java functions
 	private static bool androidJavaInit = false;
 	private static AndroidJavaObject activity;
 	private static AndroidJavaClass javaVrActivityClass;
-
 	internal static int timeWarpViewNumber = 0;
 
 	[NonSerialized]
-	private static OVRVolumeControl volumeController = null;
-	[NonSerialized]
-	private Transform volumeControllerTransform = null;
-
-	/// <summary>
-	/// Occurs when the application is resumed.
-	/// </summary>
-	public static event Action OnApplicationResumed = null;
-
-	/// <summary>
-	/// Occurs before plugin initialized. Used to configure
-	/// VR Mode Parms such as clock locks.
-	/// </summary>
-	public static event Action OnConfigureVrModeParms = null;
+	private static OVRVolumeControl VolumeController = null;
 
 	public static void EnterVRMode()
 	{
@@ -452,9 +438,18 @@ public class OVRManager : MonoBehaviour
 		}
 
 		var netVersion = new System.Version(Ovr.Hmd.OVR_VERSION_STRING);
-		var ovrVersion = new System.Version(Ovr.Hmd.GetVersionString());
-		if (netVersion > ovrVersion)
-			Debug.LogWarning("Using an older version of LibOVR.");
+		System.Version ovrVersion = new System.Version("0.0.0");
+		var versionString = Ovr.Hmd.GetVersionString();
+		var success = false;
+		try {
+			ovrVersion = new System.Version(versionString);
+			success = true;
+		} catch (Exception e) {
+			Debug.Log("Failed to parse Oculus version string \"" + versionString + "\" with message \"" + e.Message + "\".");
+		}
+		if (!success || netVersion > ovrVersion)
+			Debug.LogWarning("Version check failed. Please make sure you are using Oculus runtime " +
+			                 Ovr.Hmd.OVR_VERSION_STRING + " or newer.");
 #endif
 
         // Detect whether this platform is a supported platform
@@ -491,14 +486,11 @@ public class OVRManager : MonoBehaviour
 			Input.gyro.enabled = false;
 		}
 		
-		// NOTE: On Adreno Lollipop, it is an error to have antiAliasing set on the
-		// main window surface with front buffer rendering enabled. The view will
-		// render black.
-		// On Adreno KitKat, some tiling control modes will cause the view to render
-		// black.
+		// don't enable antiAliasing on the main window display, it may cause
+		// bad behavior with various tiling controls.
 		if (QualitySettings.antiAliasing > 1)
 		{
-			Debug.LogError("*** Antialiasing must be disabled for Gear VR ***");
+			Debug.LogError("*** Main Display should have 0 samples ***");
 		}
 
 		// we sync in the TimeWarp, so we don't want unity
@@ -519,14 +511,7 @@ public class OVRManager : MonoBehaviour
 			javaVrActivityClass = new AndroidJavaClass("com.oculusvr.vrlib.VrActivity");
 			// Prepare for the RenderThreadInit()
 			SetInitVariables(activity.GetRawObject(), javaVrActivityClass.GetRawClass());
-
-#if !INHIBIT_ENTITLEMENT_CHECK
-			AndroidJavaObject entitlementChecker = new AndroidJavaObject("com.oculus.svclib.OVREntitlementChecker");
-			entitlementChecker.CallStatic("doAutomatedCheck", activity);
-#else
-			Debug.Log( "Inhibiting Entitlement Check!" );
-#endif
-
+			
 			androidJavaInit = true;
 		}
 
@@ -563,52 +548,15 @@ public class OVRManager : MonoBehaviour
 		}
 #endif
 
-#if (UNITY_STANDALONE_WIN && (UNITY_4_6 || UNITY_4_5))
-		bool unity_4_6 = false;
-		bool unity_4_5_2 = false;
-		bool unity_4_5_3 = false;
-		bool unity_4_5_4 = false;
-		bool unity_4_5_5 = false;
-
-#if (UNITY_4_6)
-		unity_4_6 = true;
-#elif (UNITY_4_5_2)
-		unity_4_5_2 = true;
-#elif (UNITY_4_5_3)
-		unity_4_5_3 = true;
-#elif (UNITY_4_5_4)
-		unity_4_5_4 = true;
-#elif (UNITY_4_5_5)
-		unity_4_5_5 = true;
-#endif
-
-		// Detect correct Unity releases which contain the fix for D3D11 exclusive mode.
-		string version = Application.unityVersion;
-		int releaseNumber;
-		bool releaseNumberFound = Int32.TryParse(Regex.Match(version, @"\d+$").Value, out releaseNumber);
-
-		// Exclusive mode was broken for D3D9 in Unity 4.5.2p2 - 4.5.4 and 4.6 builds prior to beta 21
-		bool unsupportedExclusiveModeD3D9 = (unity_4_6 && version.Last(char.IsLetter) == 'b' && releaseNumberFound && releaseNumber < 21)
-			|| (unity_4_5_2 && version.Last(char.IsLetter) == 'p' && releaseNumberFound && releaseNumber >= 2)
-			|| (unity_4_5_3)
-			|| (unity_4_5_4);
-
-		// Exclusive mode was broken for D3D11 in Unity 4.5.2p2 - 4.5.5p2 and 4.6 builds prior to f1
-		bool unsupportedExclusiveModeD3D11 = (unity_4_6 && version.Last(char.IsLetter) == 'b')
-			|| (unity_4_5_2 && version.Last(char.IsLetter) == 'p' && releaseNumberFound && releaseNumber >= 2)
-			|| (unity_4_5_3)
-			|| (unity_4_5_4)
-			|| (unity_4_5_5 && version.Last(char.IsLetter) == 'f')
-			|| (unity_4_5_5 && version.Last(char.IsLetter) == 'p' && releaseNumberFound && releaseNumber < 3);
-
-		if (unsupportedExclusiveModeD3D9 && !display.isDirectMode && SystemInfo.graphicsDeviceVersion.Contains("Direct3D 9"))
+#if UNITY_STANDALONE_WIN
+		if (!OVRUnityVersionChecker.hasD3D9ExclusiveModeSupport && !display.isDirectMode && SystemInfo.graphicsDeviceVersion.Contains("Direct3D 9"))
 		{
 			MessageBox(0, "Direct3D 9 extended mode is not supported in this configuration. "
 				+ "Please use direct display mode, a different graphics API, or rebuild the application with a newer Unity version."
 				, "VR Configuration Warning", 0);
 		}
 
-		if (unsupportedExclusiveModeD3D11 && !display.isDirectMode && SystemInfo.graphicsDeviceVersion.Contains("Direct3D 11"))
+		if (!OVRUnityVersionChecker.hasD3D11ExclusiveModeSupport && !display.isDirectMode && SystemInfo.graphicsDeviceVersion.Contains("Direct3D 11"))
 		{
 			MessageBox(0, "Direct3D 11 extended mode is not supported in this configuration. "
 				+ "Please use direct display mode, a different graphics API, or rebuild the application with a newer Unity version."
@@ -659,6 +607,14 @@ public class OVRManager : MonoBehaviour
 		display.flipInput = isD3d;
 
 		StartCoroutine(CallbackCoroutine());
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+		if (VolumeController != null)
+		{
+			OVRPose pose = OVRManager.display.GetHeadPose();
+			VolumeController.UpdatePosition(pose.orientation, pose.position);
+		}
+#endif
 	}
 
 	private void OnDisable()
@@ -676,7 +632,6 @@ public class OVRManager : MonoBehaviour
 			ovrIsInitialized = false;
 		}
 #else
-		// NOTE: The coroutines will also be stopped when the object is destroyed.
 		StopAllCoroutines();
 #endif
 	}
@@ -684,12 +639,6 @@ public class OVRManager : MonoBehaviour
 	private void Start()
 	{
 #if UNITY_ANDROID && !UNITY_EDITOR
-		// Configure app-specific vr mode parms such as clock frequencies
-		if ( OnConfigureVrModeParms != null )
-		{
-			OnConfigureVrModeParms();
-		}
-
 		// NOTE: For Android, the resolution should be the same for both left and right eye
 		OVRDisplay.EyeRenderDesc leftEyeDesc = OVRManager.display.GetEyeRenderDesc(OVREye.Left);
 		Vector2 resolution = leftEyeDesc.resolution;
@@ -774,13 +723,10 @@ public class OVRManager : MonoBehaviour
 		display.Update();
 
 #if UNITY_ANDROID && !UNITY_EDITOR
-		if (volumeController != null)
+		if (VolumeController != null)
 		{
-			if (volumeControllerTransform == null)
-			{
-				volumeControllerTransform = gameObject.GetComponent<OVRCameraRig>().centerEyeAnchor;
-			}
-			volumeController.UpdatePosition(volumeControllerTransform);
+			OVRPose pose = OVRManager.display.GetHeadPose();
+			VolumeController.UpdatePosition(pose.orientation, pose.position);
 		}
 #endif
 	}
@@ -820,11 +766,6 @@ public class OVRManager : MonoBehaviour
 	{
 		yield return null; // delay 1 frame to allow Unity enough time to create the windowSurface
 
-		if (OnApplicationResumed != null)
-		{
-			OnApplicationResumed();
-		}
-
 		EnterVRMode();
 	}
 
@@ -855,14 +796,14 @@ public class OVRManager : MonoBehaviour
 	/// </summary>
 	private static void InitVolumeController()
 	{
-		if (volumeController == null)
+		if (VolumeController == null)
 		{
 			Debug.Log("Creating volume controller...");
 			// Create the volume control popup
 			GameObject go = GameObject.Instantiate(Resources.Load("OVRVolumeController")) as GameObject;
 			if (go != null)
 			{
-				volumeController = go.GetComponent<OVRVolumeControl>();
+				VolumeController = go.GetComponent<OVRVolumeControl>();
 			}
 			else
 			{

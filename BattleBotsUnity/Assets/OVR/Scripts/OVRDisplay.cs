@@ -64,6 +64,8 @@ public class OVRDisplay
 		/// The time between the end of TimeWarp and scan-out in seconds.
 		/// </summary>
 		public float postPresent;
+		public float renderError;
+		public float timeWarpError;
 	}
 	
 	/// <summary>
@@ -149,16 +151,6 @@ public class OVRDisplay
 	public void Update()
 	{
 		UpdateDistortionCaps();
-#if !UNITY_ANDROID || UNITY_EDITOR
-		// HACK - needed to force DX11 into low persistence mode, remove after Unity patch release
-		if (frameCount < 2)
-		{
-			uint caps = OVRManager.capiHmd.GetEnabledCaps();
-			caps ^= (uint)HmdCaps.LowPersistence;
-			OVRManager.capiHmd.SetEnabledCaps(caps);
-		}
-#endif
-
 		UpdateViewport();
 		UpdateTextures();
 	}
@@ -197,7 +189,7 @@ public class OVRDisplay
 
 		return state.HeadPose.ThePose.ToPose();
 #else
-		float px = 0.0f, py = 0.0f, pz = 0.0f, ow = 0.0f, ox = 0.0f, oy = 0.0f, oz = 0.0f;
+		float px = 0, py = 0, pz = 0, ow = 0, ox = 0, oy = 0, oz = 0;
 
 		double atTime = Time.time + predictionTime;
 		OVR_GetCameraPositionOrientation(ref  px, ref  py, ref  pz,
@@ -212,7 +204,7 @@ public class OVRDisplay
 	}
 
 #if UNITY_ANDROID && !UNITY_EDITOR
-	private float w = 0.0f, x = 0.0f, y = 0.0f, z = 0.0f, fov = 90.0f;
+	private float w = 0, x = 0, y = 0, z = 0, fov = 90f;
 #endif
 
 	/// <summary>
@@ -243,13 +235,7 @@ public class OVRDisplay
 
 		float eyeOffsetX = 0.5f * OVRManager.profile.ipd;
 		eyeOffsetX = (eye == OVREye.Left) ? -eyeOffsetX : eyeOffsetX;
-
-		float neckToEyeHeight = OVRManager.profile.eyeHeight - OVRManager.profile.neckHeight;
-		Vector3 headNeckModel = new Vector3(0.0f, neckToEyeHeight, OVRManager.profile.eyeDepth);
-		Vector3 pos = rot * (new Vector3(eyeOffsetX, 0.0f, 0.0f) + headNeckModel);
-		
-		// Subtract the HNM pivot to avoid translating the camera when level
-		pos -= headNeckModel;
+		Vector3 pos = rot * new Vector3(eyeOffsetX, 0.0f, 0.0f);
 
 		return new OVRPose
 		{
@@ -270,7 +256,9 @@ public class OVRDisplay
 #if !UNITY_ANDROID || UNITY_EDITOR
 		FovPort fov = OVRManager.capiHmd.GetDesc().DefaultEyeFov[eyeId];
 
-		return Hmd.GetProjection(fov, nearClip, farClip, true).ToMatrix4x4();
+		uint projectionModFlags = (uint)Hmd.ProjectionModifier.RightHanded;
+
+		return Hmd.GetProjection(fov, nearClip, farClip, projectionModFlags).ToMatrix4x4();
 #else
 		return new Matrix4x4();
 #endif
@@ -466,21 +454,25 @@ public class OVRDisplay
 	{
 		get {
 #if !UNITY_ANDROID || UNITY_EDITOR
-			float[] values = { 0.0f, 0.0f, 0.0f };
+			float[] values = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
 			float[] latencies = OVRManager.capiHmd.GetFloatArray("DK2Latency", values);
 
 			return new LatencyData
 			{
-				render = latencies[0],
-				timeWarp = latencies[1],
-				postPresent = latencies[2]
+				render = latencies[0] * 1000.0f,
+				timeWarp = latencies[1] * 1000.0f,
+				postPresent = latencies[2] * 1000.0f,
+				renderError = latencies[3] * 1000.0f,
+				timeWarpError = latencies[4] * 1000.0f,
 			};
 #else
 			return new LatencyData
 			{
 				render = 0.0f,
 				timeWarp = 0.0f,
-				postPresent = 0.0f
+				postPresent = 0.0f,
+				renderError = 0.0f,
+				timeWarpError = 0.0f,
 			};
 #endif
 		}
@@ -503,13 +495,13 @@ public class OVRDisplay
 				distortionCaps &= ~(uint)Ovr.DistortionCaps.HqDistortion;
 			}
 	
-			if (OVRManager.instance.hdr)
+			if (QualitySettings.activeColorSpace == ColorSpace.Linear && !OVRManager.instance.hdr)
 			{
-				distortionCaps &= ~(uint)Ovr.DistortionCaps.SRGB;
+				distortionCaps |= (uint)Ovr.DistortionCaps.SRGB;
 			}
 			else
 			{
-				distortionCaps |= (uint)Ovr.DistortionCaps.SRGB;
+				distortionCaps &= ~(uint)Ovr.DistortionCaps.SRGB;
 			}
 
 			prevAntiAliasing = QualitySettings.antiAliasing;
@@ -643,17 +635,12 @@ public class OVRDisplay
 			(int)eyeDesc.resolution.y,
 			(int)OVRManager.instance.eyeTextureDepth,
 			OVRManager.instance.eyeTextureFormat);
+
 		eyeTextures[eyeIndex].antiAliasing = (int)OVRManager.instance.eyeTextureAntiAliasing;
+
 		eyeTextures[eyeIndex].Create();
 		eyeTextureIds[eyeIndex] = eyeTextures[eyeIndex].GetNativeTextureID();
 	}
-
-    public void ForceSymmetricProj(bool enabled)
-    {
-#if !UNITY_ANDROID || UNITY_EDITOR
-        OVR_ForceSymmetricProj(enabled);
-#endif
-    }
 
     public void SetViewport(int x, int y, int w, int h)
     {
@@ -707,7 +694,5 @@ public class OVRDisplay
     private static extern bool OVR_UnityGetModeChange();
     [DllImport(LibOVR, CallingConvention = CallingConvention.Cdecl)]
     private static extern bool OVR_UnitySetModeChange(bool isChanged);
-    [DllImport(LibOVR, CallingConvention = CallingConvention.Cdecl)]
-    private static extern void OVR_ForceSymmetricProj(bool isEnabled);
 #endif
 }

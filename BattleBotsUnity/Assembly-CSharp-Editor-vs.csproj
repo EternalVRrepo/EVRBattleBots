@@ -10,7 +10,7 @@
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
 	<AssemblyName>Assembly-CSharp-Editor</AssemblyName>
-	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+	<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
 	<FileAlignment>512</FileAlignment>
 	<BaseDirectory>Assets</BaseDirectory>
   </PropertyGroup>
@@ -39,44 +39,20 @@
 	<Reference Include="System.Core" />
 	<Reference Include="System.Xml.Linq" />
 	<Reference Include="UnityEngine">
-	  <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>D:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>D:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Actions\DeleteNoDrawFaces.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Actions\ExportObj.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Actions\MakeAsset.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Actions\ProBuilderizeGameObject.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Actions\StripProBuilderScripts.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Geometry\Bridge.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Geometry\ConnectEdges.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Geometry\DetachDeleteFace.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Geometry\ExtrudeFace.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Geometry\FlipFaces.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Geometry\PivotTool.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Geometry\VertexMergeWeld.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Repair\CleanUpLeakedMeshes.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Repair\ComponentCheck.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Repair\DegenerateTris.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Repair\FixGameObjectFlags.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Repair\FixShaderWantsNormals.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Repair\ForceMeshRefresh.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Repair\RebuildSharedIndices.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Repair\SetProjectionAxis.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Selection\EdgeSelection.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Selection\ExpandSelection.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Selection\InvertSelection.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Selection\MaterialSelection.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Tools\AutoNodraw.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Tools\ProjectNodrawUtil.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\MenuItems\Tools\SelectFacesWithMaterial.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\ProBuilderMenuItems.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProBuilder\Editor\pb_Preferences.cs" />
-     <Compile Include="Assets\Imported\ProCore\ProGroups\Scripts\Editor\ProGroups_About.cs" />
-     <Compile Include="Assets\Imported\ProCore\Shared\About\Editor\pc_AboutWindow.cs" />
+     <Compile Include="Assets\BattleBots\Editor\AbilityDescriptionEditor.cs" />
+     <Compile Include="Assets\BattleBots\Editor\AbilityEditorWindow.cs" />
+     <Compile Include="Assets\BattleBots\Editor\MapEditorEditor.cs" />
+     <Compile Include="Assets\BattleBots\Editor\PowerUpEditor.cs" />
+     <Compile Include="Assets\BattleBots\Editor\PowerUpWindow.cs" />
+     <Compile Include="Assets\BattleBots\Editor\TalentTreeEditor.cs" />
+     <Compile Include="Assets\BattleBots\Editor\TalentTreeWindow.cs" />
      <Compile Include="Assets\OVR\Editor\OVRBuild.cs" />
      <Compile Include="Assets\OVR\Editor\OVRGameView.cs" />
      <Compile Include="Assets\OVR\Editor\OVRPrefabs.cs" />
@@ -86,14 +62,9 @@
      <None Include="Assets\BattleBots\Shaders\Data.shader" />
      <None Include="Assets\Imported\Image Effects (Pro Only)\_Sources\Shaders\GlowConeTap.shader" />
      <None Include="Assets\BattleBots\Shaders\Wireframe.shader" />
-     <None Include="Assets\Imported\ProCore\ProBuilder\About\changelog.txt" />
      <None Include="Assets\Plugins\Android\assets\donotdelete.txt" />
-     <None Include="Assets\Imported\ProCore\ProBuilder\Shader\VertexBillboard.shader" />
-     <None Include="Assets\Imported\ProCore\ProBuilder\Shader\DiffuseVertexColor.shader" />
-     <None Include="Assets\Imported\ProCore\ProGroups\About\changelog.txt" />
      <None Include="Assets\Plugins\Android\res\values-de\strings.xml" />
      <None Include="Assets\Plugins\x86_64\donotdelete.txt" />
-     <None Include="Assets\Imported\ProCore\ProBuilder\Shader\DiffuseVertexColorTransparency.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\LightCone.shader" />
      <None Include="Assets\Imported\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\MobileBloom.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Readme.txt" />
@@ -102,7 +73,6 @@
      <None Include="Assets\Plugins\Android\res\values\assets.xml" />
      <None Include="Assets\BattleBots\Shaders\SelfIlluminated.shader" />
      <None Include="Assets\Plugins\Android\res\raw\efigs.fnt" />
-     <None Include="Assets\Imported\ProCore\ProBuilder\About\pc_AboutEntry_ProBuilder.txt" />
      <None Include="Assets\Plugins\Android\res\values-en-rGB\strings.xml" />
      <None Include="Assets\Plugins\Android\res\values\styles.xml" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\MaterialPlatform.shader" />
@@ -117,8 +87,6 @@
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\Cubemaps.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\Refraction.shader" />
      <None Include="Assets\Imported\Shaders\Toon Shading\Sources\Shaders\Toony-BasicOutline.shader" />
-     <None Include="Assets\OVR\Moonlight\Shaders\Unlit Crosshair.shader" />
-     <None Include="Assets\Imported\ProCore\ProGroups\About\pc_AboutEntry_ProGroups.txt" />
      <None Include="Assets\OVR\Shaders\Unlit Transparent HUD.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\Parallax.shader" />
      <None Include="Assets\Imported\AlphaExample\DiffuseEmissive.shader" />
@@ -127,8 +95,6 @@
      <None Include="Assets\Plugins\Android\res\values-es\strings.xml" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\LightWrapping.shader" />
      <None Include="Assets\Imported\AlphaExample\AlphaEmissiveDiffuse.shader" />
-     <None Include="Assets\Imported\ProCore\ProBuilder\Shader\UnlitColor.shader" />
-     <None Include="Assets\Imported\ProCore\ProBuilder\API Examples\Instantiation\README.txt" />
      <None Include="Assets\Imported\Shaders\Toon Shading\Sources\Shaders\Toony-LightedOutline.shader" />
      <None Include="Assets\Imported\Shaders\Toon Shading\Sources\Shaders\Toony-Lighted.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\VertexColorRounding.shader" />
@@ -136,7 +102,6 @@
      <None Include="Assets\Plugins\Android\res\values-en-rGB\assets.xml" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\TessellationDisplacement.shader" />
      <None Include="Assets\BattleBots\Shaders\EmissiveSplit\Glow.shader" />
-     <None Include="Assets\OVR\Moonlight\Materials\GlobalMenu\OVRCutoutRamp.shader" />
      <None Include="Assets\Plugins\Android\res\values-fr\assets.xml" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\Tiles.shader" />
      <None Include="Assets\OVR\Shaders\OVRGUIShader.shader" />
@@ -145,46 +110,24 @@
      <None Include="Assets\Plugins\Android\res\values-ko\strings.xml" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\PixelRotator.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\CustomLighting.shader" />
-     <None Include="Assets\Imported\ProCore\ProBuilder\Shader\UnlitColor-Overlay.shader" />
      <None Include="Assets\Plugins\Android\res\values-v11\styles.xml" />
-     <None Include="Assets\Imported\ProCore\ProBuilder\Shader\DiffuseVertexColorEmission.shader" />
      <None Include="Assets\Plugins\Android\res\values-de\assets.xml" />
      <None Include="Assets\Plugins\Android\res\values-es\assets.xml" />
      <None Include="Assets\Plugins\Android\res\values\strings.xml" />
      <None Include="Assets\BattleBots\Shaders\Dissolve\DissolveShader.shader" />
-     <None Include="Assets\Imported\ProCore\Shared\About\README.txt" />
      <None Include="Assets\Plugins\Android\res\values-it\strings.xml" />
-     <None Include="Assets\Imported\ProCore\ProBuilder\About\Credits.txt" />
      <None Include="Assets\Plugins\Android\res\values-v14\styles.xml" />
  <Reference Include="Assembly-UnityScript">
- <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Library/ScriptAssemblies/Assembly-UnityScript.dll</HintPath>
+ <HintPath>D:/Coding/GitHub/BattleBots/BattleBotsUnity/Library/ScriptAssemblies/Assembly-UnityScript.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.UI">
- <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.3/UnityEngine.UI.dll</HintPath>
+ <HintPath>D:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.3/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.UI">
- <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.3/Editor/UnityEditor.UI.dll</HintPath>
- </Reference>
- <Reference Include="ProBuilderCore">
- <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/ProBuilder/Classes/ProBuilderCore.dll</HintPath>
- </Reference>
- <Reference Include="ProBuilderMeshOps">
- <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/ProBuilder/Classes/ProBuilderMeshOps.dll</HintPath>
- </Reference>
- <Reference Include="ProBuilderEditor">
- <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/ProBuilder/Editor/ProBuilderEditor.dll</HintPath>
- </Reference>
- <Reference Include="ProCore">
- <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/Shared/Code/ProCore.dll</HintPath>
- </Reference>
- <Reference Include="SixBySeven">
- <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/Shared/Code/SixBySeven.dll</HintPath>
- </Reference>
- <Reference Include="ShaderForge">
- <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/Shaders/ShaderForge/Editor/Code/ShaderForge.dll</HintPath>
+ <HintPath>D:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.3/Editor/UnityEditor.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.Graphs">
- <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>
+ <HintPath>D:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>
