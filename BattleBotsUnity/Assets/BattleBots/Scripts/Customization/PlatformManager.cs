@@ -1,4 +1,4 @@
-﻿/////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
 //
 //	PlatformManager.cs
 //	© EternalVR, All Rights Reserved
@@ -17,17 +17,22 @@ using UnityEngine.UI;
 public class PlatformManager : MonoBehaviour
 {
 	public bool debug = true;
-	public Hover TalentTreeAbilities;
-	public Hover TalentTreeStats;
+	
 	public Hover AbiltiyButton;
 	public Hover TalentButton;
 
 	public GameObject Stats;
 	public GameObject NamePlates;
+
+	public GameObject GUIIcon;
+
+	//Initilization
 	public PartyUnit CurrentlyDisplayedPartyUnit;
 	public Transform UnitAnchorPoint;
-	public bool isActive;
 	public Vector3 startPosition;
+
+	//States
+	public bool isActive;
 
 	//============================================================================
 	// Initilization
@@ -40,34 +45,24 @@ public class PlatformManager : MonoBehaviour
 		foreach (Hover h in GetComponentsInChildren<Hover>()) {
 			h.platformManager = this;
 		}
-		//Load current party units model to the platform
-		//Update Talent list
-		//Update displayed stats
-		//Update displayed abilities
 	}
 
 	//============================================================================
 	// Events
 	//============================================================================
 
-	/// Sets this platform to the currently focused one, so it will display the talents/stats/etc
 	public void SetFocused (bool b)
 	{
 		if (b) {
-			Debug.Log ("Set Focus To: " + CurrentlyDisplayedPartyUnit.Name);
-
-			TalentTreeStats.SetActive (true);
-			TalentTreeAbilities.SetActive (true);
+			if (debug)
+				Debug.Log ("Set Focus To: " + CurrentlyDisplayedPartyUnit.Name);
 			Stats.SetActive (true);
 
 		} else {
-			TalentTreeStats.SetActive (false);
-			TalentTreeAbilities.SetActive (false);
 			Stats.SetActive (false);
 		}
 	}
 	
-	/// Creates a unit for this platform
 	protected void CreateUnit (PartyUnit unit)
 	{
 		if (unit != null) {
@@ -89,10 +84,31 @@ public class PlatformManager : MonoBehaviour
 		}
 	}
 	
-	void CreateTalentTree (TalentTree tree)
+	void CreateTalentTree (PartyUnit unit)
 	{
 		if (debug)
-			Debug.Log ("Talent Tree: " + tree.name);
+			Debug.Log ("Talent Tree: " + unit.UnitTalentTree.name);
+
+		int row = 0;
+		int collum = 0;
+//		foreach (Talent t in unit.UnitTalentTree.Tree) {
+//		}
+
+//		for (int i; i<unit.UnitTalentTree.Tree.Count; i++) {
+//			int xPos;
+//			GameObject gIcon = Instantiate (GUIIcon, Vector3.one, Quaternion.identity) as GameObject;
+//			if (i % 3 == 0) {
+//				collum
+//			}
+//			row = i % 3;
+//			gIcon.AddComponent<TalentIcon>.Initilize (unit.UnitTalentTree.Tree[i], );
+
+//		}
+//		for (int i; i<unit.UnitTalentTree.Tree.Count; i++) {
+//			if (i % 3 == 1) {
+//				row++;
+//			}
+//		}
 	}
 
 	void CreateAbiltiyWindow (AbilityDescription[] abilities)
@@ -101,9 +117,6 @@ public class PlatformManager : MonoBehaviour
 			foreach (AbilityDescription a in abilities) {
 				Debug.Log (a.DisplayName);
 			}
-
 	}
-
-
 	//============================================================================
 }

@@ -10,7 +10,7 @@
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
 	<AssemblyName>Assembly-CSharp-Editor</AssemblyName>
-	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+	<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
 	<FileAlignment>512</FileAlignment>
 	<BaseDirectory>Assets</BaseDirectory>
   </PropertyGroup>
@@ -190,6 +190,10 @@
  <Reference Include="UnityEditor.Graphs">
  <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>
  </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-vs.csproj">
+      <Project>{33423A62-ED6D-7642-7D10-D1C564B1FE8E}</Project>      <Name>Assembly-CSharp-vs</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
