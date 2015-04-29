@@ -25,10 +25,10 @@ public class TalentTreeEditor : Editor {
 		serializedObject.Update ();
 		tree = (TalentTree)target;
 
-		if (string.Equals(tree.name, PlayerControlledBoardUnit.PlayerClass.Melee.ToString () + "Tree"))
-			EditorGUILayout.LabelField (PlayerControlledBoardUnit.PlayerClass.Melee.ToString () + "Tree");
-		else if (string.Equals(tree.name, PlayerControlledBoardUnit.PlayerClass.Ranged.ToString () + "Tree"))
-			EditorGUILayout.LabelField (PlayerControlledBoardUnit.PlayerClass.Ranged.ToString () + "Tree");
+		if (string.Equals(tree.name, PlayerControlledBoardUnit.PlayerClass.Warrior.ToString () + "Tree"))
+			EditorGUILayout.LabelField (PlayerControlledBoardUnit.PlayerClass.Warrior.ToString () + "Tree");
+		else if (string.Equals(tree.name, PlayerControlledBoardUnit.PlayerClass.Wizard.ToString () + "Tree"))
+			EditorGUILayout.LabelField (PlayerControlledBoardUnit.PlayerClass.Wizard.ToString () + "Tree");
 		else if (string.Equals(tree.name, PlayerControlledBoardUnit.PlayerClass.Support.ToString () + "Tree"))
 			EditorGUILayout.LabelField (PlayerControlledBoardUnit.PlayerClass.Support.ToString () + "Tree");
 		else EditorGUILayout.LabelField ("Name the file \"ClassName\" (Melee/Ranged/Support) + \"Tree\"");

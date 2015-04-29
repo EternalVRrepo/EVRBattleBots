@@ -15,11 +15,26 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+[System.Serializable]
 public class EnemyUnitInfo : ScriptableObject {
 
+	public string Name;
 	public int Health;
 	public GameObject UnitPrefab;
 	public int MovementDistance;
 	public List<AbilityDescription> ListOfAbilities = new List<AbilityDescription>();
 	public CombatAIManager.AIType AIType;
+
+	public AbilityDescription newAbility;
+	/// <summary>
+	/// Adds a new ability to the list of abilities
+	/// </summary>
+	public void AddNewAbility() {
+		if (newAbility == null || ListOfAbilities.Contains (newAbility)) {
+			newAbility = null;
+			return;
+		}
+		ListOfAbilities.Add (newAbility);
+		newAbility = null;
+	}
 }

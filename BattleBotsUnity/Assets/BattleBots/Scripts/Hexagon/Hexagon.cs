@@ -44,7 +44,8 @@ public class Hexagon : MonoBehaviour {
 	}
 	public Vector3 UnitAnchorPoint {				//Where the unit on this hexagon is placed
 		get {
-			return transform.position + new Vector3(0, renderer.bounds.size.y, 0);
+//			return transform.position + new Vector3(0, renderer.bounds.size.y/2, 0);
+			return transform.position + new Vector3(0, .02f, 0);
 		}
 	}
 

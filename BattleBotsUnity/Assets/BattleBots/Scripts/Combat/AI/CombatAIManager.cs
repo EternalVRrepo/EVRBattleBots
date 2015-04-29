@@ -1,4 +1,4 @@
-﻿/////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
 //
 //	CombatAIManager.cs
 //	© EternalVR, All Rights Reserved
@@ -93,10 +93,12 @@ public class CombatAIManager : MonoBehaviour {
 		PlayerControlledBoardUnit newTarget = null;
 
 		foreach (AbilityDescription ability in currentUnit.AbilityActivator.ListOfAbilities) { //Find the most damage we can do
-			int newPotentialDamage = CheckPotentialDamage(ability, ref newTarget);
-			if (newPotentialDamage > potentialDamage) {
-				AbilityTarget = newTarget;
-				AbilitySelected = ability;
+			if (ability.AbilityTargetType == AbilityDescription.TargetType.TargetEnemy) {
+				int newPotentialDamage = CheckPotentialDamage(ability, ref newTarget);
+				if (newPotentialDamage > potentialDamage) {
+					AbilityTarget = newTarget;
+					AbilitySelected = ability;
+				}
 			}
 		}
 
@@ -133,16 +135,23 @@ public class CombatAIManager : MonoBehaviour {
 	public PlayerControlledBoardUnit FindBestTarget(AbilityDescription ability, List<PlayerControlledBoardUnit> targets) {
 		PlayerControlledBoardUnit currTarget = targets[0];
 
+		float potentialDamage = 0;
+		foreach (DebuffEffect debuff in ability.debuffs) {
+			if (debuff.DebuffType == DebuffEffect.Debuff.Damage) {
+				potentialDamage += debuff.Damage;
+			}
+		}
+
 		foreach (PlayerControlledBoardUnit target in targets) {
-			if (target.CurrentHealth < ability.damage) //If we have lethal damage, its a no brainer
+			if (target.CurrentHealth < potentialDamage) //If we have lethal damage, its a no brainer
 				return target;
 
 			if (target.CurrentHealth/target.MaxHealth //If we find someone with lower health go for them
 			    < currTarget.CurrentHealth/currTarget.MaxHealth)
 				currTarget = target;
 
-			if (currTarget.UnitClass == PlayerControlledBoardUnit.PlayerClass.Melee) {
-				if (target.UnitClass == PlayerControlledBoardUnit.PlayerClass.Ranged 
+			if (currTarget.UnitClass == PlayerControlledBoardUnit.PlayerClass.Warrior) {
+				if (target.UnitClass == PlayerControlledBoardUnit.PlayerClass.Wizard 
 				    || target.UnitClass == PlayerControlledBoardUnit.PlayerClass.Support)
 					currTarget = target;
 			}
@@ -155,7 +164,7 @@ public class CombatAIManager : MonoBehaviour {
 	/// </summary>
 	IEnumerator TargetAbility() {
 		if (AbilitySelected != null) { //If we have an ability to use
-			AbilityTarget.ReceiveAbilityHit(new AbilityHit(AbilitySelected));
+			AbilityTarget.ReceiveAbilityHit(AbilitySelected);
 			Debug.Log ("Hit " + AbilityTarget.CurrentlyOccupiedHexagon + " with " + AbilitySelected.name);
 		}
 
@@ -207,10 +216,10 @@ public class CombatAIManager : MonoBehaviour {
 			float newPlayerPriorityMod = 1;
 			newPlayerPriority = int.MinValue;
 
-			if (pc.UnitClass == PlayerControlledBoardUnit.PlayerClass.Melee) {
+			if (pc.UnitClass == PlayerControlledBoardUnit.PlayerClass.Warrior) {
 				newPlayerPriority = 10;
 			}
-			else if (pc.UnitClass == PlayerControlledBoardUnit.PlayerClass.Ranged) {
+			else if (pc.UnitClass == PlayerControlledBoardUnit.PlayerClass.Wizard) {
 				newPlayerPriority = 20;
 			}
 			else if (pc.UnitClass == PlayerControlledBoardUnit.PlayerClass.Support) {

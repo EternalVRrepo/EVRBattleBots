@@ -52,9 +52,14 @@
      <None Include="Assets\BattleBots\Shaders\Data.shader" />
      <None Include="Assets\Imported\Image Effects (Pro Only)\_Sources\Shaders\GlowConeTap.shader" />
      <None Include="Assets\BattleBots\Shaders\Wireframe.shader" />
+     <None Include="Assets\ProCore\ProBuilder\About\changelog.txt" />
      <None Include="Assets\Plugins\Android\assets\donotdelete.txt" />
+     <None Include="Assets\ProCore\ProBuilder\Shader\VertexBillboard.shader" />
+     <None Include="Assets\ProCore\ProBuilder\Shader\DiffuseVertexColor.shader" />
      <None Include="Assets\Plugins\Android\res\values-de\strings.xml" />
      <None Include="Assets\Plugins\x86_64\donotdelete.txt" />
+     <None Include="Assets\ProCore\Shared\About\README.txt" />
+     <None Include="Assets\ProCore\ProBuilder\Shader\DiffuseVertexColorTransparency.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\LightCone.shader" />
      <None Include="Assets\Imported\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\MobileBloom.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Readme.txt" />
@@ -63,6 +68,7 @@
      <None Include="Assets\Plugins\Android\res\values\assets.xml" />
      <None Include="Assets\BattleBots\Shaders\SelfIlluminated.shader" />
      <None Include="Assets\Plugins\Android\res\raw\efigs.fnt" />
+     <None Include="Assets\ProCore\ProBuilder\About\pc_AboutEntry_ProBuilder.txt" />
      <None Include="Assets\Plugins\Android\res\values-en-rGB\strings.xml" />
      <None Include="Assets\Plugins\Android\res\values\styles.xml" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\MaterialPlatform.shader" />
@@ -85,6 +91,8 @@
      <None Include="Assets\Plugins\Android\res\values-es\strings.xml" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\LightWrapping.shader" />
      <None Include="Assets\Imported\AlphaExample\AlphaEmissiveDiffuse.shader" />
+     <None Include="Assets\ProCore\ProBuilder\Shader\UnlitColor.shader" />
+     <None Include="Assets\ProCore\ProBuilder\API Examples\Instantiation\README.txt" />
      <None Include="Assets\Imported\Shaders\Toon Shading\Sources\Shaders\Toony-LightedOutline.shader" />
      <None Include="Assets\Imported\Shaders\Toon Shading\Sources\Shaders\Toony-Lighted.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\VertexColorRounding.shader" />
@@ -100,12 +108,15 @@
      <None Include="Assets\Plugins\Android\res\values-ko\strings.xml" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\PixelRotator.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\CustomLighting.shader" />
+     <None Include="Assets\ProCore\ProBuilder\Shader\UnlitColor-Overlay.shader" />
      <None Include="Assets\Plugins\Android\res\values-v11\styles.xml" />
+     <None Include="Assets\ProCore\ProBuilder\Shader\DiffuseVertexColorEmission.shader" />
      <None Include="Assets\Plugins\Android\res\values-de\assets.xml" />
      <None Include="Assets\Plugins\Android\res\values-es\assets.xml" />
      <None Include="Assets\Plugins\Android\res\values\strings.xml" />
      <None Include="Assets\BattleBots\Shaders\Dissolve\DissolveShader.shader" />
      <None Include="Assets\Plugins\Android\res\values-it\strings.xml" />
+     <None Include="Assets\ProCore\ProBuilder\About\Credits.txt" />
      <None Include="Assets\Plugins\Android\res\values-v14\styles.xml" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.3/UnityEngine.UI.dll</HintPath>
@@ -130,6 +141,21 @@
  </Reference>
  <Reference Include="ShaderForge">
  <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/Shaders/ShaderForge/Editor/Code/ShaderForge.dll</HintPath>
+ </Reference>
+ <Reference Include="ProBuilderCore">
+ <HintPath>D:/Coding/GitHub/BattleBots/BattleBotsUnity/Assets/ProCore/ProBuilder/Classes/ProBuilderCore.dll</HintPath>
+ </Reference>
+ <Reference Include="ProBuilderMeshOps">
+ <HintPath>D:/Coding/GitHub/BattleBots/BattleBotsUnity/Assets/ProCore/ProBuilder/Classes/ProBuilderMeshOps.dll</HintPath>
+ </Reference>
+ <Reference Include="ProBuilderEditor">
+ <HintPath>D:/Coding/GitHub/BattleBots/BattleBotsUnity/Assets/ProCore/ProBuilder/Editor/ProBuilderEditor.dll</HintPath>
+ </Reference>
+ <Reference Include="ProCore">
+ <HintPath>D:/Coding/GitHub/BattleBots/BattleBotsUnity/Assets/ProCore/Shared/Code/ProCore.dll</HintPath>
+ </Reference>
+ <Reference Include="SixBySeven">
+ <HintPath>D:/Coding/GitHub/BattleBots/BattleBotsUnity/Assets/ProCore/Shared/Code/SixBySeven.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.Graphs">
  <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>

@@ -94,6 +94,17 @@ public class MyHeroController3rdPerson : MonoBehaviour
 		Jump ();
 	}
 
+	/// <summary>
+	/// Tries to interact with whatever its looking at
+	/// </summary>
+	void TryInteract() {
+		if (!character.isGrounded)
+			return;
+
+		//Raycast for an infected object here
+		//InfectedObject.Interact();
+	}
+
 	void Move ()
 	{
 		//Move

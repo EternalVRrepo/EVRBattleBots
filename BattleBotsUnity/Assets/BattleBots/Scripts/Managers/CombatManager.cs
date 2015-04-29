@@ -1,4 +1,4 @@
- /////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
 //
 //	CombatManager.cs
 //	© EternalVR, All Rights Reserved
@@ -15,7 +15,6 @@ using System.Collections.Generic;
 
 public class CombatManager : MonoBehaviour {
 
-	public GameObject PlayerObject;
 	public Map map;
 	public PhaseState CurrentPhase;
 	public enum PhaseState {
@@ -32,6 +31,7 @@ public class CombatManager : MonoBehaviour {
 	public List<NonPlayerControlledBoardUnit> CurrentEnemies = new List<NonPlayerControlledBoardUnit>();
 	public static CombatManager instance;
 
+	protected bool PowerUpMenuOpen;
 	protected AbilityDescription currentAbility;
 	protected Camera RaycastCamera;
 	protected int HexTargetMask;
@@ -39,8 +39,11 @@ public class CombatManager : MonoBehaviour {
 	[SerializeField]
 	protected PlayerControlledBoardUnit CurrentlySelectedUnit;
 	protected CombatAIManager AIManager;
-	private delegate void CurrentPhaseState();
+	protected TemplateManager templateManager {
+		get { return GetComponent<TemplateManager>(); }
+	}
 
+	private delegate void CurrentPhaseState();
 	private CurrentPhaseState currentPhaseStateMethod;
 	private int currentMoveDistance;
 
@@ -69,6 +72,65 @@ public class CombatManager : MonoBehaviour {
 		if (currentPhaseStateMethod != null)
 			currentPhaseStateMethod();
 		else Debug.LogError("No Current Combat State, most likely not initialized from GameManager");
+
+		PowerUpInput (); //Check for input to use powerups
+	}
+
+	/// <summary>
+	/// Check for input to use power ups
+	/// </summary>
+	void PowerUpInput ()
+	{
+		if (Input.GetButtonDown ("Select")) {
+			CyclePowerUpMenu ();
+		}
+		//TODO DEBUG only
+		if (Input.GetKeyDown (KeyCode.A) && PowerUpPhase() && GameManager.instance.CurrentPowerUps.Count > 0) { //Needs to be VR input and choose a power up based on it once popup menu is ready
+			UsePowerUp (GameManager.instance.CurrentPowerUps [0]);
+		}
+	}
+
+	/// <summary>
+	/// Uses the power up.
+	/// </summary>
+	protected void UsePowerUp(PowerUp pu) {
+		if (pu.PowerUpTargetType == PowerUp.PowerUpTarget.WholeParty) {
+			foreach (PlayerControlledBoardUnit p in CurrentParty) {
+				p.ApplyPowerUp(pu);
+			}
+		}
+		else if (pu.PowerUpTargetType == PowerUp.PowerUpTarget.CurrentUnit) {
+			CurrentlySelectedUnit.ApplyPowerUp(pu);
+		}
+		GameManager.instance.CurrentPowerUps.Remove (pu);
+	}
+
+	/// <summary>
+	/// Check if its a phase we can use power ups in
+	/// </summary>
+	protected bool PowerUpPhase() {
+		if (CurrentPhase == PhaseState.SelectMovement)
+			return true;
+
+		if (CurrentPhase == PhaseState.SelectAttack)
+			return true;
+
+		if (CurrentPhase == PhaseState.TargetAttack) 
+			return true;
+
+		return false;
+	}
+
+	/// <summary>
+	/// Cycles the power up menu between on and off
+	/// </summary>
+	protected void CyclePowerUpMenu() {
+		if (PowerUpMenuOpen) {
+			//PowerUpMenu.setActive(false);
+		}
+		else {
+			//PowerUpMenu.setActive(true)
+		}
 	}
 
 	/// <summary>
@@ -91,7 +153,9 @@ public class CombatManager : MonoBehaviour {
 		currentPhaseStateMethod = new CurrentPhaseState(StateMovementSelection);
 		CurrentPhase = PhaseState.SelectMovement;
 		currentMoveDistance = CurrentlySelectedUnit.remainingMoveDistance;
-		BoardManager.instance.HighlightMovement(currentMoveDistance, CurrentlySelectedUnit.CurrentlyOccupiedHexagon);
+		if (CurrentlySelectedUnit.CanMove())
+			BoardManager.instance.HighlightMovement(currentMoveDistance, CurrentlySelectedUnit.CurrentlyOccupiedHexagon);
+		CurrentlySelectedUnit.MovementIsDirty = false;
 	}
 
 	/// <summary>
@@ -155,11 +219,14 @@ public class CombatManager : MonoBehaviour {
 	public void KillUnit(BoardUnit unit) {
 		if (unit is PlayerControlledBoardUnit) {
 			CurrentParty.Remove (unit as PlayerControlledBoardUnit);
+			if (CurrentParty.Count == 0) {
+				GameManager.instance.FinishCombat(false);
+			}
 		}
 		else if (unit is NonPlayerControlledBoardUnit) {
 			CurrentEnemies.Remove (unit as NonPlayerControlledBoardUnit);
 			if (CurrentEnemies.Count == 0) { //End of combat
-				GameManager.instance.FinishCombat();
+				GameManager.instance.FinishCombat(true);
 			}
 		}
 	}
@@ -168,6 +235,10 @@ public class CombatManager : MonoBehaviour {
 	/// State called when in movement selection
 	/// </summary>
 	void StateMovementSelection() {
+
+		if (CurrentlySelectedUnit.MovementIsDirty)
+			EnterStateMovementSelection();
+
 		if (Input.GetButtonDown("Ability1") || Input.GetKeyDown (KeyCode.Mouse0)) {
 			Hexagon h = RaycastHexagon ();
 
@@ -213,6 +284,14 @@ public class CombatManager : MonoBehaviour {
 	/// State called when selecting what kind of attack to use
 	/// </summary>
 	void StateSelectAttack() {
+
+		if (Input.GetButtonDown ("Cancel") || Input.GetKeyDown (KeyCode.Escape)) {
+			EnterStateEndOfTurn();
+		}
+		if (!CurrentlySelectedUnit.CanCastAbility ()){ //if we are silenced or something, we cant select an ability
+			return;
+		}
+
 		if (Input.GetButtonDown ("Ability1")) { //Choose ability 1
 			currentAbility = CurrentlySelectedUnit.AbilityActivator.ActivateAbility(0);
 			EnterStateTargetAttack ();
@@ -229,9 +308,6 @@ public class CombatManager : MonoBehaviour {
 			currentAbility = CurrentlySelectedUnit.AbilityActivator.ActivateAbility (3);
 			EnterStateTargetAttack ();
 		}
-		else if (Input.GetButtonDown ("Cancel") || Input.GetKeyDown (KeyCode.Escape)) {
-			EnterStateEndOfTurn();
-		}
 	}
 
 	/// <summary>
@@ -240,12 +316,18 @@ public class CombatManager : MonoBehaviour {
 	void StateTargetAttack() {
 
 		if (Input.GetButtonDown ("Ability1") || Input.GetKeyDown (KeyCode.Mouse0)) {
-			Hexagon h = RaycastHexagon ();
-			if (h != null && h.InLOS()) {
-				if (CurrentlySelectedUnit.AbilityActivator.CheckValidTarget(h)) {
-					EnterStateWaiting ();
-					StartCoroutine ("UseAbility");
+			if (!templateManager.TemplateInUse) { 
+				Hexagon h = RaycastHexagon ();
+				if (h != null && h.InLOS()) {
+					if (CurrentlySelectedUnit.AbilityActivator.CheckValidTarget(h)) {
+						EnterStateWaiting ();
+						StartCoroutine ("UseAbility");
+					}
 				}
+			}
+			else {
+				EnterStateWaiting();
+				StartCoroutine ("UseAbility");
 			}
 		}
 
@@ -314,10 +396,13 @@ public class CombatManager : MonoBehaviour {
 
 		foreach (PartyUnit unit in currentParty) {
 			GameObject go = Instantiate (unit.UnitPrefab) as GameObject;
+			if (go.GetComponent<MyHeroController3rdPerson>())
+				Destroy (go.GetComponent<MyHeroController3rdPerson>());
 			go.AddComponent <PlayerControlledBoardUnit>();
 			go.AddComponent <AbilityActivator>();
 			PlayerControlledBoardUnit bu = go.GetComponent<PlayerControlledBoardUnit>();
 			bu.Initialize(unit);
+			go.name = bu.UnitClass.ToString ();
 			bu.Spawn (BoardManager.instance.GetHexagonFromArray((int)map.PlayerSpawns[currentParty.IndexOf (unit)].x, (int)map.PlayerSpawns[currentParty.IndexOf (unit)].y));
 			CurrentParty.Add (bu);
 		}
