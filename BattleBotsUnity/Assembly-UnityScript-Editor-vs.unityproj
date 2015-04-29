@@ -145,28 +145,9 @@
  <Reference Include="ShaderForge">
  <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/Shaders/ShaderForge/Editor/Code/ShaderForge.dll</HintPath>
  </Reference>
- <Reference Include="ProBuilderCore">
- <HintPath>D:/Coding/GitHub/BattleBots/BattleBotsUnity/Assets/ProCore/ProBuilder/Classes/ProBuilderCore.dll</HintPath>
- </Reference>
- <Reference Include="ProBuilderMeshOps">
- <HintPath>D:/Coding/GitHub/BattleBots/BattleBotsUnity/Assets/ProCore/ProBuilder/Classes/ProBuilderMeshOps.dll</HintPath>
- </Reference>
- <Reference Include="ProBuilderEditor">
- <HintPath>D:/Coding/GitHub/BattleBots/BattleBotsUnity/Assets/ProCore/ProBuilder/Editor/ProBuilderEditor.dll</HintPath>
- </Reference>
- <Reference Include="ProCore">
- <HintPath>D:/Coding/GitHub/BattleBots/BattleBotsUnity/Assets/ProCore/Shared/Code/ProCore.dll</HintPath>
- </Reference>
- <Reference Include="SixBySeven">
- <HintPath>D:/Coding/GitHub/BattleBots/BattleBotsUnity/Assets/ProCore/Shared/Code/SixBySeven.dll</HintPath>
- </Reference>
  <Reference Include="UnityEditor.Graphs">
  <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>
  </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-vs.csproj">
-      <Project>{33423A62-ED6D-7642-7D10-D1C564B1FE8E}</Project>      <Name>Assembly-CSharp-vs</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

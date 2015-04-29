@@ -137,18 +137,6 @@
  <Reference Include="SixBySeven">
  <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/Shared/Code/SixBySeven.dll</HintPath>
  </Reference>
- <Reference Include="ProBuilderCore">
- <HintPath>D:/Coding/GitHub/BattleBots/BattleBotsUnity/Assets/ProCore/ProBuilder/Classes/ProBuilderCore.dll</HintPath>
- </Reference>
- <Reference Include="ProBuilderMeshOps">
- <HintPath>D:/Coding/GitHub/BattleBots/BattleBotsUnity/Assets/ProCore/ProBuilder/Classes/ProBuilderMeshOps.dll</HintPath>
- </Reference>
- <Reference Include="ProCore">
- <HintPath>D:/Coding/GitHub/BattleBots/BattleBotsUnity/Assets/ProCore/Shared/Code/ProCore.dll</HintPath>
- </Reference>
- <Reference Include="SixBySeven">
- <HintPath>D:/Coding/GitHub/BattleBots/BattleBotsUnity/Assets/ProCore/Shared/Code/SixBySeven.dll</HintPath>
- </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

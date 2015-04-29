@@ -1,14 +1,6 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\BattleBots\Editor\AbilityDescriptionEditor.cs">
-    <Files>
-      <File FileName="Assets\BattleBots\Scripts\Customization\PlatformManager.cs" Line="68" Column="3" />
-      <File FileName="Assets\BattleBots\Scripts\Managers\GameManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\BattleBots\Scripts\Customization\CharacterCustomizerManager.cs" Line="88" Column="3" />
-      <File FileName="Assets\BattleBots\Scripts\Combat\Ability\AbilityDescription.cs" Line="22" Column="29" />
-      <File FileName="Assets\BattleBots\Editor\AbilityDescriptionEditor.cs" Line="52" Column="60" />
-    </Files>
-  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
