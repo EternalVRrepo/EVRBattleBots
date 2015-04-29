@@ -39,10 +39,10 @@
 	<Reference Include="System.Core" />
 	<Reference Include="System.Xml.Linq" />
 	<Reference Include="UnityEngine">
-	  <HintPath>D:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>D:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
@@ -59,6 +59,9 @@
      <Compile Include="Assets\BattleBots\Scripts\Combat\Units\BoardUnit.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Combat\Units\NonPlayerControlledBoardUnit.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Combat\Units\PlayerControlledBoardUnit.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Customization\CharacterCustomizerManager.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Customization\Hover.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Customization\PlatformManager.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Customization\PowerUp.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Customization\Talent.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Customization\TalentTree.cs" />
@@ -87,12 +90,9 @@
      <Compile Include="Assets\BattleBots\Scripts\Player\Features\StateManager.cs" />
      <Compile Include="Assets\BattleBots\Scripts\RXSolutionFixer.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Utility\FPSDisplay.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Utility\GazeInputModule.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Utility\LevelManager.cs" />
-     <Compile Include="Assets\CharacterCustomization\Scripts\CharacterCustomizerManager.cs" />
-     <Compile Include="Assets\CharacterCustomization\Scripts\GazeInputModule.cs" />
-     <Compile Include="Assets\CharacterCustomization\Scripts\Hover.cs" />
-     <Compile Include="Assets\CharacterCustomization\Scripts\PlatformManager.cs" />
-     <Compile Include="Assets\CharacterCustomization\Scripts\moveRightCheck.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Utility\moveRightCheck.cs" />
      <Compile Include="Assets\Imported\Image Effects (Pro Only)\GlowEffect.cs" />
      <Compile Include="Assets\Imported\Image Effects (Pro Only)\ImageEffectBase.cs" />
      <Compile Include="Assets\Imported\Image Effects (Pro Only)\ImageEffects.cs" />
@@ -114,6 +114,7 @@
      <Compile Include="Assets\OVR\Scripts\Util\OVRPlayerController.cs" />
      <Compile Include="Assets\OVR\Scripts\Util\OVRScreenFade.cs" />
      <Compile Include="Assets\OVR\Scripts\Util\OVRUGUI.cs" />
+     <Compile Include="Assets\StatsWindow.cs" />
      <None Include="Assets\Plugins\donotdelete.txt" />
      <None Include="Assets\Imported\Shaders\Toon Shading\Sources\Shaders\Toony-Basic.shader" />
      <None Include="Assets\BattleBots\Shaders\Data.shader" />
@@ -175,7 +176,19 @@
      <None Include="Assets\Plugins\Android\res\values-it\strings.xml" />
      <None Include="Assets\Plugins\Android\res\values-v14\styles.xml" />
  <Reference Include="UnityEngine.UI">
- <HintPath>D:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.3/UnityEngine.UI.dll</HintPath>
+ <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.3/UnityEngine.UI.dll</HintPath>
+ </Reference>
+ <Reference Include="ProBuilderCore">
+ <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/ProBuilder/Classes/ProBuilderCore.dll</HintPath>
+ </Reference>
+ <Reference Include="ProBuilderMeshOps">
+ <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/ProBuilder/Classes/ProBuilderMeshOps.dll</HintPath>
+ </Reference>
+ <Reference Include="ProCore">
+ <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/Shared/Code/ProCore.dll</HintPath>
+ </Reference>
+ <Reference Include="SixBySeven">
+ <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/Shared/Code/SixBySeven.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

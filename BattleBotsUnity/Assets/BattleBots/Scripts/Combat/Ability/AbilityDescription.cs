@@ -15,11 +15,15 @@ using System.Collections;
 using System.Collections.Generic;
 
 [System.Serializable]
-public class AbilityDescription : ScriptableObject {
+public class AbilityDescription : ScriptableObject
+{
 
-	public string DisplayName = ""; //Name of this ability 
+	public string DisplayName = ""; //Name of this ability
+	public Texture AbilityIcon;
+	public string TooltipText = ""; 
 	public TargetType AbilityTargetType;
-	public enum TargetType {
+	public enum TargetType
+	{
 		TargetSelf,
 		TargetUnit,
 		TargetEnemy,
@@ -28,14 +32,16 @@ public class AbilityDescription : ScriptableObject {
 	}
 
 	public DamageType AbilityDamageType;
-	public enum DamageType {
+	public enum DamageType
+	{
 		Damage,
 		Heal,
 		Absorb
 	}
 
 	public AbilityType AbilityAbilityType;
-	public enum AbilityType {
+	public enum AbilityType
+	{
 		SingleTarget,
 		SingleTargetOverTime,
 		Area,
@@ -48,7 +54,8 @@ public class AbilityDescription : ScriptableObject {
 		get {
 			if (AbilityAbilityType == AbilityType.AreaOverTime || AbilityAbilityType == AbilityType.SingleTargetOverTime)
 				return duration;
-			else return -1;
+			else
+				return -1;
 		} 
 		set {
 			duration = value;
@@ -58,6 +65,6 @@ public class AbilityDescription : ScriptableObject {
 	public int AreaOfEffectDistance; //How far from the target is affected by this ability
 	public int duration;
 	
-	public List<StatusEffect> effects = new List<StatusEffect>();
+	public List<StatusEffect> effects = new List<StatusEffect> ();
 
 }

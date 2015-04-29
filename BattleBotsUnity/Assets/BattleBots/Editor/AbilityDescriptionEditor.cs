@@ -14,11 +14,12 @@ using System.Collections;
 using UnityEditor;
 
 [CustomEditor(typeof(AbilityDescription))]
-public class AbilityDescriptionEditor : Editor {
+public class AbilityDescriptionEditor : Editor
+{
 
 	AbilityDescription abilityEditor;
 
-	public override void OnInspectorGUI()
+	public override void OnInspectorGUI ()
 	{
 		serializedObject.Update ();
 		abilityEditor = (AbilityDescription)target;
@@ -26,30 +27,33 @@ public class AbilityDescriptionEditor : Editor {
 		EditorGUILayout.BeginHorizontal ();
 		EditorGUILayout.LabelField ("Ability Name");
 		abilityEditor.DisplayName = abilityEditor.name;
-		abilityEditor.DisplayName = EditorGUILayout.TextField(abilityEditor.DisplayName);
+		abilityEditor.DisplayName = EditorGUILayout.TextField (abilityEditor.DisplayName);
 		if (abilityEditor.name != abilityEditor.DisplayName)
-			AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath (abilityEditor).ToString(), abilityEditor.DisplayName);
-		EditorGUILayout.EndHorizontal();
-
-		EditorGUILayout.BeginHorizontal();
-		abilityEditor.AbilityDamageType = (AbilityDescription.DamageType)EditorGUILayout.EnumPopup("Ability Target Type", abilityEditor.AbilityDamageType);
+			AssetDatabase.RenameAsset (AssetDatabase.GetAssetPath (abilityEditor).ToString (), abilityEditor.DisplayName);
 		EditorGUILayout.EndHorizontal ();
 
-		EditorGUILayout.BeginHorizontal();
-		abilityEditor.AbilityTargetType = (AbilityDescription.TargetType)EditorGUILayout.EnumPopup("Ability Damage Type", abilityEditor.AbilityTargetType);
+		EditorGUILayout.LabelField ("Tooltip");
+		abilityEditor.TooltipText = EditorGUILayout.TextArea (abilityEditor.TooltipText);
+
+		EditorGUILayout.BeginHorizontal ();
+		abilityEditor.AbilityDamageType = (AbilityDescription.DamageType)EditorGUILayout.EnumPopup ("Ability Target Type", abilityEditor.AbilityDamageType);
 		EditorGUILayout.EndHorizontal ();
 
-		EditorGUILayout.BeginHorizontal();
-		abilityEditor.AbilityAbilityType = (AbilityDescription.AbilityType)EditorGUILayout.EnumPopup("Ability Damage Type", abilityEditor.AbilityAbilityType);
+		EditorGUILayout.BeginHorizontal ();
+		abilityEditor.AbilityTargetType = (AbilityDescription.TargetType)EditorGUILayout.EnumPopup ("Ability Damage Type", abilityEditor.AbilityTargetType);
 		EditorGUILayout.EndHorizontal ();
 
-		EditorGUILayout.BeginHorizontal();
+		EditorGUILayout.BeginHorizontal ();
+		abilityEditor.AbilityAbilityType = (AbilityDescription.AbilityType)EditorGUILayout.EnumPopup ("Ability Damage Type", abilityEditor.AbilityAbilityType);
+		EditorGUILayout.EndHorizontal ();
+
+		EditorGUILayout.BeginHorizontal ();
 		EditorGUILayout.LabelField ((abilityEditor.AbilityDamageType == AbilityDescription.DamageType.Heal 
-		                             || abilityEditor.AbilityDamageType == AbilityDescription.DamageType.Absorb) ? "Healing" : "Damage");
+			|| abilityEditor.AbilityDamageType == AbilityDescription.DamageType.Absorb) ? "Healing" : "Damage");
 		abilityEditor.damage = EditorGUILayout.IntField (abilityEditor.damage);
 		EditorGUILayout.EndHorizontal ();
 
-		EditorGUILayout.BeginHorizontal();
+		EditorGUILayout.BeginHorizontal ();
 		if (abilityEditor.AbilityAbilityType == AbilityDescription.AbilityType.AreaOverTime || abilityEditor.AbilityAbilityType == AbilityDescription.AbilityType.SingleTargetOverTime) {
 			EditorGUILayout.LabelField ("Duration");
 			abilityEditor.Duration = EditorGUILayout.IntField (abilityEditor.Duration);
@@ -69,7 +73,7 @@ public class AbilityDescriptionEditor : Editor {
 		EditorGUILayout.EndHorizontal ();
 		
 		if (GUILayout.Button ("Create New Status Effect")) {
-			abilityEditor.effects.Add(new StatusEffect());
+			abilityEditor.effects.Add (new StatusEffect ());
 		}
 		if (abilityEditor.effects.Count > 0)
 			ShowEffectList ();
@@ -80,27 +84,27 @@ public class AbilityDescriptionEditor : Editor {
 	/// <summary>
 	/// Used to display an array
 	/// </summary>
-	public void ShowEffectList () {
+	public void ShowEffectList ()
+	{
 		for (int i = 0; i < abilityEditor.effects.Count; i++) {
-			StatusEffect eff = abilityEditor.effects[i];
+			StatusEffect eff = abilityEditor.effects [i];
 			EditorGUILayout.BeginHorizontal ();
 			EditorGUILayout.LabelField ("Status Effect Name:", GUILayout.MaxWidth (155));
 			eff.StatusEffectName = EditorGUILayout.TextField (eff.StatusEffectName);
 			if (GUILayout.Button ("Delete Effect", GUILayout.MaxWidth (100))) {
 				abilityEditor.effects.RemoveAt (i);
 				i--;
-			}
-			else {
+			} else {
 				EditorGUILayout.EndHorizontal ();
-				EditorGUILayout.BeginHorizontal();
-				eff.statusType = (StatusEffect.StatusType)EditorGUILayout.EnumPopup("Status Effect Type", eff.statusType);
+				EditorGUILayout.BeginHorizontal ();
+				eff.statusType = (StatusEffect.StatusType)EditorGUILayout.EnumPopup ("Status Effect Type", eff.statusType);
 				EditorGUILayout.EndHorizontal ();
-				EditorGUILayout.BeginHorizontal();
-				eff.damageDurationType = (StatusEffect.DamageDurationType)EditorGUILayout.EnumPopup("Status Effect Duration", eff.damageDurationType);
+				EditorGUILayout.BeginHorizontal ();
+				eff.damageDurationType = (StatusEffect.DamageDurationType)EditorGUILayout.EnumPopup ("Status Effect Duration", eff.damageDurationType);
 				EditorGUILayout.EndHorizontal ();
 				EditorGUILayout.BeginHorizontal ();
 				if (eff.damageDurationType == StatusEffect.DamageDurationType.OverTime) {
-					EditorGUILayout.LabelField("Status Effect Duration (In Turns)");
+					EditorGUILayout.LabelField ("Status Effect Duration (In Turns)");
 					eff.effectDuration = Mathf.Clamp (EditorGUILayout.IntField (eff.effectDuration), 1, 10);
 				}
 				EditorGUILayout.EndHorizontal ();
@@ -108,12 +112,10 @@ public class AbilityDescriptionEditor : Editor {
 				if (eff.statusType == StatusEffect.StatusType.Damage) {
 					EditorGUILayout.LabelField ("Total Damage Amount");
 					eff.damage = EditorGUILayout.FloatField (eff.damage);
-				}
-				else if (eff.statusType == StatusEffect.StatusType.Heal) {
+				} else if (eff.statusType == StatusEffect.StatusType.Heal) {
 					EditorGUILayout.LabelField ("Total Healing Amount");
 					eff.damage = EditorGUILayout.FloatField (eff.damage);
-				}
-				else if (eff.statusType == StatusEffect.StatusType.Absorb) {
+				} else if (eff.statusType == StatusEffect.StatusType.Absorb) {
 					EditorGUILayout.LabelField ("Total Absorb Amount");
 					eff.damage = EditorGUILayout.FloatField (eff.damage);
 				}
@@ -121,8 +123,8 @@ public class AbilityDescriptionEditor : Editor {
 				EditorGUILayout.BeginHorizontal ();
 				if (eff.statusType == StatusEffect.StatusType.Slow) {
 					EditorGUILayout.LabelField ("Move Speed Reduction (Percent)", GUILayout.MaxWidth (200));
-					eff.slowPercent = Mathf.Clamp(EditorGUILayout.FloatField(eff.slowPercent, GUILayout.MaxWidth (50)),0,1);
-					eff.slowPercent = GUILayout.HorizontalSlider(eff.slowPercent, 0f, 1f);
+					eff.slowPercent = Mathf.Clamp (EditorGUILayout.FloatField (eff.slowPercent, GUILayout.MaxWidth (50)), 0, 1);
+					eff.slowPercent = GUILayout.HorizontalSlider (eff.slowPercent, 0f, 1f);
 				}
 				EditorGUILayout.EndHorizontal ();
 			}
