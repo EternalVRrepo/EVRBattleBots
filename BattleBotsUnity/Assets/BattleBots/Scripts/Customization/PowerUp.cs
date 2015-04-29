@@ -20,15 +20,8 @@ public class PowerUp : ScriptableObject {
 		CurrentUnit,
 		WholeParty
 	}
-
-	public PowerUpBonus PowerUpBonusType;
-	public enum PowerUpBonus {
-		Healing,
-		MovementDistance,
-		AllAbilityRanges,
-		PercentDamageIncrease,
-		RemoveDebuffs
-	}
+	
+	public BuffEffect.Buff PowerUpEffect;
 
 	public float PowerUpBonusValue;
 	public int PowerUpBonusDuration;

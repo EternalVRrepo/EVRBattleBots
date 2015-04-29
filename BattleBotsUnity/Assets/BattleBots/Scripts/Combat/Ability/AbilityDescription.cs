@@ -18,46 +18,55 @@ using System.Collections.Generic;
 public class AbilityDescription : ScriptableObject {
 
 	public string DisplayName = ""; //Name of this ability 
+	public string TooltipText = ""; 
 	public TargetType AbilityTargetType;
 	public enum TargetType {
 		TargetSelf,
 		TargetUnit,
 		TargetEnemy,
 		TargetAlly,
-		TargetHexagon
+		CustomTemplate
 	}
 
-	public DamageType AbilityDamageType;
-	public enum DamageType {
-		Damage,
-		Heal,
-		Absorb
-	}
+	public TemplateManager.Target TemplateType;
+	public TemplateManager.TargetTemplate Template;
 
-	public AbilityType AbilityAbilityType;
-	public enum AbilityType {
-		SingleTarget,
-		SingleTargetOverTime,
-		Area,
-		AreaOverTime
-	}
+	public int TemplateLength;
+	public int TemplateWidth;
+
+	public bool FriendlyFireEnabled;
+	
+//	public DamageType AbilityDamageType;
+//	public enum DamageType {
+//		Damage,
+//		Heal,
+//		Absorb
+//	}
+
+//	public AbilityType AbilityAbilityType;
+//	public enum AbilityType {
+//		SingleTarget,
+//		Area,
+//		AreaOverTime
+//	}
 
 	public int castRange; //How far from the player this ability can be cast
-	public int damage; //damage or healing per tick = damage or healing/duration if it is a DoT
-	public int Duration { //Used for DoT attacks
-		get {
-			if (AbilityAbilityType == AbilityType.AreaOverTime || AbilityAbilityType == AbilityType.SingleTargetOverTime)
-				return duration;
-			else return -1;
-		} 
-		set {
-			duration = value;
-		}
-	}
+//	public int damage; //damage or healing per tick = damage or healing/duration if it is a DoT
+//	public int Duration { //Used for DoT attacks
+//		get {
+//			if (AbilityAbilityType == AbilityType.AreaOverTime)
+//				return duration;
+//			else return -1;
+//		} 
+//		set {
+//			duration = value;
+//		}
+//	}
 
 	public int AreaOfEffectDistance; //How far from the target is affected by this ability
 	public int duration;
 	
-	public List<StatusEffect> effects = new List<StatusEffect>();
+	public List<DebuffEffect> debuffs = new List<DebuffEffect>();
+	public List<BuffEffect> buffs = new List<BuffEffect>();
 
 }

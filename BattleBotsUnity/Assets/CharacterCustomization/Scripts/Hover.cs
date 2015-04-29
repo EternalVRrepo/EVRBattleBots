@@ -61,7 +61,7 @@ public class Hover : MonoBehaviour
 		if (hover) {
 			if (hType == hoverType.characterSelection) {
 				//Trigger Events
-				if (timer > 2f || Input.GetMouseButton (0)) {
+				if (Input.GetMouseButton (0)) {
 					//Set Manager To Be Aware This Character Is Selected And Just Incase Sets Last Character To Inactive
 					if (CCManager.currentlySelectedCharacter != platformManager && platformManager.CurrentlyDisplayedPartyUnit != null) {
 						if (CCManager.currentlySelectedCharacter != null) 

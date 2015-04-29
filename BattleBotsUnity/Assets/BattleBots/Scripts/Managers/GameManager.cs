@@ -41,6 +41,8 @@ public class GameManager : MonoBehaviour {
 	public delegate void OnStateChangeHandler();
 	public event OnStateChangeHandler OnStateChange;
 
+	protected List<EnemyUnitInfo> enemies = new List<EnemyUnitInfo>();
+	
 	private static GameManager _instance = null;
 
 	/// <summary>
@@ -99,7 +101,6 @@ public class GameManager : MonoBehaviour {
 	}
 
 	protected void StartCustomization() {
-		Debug.Log("Loading Level: Customization Menu");
 		Application.LoadLevel("CustomizationMenu");
 	}
 
@@ -117,24 +118,26 @@ public class GameManager : MonoBehaviour {
 		newUnit.UnitPrefab = Resources.Load ("Characters/Hero") as GameObject;
 		newUnit.MovementDistance = 3;
 		newUnit.Health = 60;
-		newUnit.UnitClass = PlayerControlledBoardUnit.PlayerClass.Melee;
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/TestDamageSlow")) as AbilityDescription);
+		newUnit.UnitClass = PlayerControlledBoardUnit.PlayerClass.Warrior;
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/SonicStrike")) as AbilityDescription);
 		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/TestHeal")) as AbilityDescription);
 		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/TestStun")) as AbilityDescription);
 		newUnit.currentLevel = 1;
 		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree>("TalentTrees/MeleeTree")) as TalentTree;
 		CurrentParty.Add (newUnit);
-//		newUnit = ScriptableObject.CreateInstance<PartyUnit>();
-//		newUnit.UnitPrefab = Resources.Load ("Characters/Hero") as GameObject;
-//		newUnit.MovementDistance = 4;
-//		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/TestDamageSlow")) as AbilityDescription);
-//		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/TestHeal")) as AbilityDescription);
-//		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/TestStun")) as AbilityDescription);
-//		newUnit.Health = 65;
-//		newUnit.UnitClass = PlayerControlledBoardUnit.PlayerClass.Ranged;
-//		newUnit.currentLevel = 1;
-//		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree>("TalentTrees/RangedTree")) as TalentTree;
-//		CurrentParty.Add (newUnit);
+		newUnit = ScriptableObject.CreateInstance<PartyUnit>();
+		newUnit.UnitPrefab = Resources.Load ("Characters/Hero") as GameObject;
+		newUnit.MovementDistance = 4;
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/TestDamageSlow")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/TestHeal")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/TestStun")) as AbilityDescription);
+		newUnit.Health = 65;
+		newUnit.UnitClass = PlayerControlledBoardUnit.PlayerClass.Wizard;
+		newUnit.currentLevel = 1;
+		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree>("TalentTrees/RangedTree")) as TalentTree;
+		CurrentParty.Add (newUnit);
+
+		CurrentPowerUps.Add(Instantiate(Resources.Load<PowerUp>("PowerUps/MoveSpeed")) as PowerUp);
 	}
 
 	/// <summary>
@@ -153,24 +156,28 @@ public class GameManager : MonoBehaviour {
 	}
 
 	protected void StartOpenWorld() {
-		Debug.Log ("Loading Level: OpenWorld");
 		Application.LoadLevel("OpenWorld");
 	}
 
 	/// <summary>
 	/// Called to switch to and start combat
 	/// </summary>
-	protected void StartCombat() {
-		Debug.Log ("Loading Level: CombatTest");
+	public void StartCombat(List<EnemyUnitInfo> newEnemies = null) {
+		enemies = newEnemies;
 		Application.LoadLevel ("CombatTest");
 	}
 
 	/// <summary>
 	/// Finish combat and return to the open world, called from combat manager when its finished
 	/// </summary>
-	public void FinishCombat() {
-		foreach (PartyUnit u in CurrentParty) {
-			u.AddXP(10);
+	public void FinishCombat(bool win) {
+		if (win) { //victory
+			foreach (PartyUnit u in CurrentParty) {
+				u.AddXP(10);
+			}
+		}
+		else { //defeat
+
 		}
 		SetGameState (GameState.OpenWorld);
 	}
@@ -200,24 +207,24 @@ public class GameManager : MonoBehaviour {
 			GameObject mapEditor = GameObject.Find ("MapEditor");
 			if (mapEditor != null)
 				Destroy (mapEditor);
-			
 
-			List<EnemyUnitInfo> enemies = new List<EnemyUnitInfo>();
-			EnemyUnitInfo newUnit = ScriptableObject.CreateInstance<EnemyUnitInfo>();
-			newUnit.UnitPrefab = Resources.Load ("EnemyUnitPrefabTest") as GameObject;
-			newUnit.MovementDistance = 3;
-			newUnit.Health = 80;
-			newUnit.AIType = CombatAIManager.AIType.Melee;
-			newUnit.ListOfAbilities.Add(Resources.Load<AbilityDescription>("Abilities/EnemyAbilities/Bite"));
-			enemies.Add (newUnit);
-			newUnit = ScriptableObject.CreateInstance<EnemyUnitInfo>();
-			newUnit.UnitPrefab = Resources.Load ("EnemyUnitPrefabTest") as GameObject;
-			newUnit.MovementDistance = 3;
-			newUnit.Health = 80;
-			newUnit.AIType = CombatAIManager.AIType.Melee;
-			newUnit.ListOfAbilities.Add(Resources.Load<AbilityDescription>("Abilities/EnemyAbilities/Bite"));
-			enemies.Add (newUnit);
-
+			if (enemies == null || enemies.Count == 0) {
+				enemies = new List<EnemyUnitInfo>();
+				EnemyUnitInfo newUnit = ScriptableObject.CreateInstance<EnemyUnitInfo>();
+				newUnit.UnitPrefab = Resources.Load ("EnemyUnitPrefabTest") as GameObject;
+				newUnit.MovementDistance = 3;
+				newUnit.Health = 80;
+				newUnit.AIType = CombatAIManager.AIType.Melee;
+				newUnit.ListOfAbilities.Add(Resources.Load<AbilityDescription>("Abilities/EnemyAbilities/Bite"));
+				enemies.Add (newUnit);
+				newUnit = ScriptableObject.CreateInstance<EnemyUnitInfo>();
+				newUnit.UnitPrefab = Resources.Load ("EnemyUnitPrefabTest") as GameObject;
+				newUnit.MovementDistance = 3;
+				newUnit.Health = 80;
+				newUnit.AIType = CombatAIManager.AIType.Melee;
+				newUnit.ListOfAbilities.Add(Resources.Load<AbilityDescription>("Abilities/EnemyAbilities/Bite"));
+				enemies.Add (newUnit);
+			}
 			combatManager.SetupCombat (0, CurrentParty, enemies);
 		}
 		else if (Application.loadedLevelName == "CustomizationMenu") {

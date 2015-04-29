@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -15,10 +15,10 @@ public class CharacterCustomizerManager : MonoBehaviour
 			UpdateActive(value);
 			lastSelectedCharacter = selectedChar;
 			selectedChar = value;
+			Debug.Log (value);
 		}
 	}
 	public PlatformManager lastSelectedCharacter;
-	public PartyUnit CurrentlyDisplayedUnit;
 	public List<PartyUnit> currentParty;
 	public GameObject PlatformPrefab;
 	public float PlatformDistance;
@@ -37,7 +37,6 @@ public class CharacterCustomizerManager : MonoBehaviour
 		defaultSelectedCharacter = Platforms[0];
 		defaultSelectedCharacter.isActive = true;
 		currentlySelectedCharacter = defaultSelectedCharacter;
-		CurrentlyDisplayedUnit = currentParty[0];
 		lastSelectedCharacter = defaultSelectedCharacter;
 	}
 
@@ -49,7 +48,7 @@ public class CharacterCustomizerManager : MonoBehaviour
 		newUnit.UnitPrefab = Resources.Load ("Characters/Hero") as GameObject;
 		newUnit.MovementDistance = 3;
 		newUnit.Health = 60;
-		newUnit.UnitClass = PlayerControlledBoardUnit.PlayerClass.Melee;
+		newUnit.UnitClass = PlayerControlledBoardUnit.PlayerClass.Warrior;
 		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/TestDamageSlow")) as AbilityDescription);
 		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/TestHeal")) as AbilityDescription);
 		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/TestHeal")) as AbilityDescription);
@@ -64,7 +63,7 @@ public class CharacterCustomizerManager : MonoBehaviour
 		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/TestHeal")) as AbilityDescription);
 		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/TestStun")) as AbilityDescription);
 		newUnit.Health = 65;
-		newUnit.UnitClass = PlayerControlledBoardUnit.PlayerClass.Ranged;
+		newUnit.UnitClass = PlayerControlledBoardUnit.PlayerClass.Wizard;
 		newUnit.currentLevel = 1;
 		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree>("TalentTrees/RangedTree")) as TalentTree;
 		currentParty.Add (newUnit);

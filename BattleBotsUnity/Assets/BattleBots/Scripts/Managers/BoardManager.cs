@@ -39,10 +39,10 @@ public class BoardManager : MonoBehaviour {
 
 	protected float HexWidth;						//Width of a hex prefab
 	protected float HexHeight;						//Height of a hex prefab
-	protected int GridHexColumns {					//How many columns on the map
+	public int GridHexColumns {					//How many columns on the map
 		get { return CurrentMap.GridWidth; }
 	}
-	protected int GridHexRows {						//How many rows on the map
+	public int GridHexRows {						//How many rows on the map
 		get { return CurrentMap.GridHeight; }
 	}
 	protected static BoardManager _instance;
@@ -196,6 +196,7 @@ public class BoardManager : MonoBehaviour {
 	/// </summary>
 	public void HighlightMovement (int currentMoveDistance, Hexagon currentlyOccupiedHexagon)
 	{
+		FinishMovement ();
 		visited.Clear ();
 		frontier.Clear ();
 		distanceQueue.Clear ();
@@ -273,6 +274,7 @@ public class BoardManager : MonoBehaviour {
 			h.CurrentDistance = -1;
 			h.StopHighlight ();
 		}
+		HighlightedHexagons.Clear ();
 	}
 
 	/// <summary>
@@ -405,9 +407,9 @@ public class BoardManager : MonoBehaviour {
 					return true;
 				break;
 			}
-		case AbilityDescription.TargetType.TargetHexagon: {
-				return true;
-			}
+//		case AbilityDescription.TargetType.TargetHexagon: {
+//				return true;
+//			}
 		}
 		return false;
 	}
@@ -517,6 +519,7 @@ public class BoardManager : MonoBehaviour {
 			h.EnableLOSCollider();
 			h.StopHighlight ();
 		}
+		HighlightedHexagons.Clear ();
 	}
 
 	/// <summary>

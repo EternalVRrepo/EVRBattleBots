@@ -19,8 +19,9 @@ public class PlayerControlledBoardUnit : BoardUnit {
 
 	public PlayerClass UnitClass;
 	public enum PlayerClass { 
-		Melee,
-		Ranged,
+		Warrior,
+		Assassin,
+		Wizard,
 		Support
 	}
 
@@ -43,5 +44,34 @@ public class PlayerControlledBoardUnit : BoardUnit {
 		alive = true;
 		UnitClass = u.UnitClass;
 	}
-	
+
+	/// <summary>
+	/// Applies the power up.
+	/// </summary>
+	public void ApplyPowerUp(PowerUp p) {
+		if (!alive)
+			return;
+
+		if (p.PowerUpEffect == BuffEffect.Buff.RemoveDebuffs) {
+			debuffs.Clear ();
+			RemoveStuns();
+			RemoveSlows();
+			RemoveRoots();
+			RemoveSilences ();
+			RemoveUnstableStatic();
+		}
+		else if (p.PowerUpEffect == BuffEffect.Buff.MovementIncrease) {
+			ApplyMovementIncrease((int)p.PowerUpBonusValue);
+		}
+		else if (p.PowerUpEffect == BuffEffect.Buff.FullHeal) {
+			ApplyHeal(int.MaxValue);
+		}
+		else if (p.PowerUpEffect == BuffEffect.Buff.Absorb) {
+			ApplyAbsorb ((int)p.PowerUpBonusValue);
+		}
+
+		if (p.PowerUpBonusDuration > 0) {
+			buffs.Add (new BuffEffect(p));
+		}
+	}
 }

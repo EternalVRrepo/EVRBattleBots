@@ -27,7 +27,6 @@ public class MyHeroController3rdPerson : MonoBehaviour
 	
 	void Start ()
 	{
-		Debug.Log ("ASDASDASDASD");
 		//Get Components
 		character = transform.GetComponent<CharacterController> ();
 		animator = transform.GetComponentInChildren<Animator> ();
@@ -92,6 +91,17 @@ public class MyHeroController3rdPerson : MonoBehaviour
 
 		//Check for Jump
 		Jump ();
+	}
+
+	/// <summary>
+	/// Tries to interact with whatever its looking at
+	/// </summary>
+	void TryInteract() {
+		if (!character.isGrounded)
+			return;
+
+		//Raycast for an infected object here
+		//InfectedObject.Interact();
 	}
 
 	void Move ()
