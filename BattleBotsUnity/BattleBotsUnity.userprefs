@@ -1,14 +1,17 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\TalentIcon.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\BattleBots\Scripts\Customization\TooltipGUI.cs">
     <Files>
-      <File FileName="Assets\TalentIcon.cs" Line="22" Column="3" />
-      <File FileName="Assets\BattleBots\Scripts\Customization\Hover.cs" Line="1" Column="1" />
+      <File FileName="Assets\BattleBots\Scripts\Customization\PlatformManager.cs" Line="21" Column="28" />
+      <File FileName="Assets\BattleBots\Editor\TalentTreeEditor.cs" Line="1" Column="1" />
       <File FileName="Assets\BattleBots\Scripts\OpenWorld\PartyUnit.cs" Line="1" Column="1" />
-      <File FileName="Assets\BattleBots\Scripts\Customization\TalentTree.cs" Line="4" Column="13" />
-      <File FileName="Assets\BattleBots\Scripts\Customization\Talent.cs" Line="20" Column="33" />
-      <File FileName="Assets\BattleBots\Scripts\Customization\PlatformManager.cs" Line="104" Column="35" />
-      <File FileName="Assets\BattleBots\Editor\TalentTreeEditor.cs" Line="58" Column="28" />
+      <File FileName="Assets\BattleBots\Scripts\Customization\TalentIcon.cs" Line="70" Column="5" />
+      <File FileName="Assets\BattleBots\Scripts\Customization\CharacterCustomizerManager.cs" Line="66" Column="3" />
+      <File FileName="Assets\BattleBots\Scripts\Customization\Talent.cs" Line="1" Column="1" />
+      <File FileName="Assets\BattleBots\Scripts\Customization\Hover.cs" Line="144" Column="38" />
+      <File FileName="Assets\BattleBots\Scripts\Customization\TalentTree.cs" Line="1" Column="1" />
+      <File FileName="Assets\BattleBots\Scripts\Combat\Units\PlayerControlledBoardUnit.cs" Line="1" Column="1" />
+      <File FileName="Assets\BattleBots\Scripts\Customization\TooltipGUI.cs" Line="19" Column="43" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

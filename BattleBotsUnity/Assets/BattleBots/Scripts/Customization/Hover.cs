@@ -32,7 +32,9 @@ public class Hover : MonoBehaviour
 	}
 
 	public hoverType hType;
-	Color characterSelectionStartColor;
+	Color startColor;
+	TalentIcon talentIcon;
+	bool talentWindowToggle;
 	#endregion
 	//============================================================================
 	// Initilization
@@ -41,11 +43,17 @@ public class Hover : MonoBehaviour
 	void Start ()
 	{
 		startPosition = transform.position;
-		CCManager = GameObject.Find ("CharacterCustomizerManager").GetComponent<CharacterCustomizerManager> ();
+		CCManager = FindObjectOfType<CharacterCustomizerManager> ();
 
 		if (hType == hoverType.characterSelection) {
 			if (glowObject)
-				characterSelectionStartColor = glowObject.material.GetColor ("_TintColor");
+				startColor = glowObject.material.GetColor ("_TintColor");
+			else 
+				startColor = renderer.material.color;
+		}
+
+		if (hType == hoverType.talents) {
+			talentIcon = GetComponent<TalentIcon> ();
 		}
 	}
 	//============================================================================
@@ -57,36 +65,36 @@ public class Hover : MonoBehaviour
 		timer += Time.deltaTime;
 
 		HoverHandler (hit);
+		GlowObjectAnimation (active);
 	}
 
 	void HoverHandler (bool target)
 	{
 		if (target) {
-			
-			if (active)
-				GlowObjectAnimation (false);
-			else
-				GlowObjectAnimation (true);
-			
-			
-			if (hType == hoverType.characterSelection) {
+			if (hType == hoverType.characterSelection && !platformManager.isActive) {
 				//Trigger Events
-				if (timer > 2f || Input.GetMouseButton (0)) {
+				if (timer > 2f || Input.GetMouseButtonDown (0)) {
 					SetCharacterSelection ();
+				}
+			}
+
+			if (hType == hoverType.talentsWindow) {
+				if (timer > 2f || Input.GetMouseButtonDown (0)) {
+					ToggleTalentWindow ();
+				}
+			}
+
+			if (hType == hoverType.talents) {
+				if (timer > 2f || Input.GetMouseButtonDown (0)) {
+					talentIcon.Select (true);
 				}
 			}
 		}
 		
 		if (!target) {
-			
-			if (active)
-				GlowObjectAnimation (true);
-			else
-				GlowObjectAnimation (false);
-			
-			if (timer > 2f) {
-				//"ExitDelayFinished";
-			}
+//			if (timer > 2f) {
+//				//"ExitDelayFinished";
+//			}
 		}
 	}
 
@@ -98,22 +106,56 @@ public class Hover : MonoBehaviour
 	{
 		timer = 0;
 		hit = b;
-	}
-	
-	public void SetActive (bool b)
-	{
-		active = b;
+
+		if (hType == hoverType.talents) {
+			if (b) {
+				CCManager.tooltipText = talentIcon.name + "\n" + talentIcon.description;
+			}
+			CCManager.displayTooltip = b;
+		}
 	}
 
-	void GlowObjectAnimation (bool b)
+	void GlowObjectAnimation (bool on)
 	{
 		if (glowObject == null) 
 			return;
 
-		if (b)  
-			glowObject.material.SetColor ("_TintColor", Color.Lerp (gameObject.renderer.material.GetColor ("_TintColor"), Color.white, Time.deltaTime * 0.3f));
-		else
-			glowObject.material.SetColor ("_TintColor", Color.Lerp (gameObject.renderer.material.GetColor ("_TintColor"), characterSelectionStartColor, Time.deltaTime * 1.5f));
+		switch (hType) {
+		case hoverType.characterSelection: 
+
+			if (hit && platformManager.isActive) {
+				glowObject.material.SetColor ("_TintColor", Color.Lerp (glowObject.material.GetColor ("_TintColor"), startColor, Time.deltaTime * 1.5f));
+			}
+
+			if (hit && !platformManager.isActive) {
+				glowObject.material.SetColor ("_TintColor", Color.Lerp (glowObject.material.GetColor ("_TintColor"), Color.white, Time.deltaTime * 0.5f));
+			}
+
+			if (!hit) {
+				glowObject.material.SetColor ("_TintColor", Color.Lerp (glowObject.material.GetColor ("_TintColor"), startColor, Time.deltaTime * 1.5f));
+			}
+			return;
+
+		case hoverType.talentsWindow:
+
+			if (platformManager.TalentWindow.activeInHierarchy || hit)
+				glowObject.material.SetColor ("_TintColor", Color.Lerp (glowObject.material.GetColor ("_TintColor"), Color.white, Time.deltaTime * 0.5f));
+			else
+				glowObject.material.SetColor ("_TintColor", Color.Lerp (glowObject.material.GetColor ("_TintColor"), startColor, Time.deltaTime * 1.5f));
+			return;
+		
+		case hoverType.talents:
+			return;
+
+		default: 			
+
+			if (on) {
+				glowObject.material.SetColor ("_TintColor", Color.Lerp (glowObject.material.GetColor ("_TintColor"), Color.white, Time.deltaTime * 0.5f));
+			} else {
+				glowObject.material.SetColor ("_TintColor", Color.Lerp (glowObject.material.GetColor ("_TintColor"), startColor, Time.deltaTime * 1.5f));
+			}
+			return;
+		}
 	}
 
 	void SetCharacterSelection ()
@@ -121,9 +163,17 @@ public class Hover : MonoBehaviour
 		//Set Manager To Be Aware This Character Is Selected And Just Incase Sets Last Character To Inactive
 		if (CCManager.currentlySelectedCharacter != platformManager && platformManager.CurrentlyDisplayedPartyUnit != null) {
 			if (CCManager.currentlySelectedCharacter != null) 
-				CCManager.currentlySelectedCharacter.active = false;
+				CCManager.currentlySelectedCharacter.SetWindowsActive (false);
 			CCManager.currentlySelectedCharacter = platformManager;
 			active = true;
 		}
+	}
+
+	void ToggleTalentWindow ()
+	{
+		active = !active;
+		if (platformManager.isActive)
+			platformManager.TalentWindow.SetActive (active);
+		timer = 0;
 	}
 }

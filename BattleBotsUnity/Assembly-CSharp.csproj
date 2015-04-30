@@ -46,7 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\BattleBots\Effects\Bullet\Scripts\Explosion.cs" />
+     <Compile Include="Assets\BattleBots\GUI\Effects\Bullet\Scripts\Explosion.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Animation\pingPongAnimation.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Combat\AI\CombatAIManager.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Combat\AI\EnemyUnitInfo.cs" />
@@ -65,8 +65,12 @@
      <Compile Include="Assets\BattleBots\Scripts\Customization\Hover.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Customization\PlatformManager.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Customization\PowerUp.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Customization\StatsWindow.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Customization\Talent.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Customization\TalentIcon.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Customization\TalentTree.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Customization\TooltipGUI.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Customization\UnitNamePlateGUI.cs" />
      <Compile Include="Assets\BattleBots\Scripts\GUI\UnitUIManager.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Hexagon\Hexagon.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Hexagon\HexagonData.cs" />
@@ -121,8 +125,6 @@
      <Compile Include="Assets\ProCore\ProBuilder\API Examples\Instantiation\ProBuilderInstantiate.cs" />
      <Compile Include="Assets\ProCore\ProBuilder\API Examples\Runtime Editing\Materials\pb_Selection.cs" />
      <Compile Include="Assets\ProCore\ProBuilder\API Examples\Runtime Editing\RuntimeEdit.cs" />
-     <Compile Include="Assets\StatsWindow.cs" />
-     <Compile Include="Assets\TalentIcon.cs" />
      <None Include="Assets\Plugins\donotdelete.txt" />
      <None Include="Assets\Imported\Shaders\Toon Shading\Sources\Shaders\Toony-Basic.shader" />
      <None Include="Assets\BattleBots\Shaders\Data.shader" />

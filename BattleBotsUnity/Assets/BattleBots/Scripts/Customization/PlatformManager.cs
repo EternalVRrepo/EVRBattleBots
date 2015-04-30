@@ -12,23 +12,26 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class PlatformManager : MonoBehaviour
 {
 	public bool debug = true;
-	
-	public Hover AbiltiyButton;
-	public Hover TalentButton;
+
+	public GameObject TalentWindow;
 
 	public GameObject Stats;
-	public GameObject NamePlates;
+	public GameObject NamePlate;
 
 	public GameObject GUIIcon;
 
 	//Initilization
 	public PartyUnit CurrentlyDisplayedPartyUnit;
-	public Transform UnitAnchorPoint;
+	public TalentIcon[] talentIcons;
+	public List<Talent> currentTalents = new List<Talent> ();
+
+	public Transform UnitAnchorPoint, TalentAnchorPoint;
 	public Vector3 startPosition;
 
 	//States
@@ -45,70 +48,91 @@ public class PlatformManager : MonoBehaviour
 		foreach (Hover h in GetComponentsInChildren<Hover>()) {
 			h.platformManager = this;
 		}
-	}
-
-	//============================================================================
-	// Events
-	//============================================================================
-
-	public void SetFocused (bool b)
-	{
-		if (b) {
-			if (debug)
-				Debug.Log ("Set Focus To: " + CurrentlyDisplayedPartyUnit.Name);
-			Stats.SetActive (true);
-
-		} else {
-			Stats.SetActive (false);
-		}
+		SetWindowsActive (false);
 	}
 	
 	protected void CreateUnit (PartyUnit unit)
 	{
 		if (unit != null) {
 			CurrentlyDisplayedPartyUnit = unit;
-
+			
 			if (debug)
-				Debug.Log (string.Format (":Loaded Character:\n" +
-					"Name: {0} \n" +
-					"Level: {1} \n", unit.name, unit.currentLevel));
-
+				Debug.Log (string.Format (":Loaded Character:" +
+					"Name: {0} " +
+					"Level: {1} ", unit.name, unit.currentLevel));
+			unit.currentLevel = 5;
 			GameObject obj = Instantiate (unit.UnitPrefab) as GameObject;
 			if (obj.GetComponent<MyHeroController3rdPerson> ())
 				Destroy (obj.GetComponent<MyHeroController3rdPerson> ());
 			obj.transform.position = UnitAnchorPoint.position;
 			obj.transform.parent = UnitAnchorPoint;
-
+			
+			NamePlate.GetComponent<UnitNamePlateGUI> ().Initilize (unit);
+			CreateTalentTree (unit);
+			
 		} else {
-			NamePlates.SetActive (false);
+			NamePlate.SetActive (false);
+			Stats.SetActive (false);
+			TalentWindow.SetActive (false);
 		}
 	}
-	
+
 	void CreateTalentTree (PartyUnit unit)
 	{
-		if (debug)
+		if (debug) {
 			Debug.Log ("Talent Tree: " + unit.UnitTalentTree.name);
-
+			Debug.Log ("Talent Count: " + unit.UnitTalentTree.Tree.Count);
+		}
+		
+		GameObject talentTreeAnchor = new GameObject ("TalentTreeAnchor");
 		int row = 0;
 		int collum = 0;
-//		foreach (Talent t in unit.UnitTalentTree.Tree) {
-//		}
 
-//		for (int i; i<unit.UnitTalentTree.Tree.Count; i++) {
-//			int xPos;
-//			GameObject gIcon = Instantiate (GUIIcon, Vector3.one, Quaternion.identity) as GameObject;
-//			if (i % 3 == 0) {
-//				collum
-//			}
-//			row = i % 3;
-//			gIcon.AddComponent<TalentIcon>.Initilize (unit.UnitTalentTree.Tree[i], );
+		//Initilize Icons
+		for (int i = 0; i< unit.UnitTalentTree.Tree.Count; i++) {
+			collum = i % 3 + 1;
+			row = (int)(i / 3) + 1;
+			GameObject talentIcon = Instantiate (GUIIcon, new Vector3 (collum, -row * 1.125f, 0), Quaternion.identity) as GameObject;
+			TalentIcon talentIconCached = talentIcon.GetComponent<TalentIcon> ();
+			talentIconCached.Initilize (CurrentlyDisplayedPartyUnit, unit.UnitTalentTree.Tree [i], collum, row);
+			talentIcon.transform.parent = talentTreeAnchor.transform;
+			talentIconCached.pm = this;
+		}
+		//Set Transform
+		talentTreeAnchor.transform.parent = TalentAnchorPoint;
+		talentTreeAnchor.transform.localPosition = Vector3.zero;
+		talentTreeAnchor.transform.localRotation = Quaternion.identity;
+		talentTreeAnchor.transform.localScale = Vector3.one * 0.52f;
+		//Set Array
+		talentIcons = GetComponentsInChildren<TalentIcon> ();
+		TalentWindow.SetActive (false);
+	}
 
-//		}
-//		for (int i; i<unit.UnitTalentTree.Tree.Count; i++) {
-//			if (i % 3 == 1) {
-//				row++;
-//			}
-//		}
+	//============================================================================
+	// Events
+	//============================================================================
+	public void SetWindowsActive (bool b)
+	{
+		isActive = b;
+		if (b) {
+			Stats.SetActive (true);
+			TalentWindow.SetActive (true);
+		} else {
+			Stats.SetActive (false);
+			TalentWindow.SetActive (false);
+		}
+	}
+
+	public void UpdateTalentTree ()
+	{
+		currentTalents.Clear ();
+
+		for (int i = 0; i < talentIcons.Length - 1; i++) {
+			if (talentIcons [i].selected) {
+				currentTalents.Add (talentIcons [i].talent);
+			}
+		}
+		CurrentlyDisplayedPartyUnit.UnitTalentTree.UpdateTalents (currentTalents);
 	}
 
 	void CreateAbiltiyWindow (AbilityDescription[] abilities)

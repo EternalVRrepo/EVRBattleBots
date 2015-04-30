@@ -1,34 +1,34 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
-public class TalentIcon : MonoBehaviour
+public class UnitNamePlateGUI : MonoBehaviour
 {
 	#region Variables
-	public string name, discription;
-	public bool active;
-	public int row;
-	public int collum;
+	public Text NameText;
+	public Text LevelText;
+
+	[HideInInspector]
+	public string
+		name;
+	[HideInInspector]
+	public int
+		level;
 	#endregion
 	//============================================================================
 	// Initilization
 	//============================================================================
-	public void Initilization (Talent t, int r, int c)
+	public void Initilize (PartyUnit unit)
 	{
-		name = t.TalentName;
-		discription = t.TalentDiscription;
-	}
+		NameText.text = unit.Name;
+		LevelText.text = unit.currentLevel.ToString ();
 
-	void Start ()
-	{
-		
+		name = unit.Name;
+		level = unit.currentLevel;
 	}
 	//============================================================================
 	// Update
 	//============================================================================
-	void Update ()
-	{
-		
-	}
 	//============================================================================
 	// Events
 	//============================================================================

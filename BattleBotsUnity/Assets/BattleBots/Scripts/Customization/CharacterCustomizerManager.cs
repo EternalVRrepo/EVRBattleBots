@@ -6,8 +6,9 @@ public class CharacterCustomizerManager : MonoBehaviour
 {
 	#region Variables
 	public bool isDebug;
+	public string tooltipText;
+	public bool displayTooltip;
 
-	public PlatformManager defaultSelectedCharacter;
 	public PlatformManager currentlySelectedCharacter;
 	public PlatformManager lastSelectedCharacter;
 	public List<PartyUnit> currentParty;
@@ -60,8 +61,12 @@ public class CharacterCustomizerManager : MonoBehaviour
 
 	void CheckForCurrentAndLastSelectedCharacter ()
 	{
-		if (currentlySelectedCharacter != lastSelectedCharacter)
+		if (currentlySelectedCharacter != lastSelectedCharacter) {
 			lastSelectedCharacter.isActive = false;
+			lastSelectedCharacter.SetWindowsActive (false);
+		}
+
+		currentlySelectedCharacter.isActive = true;
 
 		lastSelectedCharacter = currentlySelectedCharacter;
 	}
@@ -77,10 +82,10 @@ public class CharacterCustomizerManager : MonoBehaviour
 
 	void SetFirstSelected ()
 	{
-		defaultSelectedCharacter = Platforms [0];
-		defaultSelectedCharacter.isActive = true;
-		currentlySelectedCharacter = defaultSelectedCharacter;
-		lastSelectedCharacter = defaultSelectedCharacter;
+		currentlySelectedCharacter = Platforms [0];
+		currentlySelectedCharacter.SetWindowsActive (true);
+		currentlySelectedCharacter.TalentWindow.SetActive (false);
+		lastSelectedCharacter = currentlySelectedCharacter;
 	}
 	
 	/// Generates/Initializes the customization platforms.
@@ -107,7 +112,7 @@ public class CharacterCustomizerManager : MonoBehaviour
 		i--;
 		if (i < 0)
 			i = currentParty.Count - 1;
-		currentlySelectedCharacter.isActive = false;
+		currentlySelectedCharacter.SetWindowsActive (false);
 		currentlySelectedCharacter = Platforms [i];
 	}
 	
@@ -118,7 +123,7 @@ public class CharacterCustomizerManager : MonoBehaviour
 		i++;
 		if (i >= currentParty.Count)
 			i = 0;
-		currentlySelectedCharacter.isActive = false;
+		currentlySelectedCharacter.SetWindowsActive (false);
 		currentlySelectedCharacter = Platforms [i];
 	}
 

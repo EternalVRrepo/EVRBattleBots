@@ -17,7 +17,7 @@ public class Talent
 {
 
 	public string TalentName;
-	public string TalentDiscription;
+	public string TalentDescription;
 	public Texture TalentTexture;
 
 	public TalentType ThisTalentType;

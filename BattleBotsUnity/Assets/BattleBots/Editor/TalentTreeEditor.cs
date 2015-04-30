@@ -33,9 +33,9 @@ public class TalentTreeEditor : Editor
 		else if (string.Equals (tree.name, PlayerControlledBoardUnit.PlayerClass.Support.ToString () + "Tree"))
 			EditorGUILayout.LabelField (PlayerControlledBoardUnit.PlayerClass.Support.ToString () + "Tree");
 		else
-			EditorGUILayout.LabelField ("Name the file \"ClassName\" (Melee/Ranged/Support) + \"Tree\"");
+			EditorGUILayout.LabelField ("Name the file \"ClassName\" (Warrior/Wizard/Support) + \"Tree\"");
 
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 5; i++) {
 			while (i > showTalent.Count-1) {
 				showTalent.Add (false);
 			}
@@ -57,8 +57,12 @@ public class TalentTreeEditor : Editor
 
 		for (int i=0; i<3; i++) {
 			Talent t = tree.Tree [row * 3 + i];
-			t.TalentName = EditorGUILayout.TextField ("Talent Name", t.TalentName);
-			t.TalentDiscription = EditorGUILayout.TextField ("Talent Discription", t.TalentDiscription);
+
+			EditorGUILayout.BeginHorizontal ();
+			t.TalentName = EditorGUILayout.TextField ("Talent Name", t.TalentName, GUILayout.MinWidth (100));
+			EditorGUILayout.EndHorizontal ();
+
+			t.TalentDescription = EditorGUILayout.TextField ("Talent Description", t.TalentDescription);
 			t.ThisTalentType = (Talent.TalentType)EditorGUILayout.EnumPopup ("Talent Type", t.ThisTalentType);
 			if (t.ThisTalentType == Talent.TalentType.StatBoost) {
 				t.StatType = (Talent.Stat)EditorGUILayout.EnumPopup ("Stat Type", t.StatType);
@@ -84,6 +88,11 @@ public class TalentTreeEditor : Editor
 				t.SpecialAbilityModIdentifer = EditorGUILayout.IntField ("Ability Special Index", t.SpecialAbilityModIdentifer);
 			}
 			EditorGUILayout.Space ();
+			EditorGUILayout.Separator ();
+			EditorGUILayout.Separator ();
+			EditorGUILayout.Separator ();
+			EditorGUILayout.Separator ();
+
 		}
 
 		EditorGUI.indentLevel--;
