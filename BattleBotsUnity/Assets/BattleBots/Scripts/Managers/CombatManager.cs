@@ -56,7 +56,9 @@ public class CombatManager : MonoBehaviour {
 	/// </summary>
 	void Start () {
 		CreateHexLayerMask();
-		RaycastCamera = Camera.main;
+//		RaycastCamera = Camera.main;
+//		RaycastCamera = GameObject.Find("CenterEyeAnchor").camera;
+
 		if (RaycastCamera == null) 
 			Debug.LogError ("No Camera Found for RaycastCamera in CombatManager.cs");
 	}
@@ -436,6 +438,7 @@ public class CombatManager : MonoBehaviour {
 		if (Physics.Raycast (ray, out hit, 100, HexTargetMask)) //If an object is found
 		{
 			if (hit.collider.GetComponent<Hexagon>()) {
+				Debug.Log (hit.transform.name);
 				return hit.collider.GetComponent<Hexagon>(); //Return the game object as a GameObject
 			}
 			else return null;
