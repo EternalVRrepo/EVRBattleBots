@@ -30,6 +30,7 @@ public class MyHeroController3rdPerson : MonoBehaviour
 		//Get Components
 		character = transform.GetComponent<CharacterController> ();
 		animator = transform.GetComponentInChildren<Animator> ();
+		Debug.Log (animator.gameObject);
 
 		//Set Speeds
 		airSpeed = forwardSpeed * 0.8f;
