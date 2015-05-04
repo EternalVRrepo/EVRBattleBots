@@ -10,7 +10,7 @@
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
 	<AssemblyName>Assembly-CSharp</AssemblyName>
-	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+	<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
 	<FileAlignment>512</FileAlignment>
 	<BaseDirectory>Assets</BaseDirectory>
   </PropertyGroup>
@@ -39,10 +39,10 @@
 	<Reference Include="System.Core" />
 	<Reference Include="System.Xml.Linq" />
 	<Reference Include="UnityEngine">
-	  <HintPath>D:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>D:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
@@ -198,19 +198,19 @@
      <None Include="Assets\ProCore\ProBuilder\About\Credits.txt" />
      <None Include="Assets\Plugins\Android\res\values-v14\styles.xml" />
  <Reference Include="UnityEngine.UI">
- <HintPath>D:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.3/UnityEngine.UI.dll</HintPath>
+ <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.3/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="ProBuilderCore">
- <HintPath>D:/Coding/GitHub/BattleBots/BattleBotsUnity/Assets/ProCore/ProBuilder/Classes/ProBuilderCore.dll</HintPath>
+ <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/ProBuilder/Classes/ProBuilderCore.dll</HintPath>
  </Reference>
  <Reference Include="ProBuilderMeshOps">
- <HintPath>D:/Coding/GitHub/BattleBots/BattleBotsUnity/Assets/ProCore/ProBuilder/Classes/ProBuilderMeshOps.dll</HintPath>
+ <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/ProBuilder/Classes/ProBuilderMeshOps.dll</HintPath>
  </Reference>
  <Reference Include="ProCore">
- <HintPath>D:/Coding/GitHub/BattleBots/BattleBotsUnity/Assets/ProCore/Shared/Code/ProCore.dll</HintPath>
+ <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/Shared/Code/ProCore.dll</HintPath>
  </Reference>
  <Reference Include="SixBySeven">
- <HintPath>D:/Coding/GitHub/BattleBots/BattleBotsUnity/Assets/ProCore/Shared/Code/SixBySeven.dll</HintPath>
+ <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/Shared/Code/SixBySeven.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
