@@ -109,7 +109,8 @@ public class Hover : MonoBehaviour
 
 		if (hType == hoverType.talents) {
 			if (b) {
-				CCManager.tooltipText = talentIcon.name + "\n" + talentIcon.description;
+				CCManager.tooltipTextName = talentIcon.name;
+				CCManager.tooltipTextDescription = talentIcon.description;
 			}
 			CCManager.displayTooltip = b;
 		}

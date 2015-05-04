@@ -6,7 +6,8 @@ public class CharacterCustomizerManager : MonoBehaviour
 {
 	#region Variables
 	public bool isDebug;
-	public string tooltipText;
+	public string tooltipTextName;
+	public string tooltipTextDescription;
 	public bool displayTooltip;
 
 	public PlatformManager currentlySelectedCharacter;
