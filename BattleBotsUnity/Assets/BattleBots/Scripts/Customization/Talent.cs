@@ -17,11 +17,8 @@ public class Talent
 {
 
 	public string TalentName;
-<<<<<<< HEAD
 	public string Description;
-=======
 	public string TalentDescription;
->>>>>>> 0ed0073fc6639eee4fd838167712070c955621bc
 	public Texture TalentTexture;
 
 	public TalentType ThisTalentType;

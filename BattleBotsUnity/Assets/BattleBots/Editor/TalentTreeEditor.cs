@@ -32,12 +32,7 @@ public class TalentTreeEditor : Editor
 			EditorGUILayout.LabelField (PlayerControlledBoardUnit.PlayerClass.Wizard.ToString () + "Tree");
 		else if (string.Equals (tree.name, PlayerControlledBoardUnit.PlayerClass.Support.ToString () + "Tree"))
 			EditorGUILayout.LabelField (PlayerControlledBoardUnit.PlayerClass.Support.ToString () + "Tree");
-<<<<<<< HEAD
 		else EditorGUILayout.LabelField ("Name the file \"ClassName\" (Warrior/Wizard/Assassin/Support) + \"Tree\"");
-=======
-		else
-			EditorGUILayout.LabelField ("Name the file \"ClassName\" (Warrior/Wizard/Support) + \"Tree\"");
->>>>>>> 0ed0073fc6639eee4fd838167712070c955621bc
 
 		for (int i = 0; i < 5; i++) {
 			while (i > showTalent.Count-1) {
@@ -60,15 +55,12 @@ public class TalentTreeEditor : Editor
 		}
 
 		for (int i=0; i<3; i++) {
-<<<<<<< HEAD
 			Talent t = tree.Tree[row*3+i];
 			t.TalentName = EditorGUILayout.TextField ("Talent Name", t.TalentName);
 			t.Description = EditorGUILayout.TextField ("Talent Description", t.Description);
 			if (t.Description.Contains ("{0}"))
 			    t.Description = t.Description.Replace ("{0}", t.StatBoostAmount.ToString());
 			t.ThisTalentType = (Talent.TalentType)EditorGUILayout.EnumPopup("Talent Type", t.ThisTalentType);
-=======
-			Talent t = tree.Tree [row * 3 + i];
 
 			EditorGUILayout.BeginHorizontal ();
 			t.TalentName = EditorGUILayout.TextField ("Talent Name", t.TalentName, GUILayout.MinWidth (100));
@@ -76,7 +68,6 @@ public class TalentTreeEditor : Editor
 
 			t.TalentDescription = EditorGUILayout.TextField ("Talent Description", t.TalentDescription);
 			t.ThisTalentType = (Talent.TalentType)EditorGUILayout.EnumPopup ("Talent Type", t.ThisTalentType);
->>>>>>> 0ed0073fc6639eee4fd838167712070c955621bc
 			if (t.ThisTalentType == Talent.TalentType.StatBoost) {
 				t.StatType = (Talent.Stat)EditorGUILayout.EnumPopup ("Stat Type", t.StatType);
 				if (t.StatType.ToString ().Contains ("Percent"))

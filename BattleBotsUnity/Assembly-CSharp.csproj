@@ -1,217 +1,216 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-	<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-	<ProductVersion>10.0.20506</ProductVersion>
-	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{33423A62-ED6D-7642-7D10-D1C564B1FE8E}</ProjectGuid>
-	<OutputType>Library</OutputType>
-	<AppDesignerFolder>Properties</AppDesignerFolder>
-	<RootNamespace></RootNamespace>
-	<AssemblyName>Assembly-CSharp</AssemblyName>
-	<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-	<FileAlignment>512</FileAlignment>
-	<BaseDirectory>Assets</BaseDirectory>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{33423A62-ED6D-7642-7D10-D1C564B1FE8E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <AssemblyName>Assembly-CSharp</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <BaseDirectory>Assets</BaseDirectory>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-	<DebugSymbols>true</DebugSymbols>
-	<DebugType>full</DebugType>
-	<Optimize>false</Optimize>
-	<OutputPath>Temp\bin\Debug\</OutputPath>
-	<DefineConstants>DEBUG;TRACE;UNITY_4_6_3;UNITY_4_6;UNITY_STANDALONE_WIN;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_AUDIO_FMOD;UNITY_STANDALONE;ENABLE_TERRAIN;ENABLE_SUBSTANCE;ENABLE_GENERICS;INCLUDE_IL2CPP;INCLUDE_WP8SUPPORT;ENABLE_MOVIES;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_4_6_FEATURES;INCLUDE_WP_BLUE_SUPPORT;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;UNITY5_SCRIPTING_IN_UNITY4;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_DUCK_TYPING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_MONO;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN;UNITY_TEAM_LICENSE;UNITY_PRO_LICENSE</DefineConstants>
-	<ErrorReport>prompt</ErrorReport>
-	<WarningLevel>4</WarningLevel>
-	<NoWarn>0169</NoWarn>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>Temp\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;UNITY_4_6_3;UNITY_4_6;UNITY_STANDALONE_WIN;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_AUDIO_FMOD;UNITY_STANDALONE;ENABLE_TERRAIN;ENABLE_SUBSTANCE;ENABLE_GENERICS;INCLUDE_IL2CPP;INCLUDE_WP8SUPPORT;ENABLE_MOVIES;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_4_6_FEATURES;INCLUDE_WP_BLUE_SUPPORT;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;UNITY5_SCRIPTING_IN_UNITY4;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_DUCK_TYPING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_MONO;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN;UNITY_TEAM_LICENSE;UNITY_PRO_LICENSE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0169</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-	<DebugType>pdbonly</DebugType>
-	<Optimize>true</Optimize>
-	<OutputPath>Temp\bin\Release\</OutputPath>
-	<DefineConstants>TRACE</DefineConstants>
-	<ErrorReport>prompt</ErrorReport>
-	<WarningLevel>4</WarningLevel>
-	<NoWarn>0169</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>True</Optimize>
+    <OutputPath>Temp\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0169</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-	<Reference Include="System" />
-    <Reference Include="System.XML" />
-	<Reference Include="System.Core" />
-	<Reference Include="System.Xml.Linq" />
-	<Reference Include="UnityEngine">
-	  <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/Managed/UnityEngine.dll</HintPath>
-	</Reference>
-	<Reference Include="UnityEditor">
-	  <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/Managed/UnityEditor.dll</HintPath>
-	</Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="UnityEngine">
+      <HintPath>D:\Program Files %28x86%29\Unity\Editor\Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor">
+      <HintPath>D:\Program Files %28x86%29\Unity\Editor\Data\Managed\UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\BattleBots\GUI\Effects\Bullet\Scripts\Explosion.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Animation\pingPongAnimation.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Combat\AI\CombatAIManager.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Combat\AI\EnemyUnitInfo.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Combat\Ability\AbilityActivator.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Combat\Ability\AbilityDescription.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Combat\Ability\AbilityModifier.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Combat\Ability\BuffEffect.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Combat\Ability\DebuffEffect.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Combat\Ability\StatusEffect.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Combat\Ability\Template.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Combat\Map.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Combat\MapEditor.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Combat\Units\BoardUnit.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Combat\Units\NonPlayerControlledBoardUnit.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Combat\Units\PlayerControlledBoardUnit.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Customization\CharacterCustomizerManager.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Customization\Hover.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Customization\PlatformManager.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Customization\PowerUp.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Customization\StatsWindow.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Customization\Talent.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Customization\TalentIcon.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Customization\TalentTree.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Customization\TooltipGUI.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Customization\UnitNamePlateGUI.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\GUI\UnitUIManager.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Hexagon\Hexagon.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Hexagon\HexagonData.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Managers\BoardManager.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Managers\CombatManager.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Managers\CustomizationManager.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Managers\GameManager.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Managers\TemplateManager.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\OpenWorld\Infection.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\OpenWorld\PartyUnit.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Pathfinding\AStarSearch.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Pathfinding\HeapPriorityQueue.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Pathfinding\IPriorityQueue.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Pathfinding\IPriorityQueueNode.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Pathfinding\Location.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Player\Archive\PlayerMovement.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Player\Archive\TinpetMovement.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Player\Archive\WeaponController.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Player\Controllers\IKController.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Player\Controllers\MyHeroController.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Player\Controllers\MyHeroController3rdPerson.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Player\Features\Gun.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Player\Features\HeroStats.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Player\Features\Projectile.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Player\Features\StateManager.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\RXSolutionFixer.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Utility\FPSDisplay.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Utility\GazeInputModule.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Utility\LevelManager.cs" />
-     <Compile Include="Assets\BattleBots\Scripts\Utility\moveRightCheck.cs" />
-     <Compile Include="Assets\Imported\Image Effects (Pro Only)\GlowEffect.cs" />
-     <Compile Include="Assets\Imported\Image Effects (Pro Only)\ImageEffectBase.cs" />
-     <Compile Include="Assets\Imported\Image Effects (Pro Only)\ImageEffects.cs" />
-     <Compile Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Scripts\EditorLabel.cs" />
-     <Compile Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Scripts\EnableCameraDepthInForward.cs" />
-     <Compile Include="Assets\OVR\Scripts\OVRCameraRig.cs" />
-     <Compile Include="Assets\OVR\Scripts\OVRCommon.cs" />
-     <Compile Include="Assets\OVR\Scripts\OVRDisplay.cs" />
-     <Compile Include="Assets\OVR\Scripts\OVRManager.cs" />
-     <Compile Include="Assets\OVR\Scripts\OVRPluginEvent.cs" />
-     <Compile Include="Assets\OVR\Scripts\OVRTracker.cs" />
-     <Compile Include="Assets\OVR\Scripts\OVRUnityVersionChecker.cs" />
-     <Compile Include="Assets\OVR\Scripts\OvrCapi.cs" />
-     <Compile Include="Assets\OVR\Scripts\Util\OVRCrosshair.cs" />
-     <Compile Include="Assets\OVR\Scripts\Util\OVRGUI.cs" />
-     <Compile Include="Assets\OVR\Scripts\Util\OVRGamepadController.cs" />
-     <Compile Include="Assets\OVR\Scripts\Util\OVRGridCube.cs" />
-     <Compile Include="Assets\OVR\Scripts\Util\OVRMainMenu.cs" />
-     <Compile Include="Assets\OVR\Scripts\Util\OVRPlayerController.cs" />
-     <Compile Include="Assets\OVR\Scripts\Util\OVRScreenFade.cs" />
-     <Compile Include="Assets\OVR\Scripts\Util\OVRUGUI.cs" />
-     <Compile Include="Assets\ProCore\ProBuilder\API Examples\Instantiation\ProBuilderInstantiate.cs" />
-     <Compile Include="Assets\ProCore\ProBuilder\API Examples\Runtime Editing\Materials\pb_Selection.cs" />
-     <Compile Include="Assets\ProCore\ProBuilder\API Examples\Runtime Editing\RuntimeEdit.cs" />
-     <None Include="Assets\Plugins\donotdelete.txt" />
-     <None Include="Assets\Imported\Shaders\Toon Shading\Sources\Shaders\Toony-Basic.shader" />
-     <None Include="Assets\BattleBots\Shaders\Data.shader" />
-     <None Include="Assets\Imported\Image Effects (Pro Only)\_Sources\Shaders\GlowConeTap.shader" />
-     <None Include="Assets\BattleBots\Shaders\Wireframe.shader" />
-     <None Include="Assets\ProCore\ProBuilder\About\changelog.txt" />
-     <None Include="Assets\Plugins\Android\assets\donotdelete.txt" />
-     <None Include="Assets\ProCore\ProBuilder\Shader\VertexBillboard.shader" />
-     <None Include="Assets\ProCore\ProBuilder\Shader\DiffuseVertexColor.shader" />
-     <None Include="Assets\Plugins\Android\res\values-de\strings.xml" />
-     <None Include="Assets\Plugins\x86_64\donotdelete.txt" />
-     <None Include="Assets\ProCore\Shared\About\README.txt" />
-     <None Include="Assets\ProCore\ProBuilder\Shader\DiffuseVertexColorTransparency.shader" />
-     <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\LightCone.shader" />
-     <None Include="Assets\Imported\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\MobileBloom.shader" />
-     <None Include="Assets\Imported\Shaders\ShaderForge\Readme.txt" />
-     <None Include="Assets\Imported\Image Effects (Pro Only)\_Sources\Shaders\GlowCompose.shader" />
-     <None Include="Assets\Plugins\Android\res\values-ko\assets.xml" />
-     <None Include="Assets\Plugins\Android\res\values\assets.xml" />
-     <None Include="Assets\BattleBots\Shaders\SelfIlluminated.shader" />
-     <None Include="Assets\Plugins\Android\res\raw\efigs.fnt" />
-     <None Include="Assets\ProCore\ProBuilder\About\pc_AboutEntry_ProBuilder.txt" />
-     <None Include="Assets\Plugins\Android\res\values-en-rGB\strings.xml" />
-     <None Include="Assets\Plugins\Android\res\values\styles.xml" />
-     <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\MaterialPlatform.shader" />
-     <None Include="Assets\Plugins\Android\res\values-it\assets.xml" />
-     <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
-     <None Include="Assets\OVR\Shaders\TextShader3D.shader" />
-     <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\Vegetation.shader" />
-     <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\VertexAnimation.shader" />
-     <None Include="Assets\Imported\Environment Packages\Skyboxes\_skybox info.txt" />
-     <None Include="Assets\BattleBots\Shaders\ValueNoise.shader" />
-     <None Include="Assets\BattleBots\Shaders\WorldSpacePanner\AlphaBlendWorldSpacePanner.shader" />
-     <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\Cubemaps.shader" />
-     <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\Refraction.shader" />
-     <None Include="Assets\Imported\Shaders\Toon Shading\Sources\Shaders\Toony-BasicOutline.shader" />
-     <None Include="Assets\OVR\Shaders\Unlit Transparent HUD.shader" />
-     <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\Parallax.shader" />
-     <None Include="Assets\Imported\AlphaExample\DiffuseEmissive.shader" />
-     <None Include="Assets\Plugins\Android\res\values-es-rES\assets.xml" />
-     <None Include="Assets\Imported\Image Effects (Pro Only)\_Sources\Shaders\GlowEffectDownsample.shader" />
-     <None Include="Assets\Plugins\Android\res\values-es\strings.xml" />
-     <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\LightWrapping.shader" />
-     <None Include="Assets\Imported\AlphaExample\AlphaEmissiveDiffuse.shader" />
-     <None Include="Assets\ProCore\ProBuilder\Shader\UnlitColor.shader" />
-     <None Include="Assets\ProCore\ProBuilder\API Examples\Instantiation\README.txt" />
-     <None Include="Assets\Imported\Shaders\Toon Shading\Sources\Shaders\Toony-LightedOutline.shader" />
-     <None Include="Assets\Imported\Shaders\Toon Shading\Sources\Shaders\Toony-Lighted.shader" />
-     <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\VertexColorRounding.shader" />
-     <None Include="Assets\Plugins\Android\res\values-es-rES\strings.xml" />
-     <None Include="Assets\Plugins\Android\res\values-en-rGB\assets.xml" />
-     <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\TessellationDisplacement.shader" />
-     <None Include="Assets\BattleBots\Shaders\EmissiveSplit\Glow.shader" />
-     <None Include="Assets\Plugins\Android\res\values-fr\assets.xml" />
-     <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\Tiles.shader" />
-     <None Include="Assets\OVR\Shaders\OVRGUIShader.shader" />
-     <None Include="Assets\Plugins\Android\res\values-fr\strings.xml" />
-     <None Include="Assets\Plugins\x86\donotdelete.txt" />
-     <None Include="Assets\Plugins\Android\res\values-ko\strings.xml" />
-     <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\PixelRotator.shader" />
-     <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\CustomLighting.shader" />
-     <None Include="Assets\ProCore\ProBuilder\Shader\UnlitColor-Overlay.shader" />
-     <None Include="Assets\Plugins\Android\res\values-v11\styles.xml" />
-     <None Include="Assets\ProCore\ProBuilder\Shader\DiffuseVertexColorEmission.shader" />
-     <None Include="Assets\Plugins\Android\res\values-de\assets.xml" />
-     <None Include="Assets\Plugins\Android\res\values-es\assets.xml" />
-     <None Include="Assets\Plugins\Android\res\values\strings.xml" />
-     <None Include="Assets\BattleBots\Shaders\Dissolve\DissolveShader.shader" />
-     <None Include="Assets\Plugins\Android\res\values-it\strings.xml" />
-     <None Include="Assets\ProCore\ProBuilder\About\Credits.txt" />
-     <None Include="Assets\Plugins\Android\res\values-v14\styles.xml" />
- <Reference Include="UnityEngine.UI">
- <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.3/UnityEngine.UI.dll</HintPath>
- </Reference>
- <Reference Include="ProBuilderCore">
- <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/ProBuilder/Classes/ProBuilderCore.dll</HintPath>
- </Reference>
- <Reference Include="ProBuilderMeshOps">
- <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/ProBuilder/Classes/ProBuilderMeshOps.dll</HintPath>
- </Reference>
- <Reference Include="ProCore">
- <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/Shared/Code/ProCore.dll</HintPath>
- </Reference>
- <Reference Include="SixBySeven">
- <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/Shared/Code/SixBySeven.dll</HintPath>
- </Reference>
+    <Compile Include="Assets\BattleBots\GUI\Effects\Bullet\Scripts\Explosion.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Animation\pingPongAnimation.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Combat\AI\CombatAIManager.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Combat\AI\EnemyUnitInfo.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Combat\Ability\AbilityActivator.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Combat\Ability\AbilityDescription.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Combat\Ability\AbilityModifier.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Combat\Ability\BuffEffect.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Combat\Ability\DebuffEffect.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Combat\Ability\StatusEffect.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Combat\Ability\Template.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Combat\Map.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Combat\MapEditor.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Combat\Units\BoardUnit.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Combat\Units\NonPlayerControlledBoardUnit.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Combat\Units\PlayerControlledBoardUnit.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Customization\CharacterCustomizerManager.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Customization\Hover.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Customization\PlatformManager.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Customization\PowerUp.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Customization\StatsWindow.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Customization\Talent.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Customization\TalentIcon.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Customization\TalentTree.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Customization\TooltipGUI.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Customization\UnitNamePlateGUI.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\GUI\UnitUIManager.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Hexagon\Hexagon.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Hexagon\HexagonData.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Managers\BoardManager.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Managers\CombatManager.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Managers\CustomizationManager.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Managers\GameManager.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Managers\TemplateManager.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\OpenWorld\Infection.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\OpenWorld\PartyUnit.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Pathfinding\AStarSearch.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Pathfinding\HeapPriorityQueue.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Pathfinding\IPriorityQueue.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Pathfinding\IPriorityQueueNode.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Pathfinding\Location.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Player\Archive\PlayerMovement.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Player\Archive\TinpetMovement.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Player\Archive\WeaponController.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Player\Controllers\IKController.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Player\Controllers\MyHeroController.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Player\Controllers\MyHeroController3rdPerson.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Player\Features\Gun.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Player\Features\HeroStats.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Player\Features\Projectile.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Player\Features\StateManager.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\RXSolutionFixer.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Utility\FPSDisplay.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Utility\GazeInputModule.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Utility\LevelManager.cs" />
+    <Compile Include="Assets\BattleBots\Scripts\Utility\moveRightCheck.cs" />
+    <Compile Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Scripts\EditorLabel.cs" />
+    <Compile Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Scripts\EnableCameraDepthInForward.cs" />
+    <Compile Include="Assets\OVR\Scripts\OVRCameraRig.cs" />
+    <Compile Include="Assets\OVR\Scripts\OVRCommon.cs" />
+    <Compile Include="Assets\OVR\Scripts\OVRDisplay.cs" />
+    <Compile Include="Assets\OVR\Scripts\OVRManager.cs" />
+    <Compile Include="Assets\OVR\Scripts\OVRPluginEvent.cs" />
+    <Compile Include="Assets\OVR\Scripts\OVRTracker.cs" />
+    <Compile Include="Assets\OVR\Scripts\OVRUnityVersionChecker.cs" />
+    <Compile Include="Assets\OVR\Scripts\OvrCapi.cs" />
+    <Compile Include="Assets\OVR\Scripts\Util\OVRCrosshair.cs" />
+    <Compile Include="Assets\OVR\Scripts\Util\OVRGUI.cs" />
+    <Compile Include="Assets\OVR\Scripts\Util\OVRGamepadController.cs" />
+    <Compile Include="Assets\OVR\Scripts\Util\OVRGridCube.cs" />
+    <Compile Include="Assets\OVR\Scripts\Util\OVRMainMenu.cs" />
+    <Compile Include="Assets\OVR\Scripts\Util\OVRPlayerController.cs" />
+    <Compile Include="Assets\OVR\Scripts\Util\OVRScreenFade.cs" />
+    <Compile Include="Assets\OVR\Scripts\Util\OVRUGUI.cs" />
+    <Compile Include="Assets\ProCore\ProBuilder\API Examples\Instantiation\ProBuilderInstantiate.cs" />
+    <Compile Include="Assets\ProCore\ProBuilder\API Examples\Runtime Editing\Materials\pb_Selection.cs" />
+    <Compile Include="Assets\ProCore\ProBuilder\API Examples\Runtime Editing\RuntimeEdit.cs" />
+    <None Include="Assets\Plugins\donotdelete.txt" />
+    <None Include="Assets\Imported\Shaders\Toon Shading\Sources\Shaders\Toony-Basic.shader" />
+    <None Include="Assets\BattleBots\Shaders\Data.shader" />
+    <None Include="Assets\BattleBots\Shaders\Wireframe.shader" />
+    <None Include="Assets\ProCore\ProBuilder\About\changelog.txt" />
+    <None Include="Assets\Plugins\Android\assets\donotdelete.txt" />
+    <None Include="Assets\ProCore\ProBuilder\Shader\VertexBillboard.shader" />
+    <None Include="Assets\ProCore\ProBuilder\Shader\DiffuseVertexColor.shader" />
+    <None Include="Assets\Plugins\Android\res\values-de\strings.xml" />
+    <None Include="Assets\Plugins\x86_64\donotdelete.txt" />
+    <None Include="Assets\ProCore\Shared\About\README.txt" />
+    <None Include="Assets\ProCore\ProBuilder\Shader\DiffuseVertexColorTransparency.shader" />
+    <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\LightCone.shader" />
+    <None Include="Assets\Imported\Shaders\ShaderForge\Readme.txt" />
+    <None Include="Assets\Plugins\Android\res\values-ko\assets.xml" />
+    <None Include="Assets\Plugins\Android\res\values\assets.xml" />
+    <None Include="Assets\BattleBots\Shaders\SelfIlluminated.shader" />
+    <None Include="Assets\Plugins\Android\res\raw\efigs.fnt" />
+    <None Include="Assets\ProCore\ProBuilder\About\pc_AboutEntry_ProBuilder.txt" />
+    <None Include="Assets\Plugins\Android\res\values-en-rGB\strings.xml" />
+    <None Include="Assets\Plugins\Android\res\values\styles.xml" />
+    <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\MaterialPlatform.shader" />
+    <None Include="Assets\Plugins\Android\res\values-it\assets.xml" />
+    <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
+    <None Include="Assets\OVR\Shaders\TextShader3D.shader" />
+    <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\Vegetation.shader" />
+    <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\VertexAnimation.shader" />
+    <None Include="Assets\Imported\Environment Packages\Skyboxes\_skybox info.txt" />
+    <None Include="Assets\BattleBots\Shaders\ValueNoise.shader" />
+    <None Include="Assets\BattleBots\Shaders\WorldSpacePanner\AlphaBlendWorldSpacePanner.shader" />
+    <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\Cubemaps.shader" />
+    <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\Refraction.shader" />
+    <None Include="Assets\Imported\Shaders\Toon Shading\Sources\Shaders\Toony-BasicOutline.shader" />
+    <None Include="Assets\OVR\Shaders\Unlit Transparent HUD.shader" />
+    <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\Parallax.shader" />
+    <None Include="Assets\Imported\AlphaExample\DiffuseEmissive.shader" />
+    <None Include="Assets\Plugins\Android\res\values-es-rES\assets.xml" />
+    <None Include="Assets\Plugins\Android\res\values-es\strings.xml" />
+    <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\LightWrapping.shader" />
+    <None Include="Assets\Imported\AlphaExample\AlphaEmissiveDiffuse.shader" />
+    <None Include="Assets\ProCore\ProBuilder\Shader\UnlitColor.shader" />
+    <None Include="Assets\ProCore\ProBuilder\API Examples\Instantiation\README.txt" />
+    <None Include="Assets\Imported\Shaders\Toon Shading\Sources\Shaders\Toony-LightedOutline.shader" />
+    <None Include="Assets\Imported\Shaders\Toon Shading\Sources\Shaders\Toony-Lighted.shader" />
+    <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\VertexColorRounding.shader" />
+    <None Include="Assets\Plugins\Android\res\values-es-rES\strings.xml" />
+    <None Include="Assets\Plugins\Android\res\values-en-rGB\assets.xml" />
+    <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\TessellationDisplacement.shader" />
+    <None Include="Assets\BattleBots\Shaders\EmissiveSplit\Glow.shader" />
+    <None Include="Assets\Plugins\Android\res\values-fr\assets.xml" />
+    <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\Tiles.shader" />
+    <None Include="Assets\OVR\Shaders\OVRGUIShader.shader" />
+    <None Include="Assets\Plugins\Android\res\values-fr\strings.xml" />
+    <None Include="Assets\Plugins\x86\donotdelete.txt" />
+    <None Include="Assets\Plugins\Android\res\values-ko\strings.xml" />
+    <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\PixelRotator.shader" />
+    <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\CustomLighting.shader" />
+    <None Include="Assets\ProCore\ProBuilder\Shader\UnlitColor-Overlay.shader" />
+    <None Include="Assets\Plugins\Android\res\values-v11\styles.xml" />
+    <None Include="Assets\ProCore\ProBuilder\Shader\DiffuseVertexColorEmission.shader" />
+    <None Include="Assets\Plugins\Android\res\values-de\assets.xml" />
+    <None Include="Assets\Plugins\Android\res\values-es\assets.xml" />
+    <None Include="Assets\Plugins\Android\res\values\strings.xml" />
+    <None Include="Assets\BattleBots\Shaders\Dissolve\DissolveShader.shader" />
+    <None Include="Assets\Plugins\Android\res\values-it\strings.xml" />
+    <None Include="Assets\ProCore\ProBuilder\About\Credits.txt" />
+    <None Include="Assets\Plugins\Android\res\values-v14\styles.xml" />
+    <Reference Include="UnityEngine.UI">
+      <HintPath>D:\Program Files %28x86%29\Unity\Editor\Data\UnityExtensions\Unity\GUISystem\4.6.3\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="ProBuilderCore">
+      <HintPath>D:\Coding\GitHub\BattleBots\BattleBotsUnity\Assets\ProCore\ProBuilder\Classes\ProBuilderCore.dll</HintPath>
+    </Reference>
+    <Reference Include="ProBuilderMeshOps">
+      <HintPath>D:\Coding\GitHub\BattleBots\BattleBotsUnity\Assets\ProCore\ProBuilder\Classes\ProBuilderMeshOps.dll</HintPath>
+    </Reference>
+    <Reference Include="ProCore">
+      <HintPath>D:\Coding\GitHub\BattleBots\BattleBotsUnity\Assets\ProCore\Shared\Code\ProCore.dll</HintPath>
+    </Reference>
+    <Reference Include="SixBySeven">
+      <HintPath>D:\Coding\GitHub\BattleBots\BattleBotsUnity\Assets\ProCore\Shared\Code\SixBySeven.dll</HintPath>
+    </Reference>
+    <Compile Include="Assets\Imported\Image Effects %28Pro Only%29\GlowEffect.cs" />
+    <Compile Include="Assets\Imported\Image Effects %28Pro Only%29\ImageEffectBase.cs" />
+    <Compile Include="Assets\Imported\Image Effects %28Pro Only%29\ImageEffects.cs" />
+    <None Include="Assets\Imported\Image Effects %28Pro Only%29\_Sources\Shaders\GlowConeTap.shader" />
+    <None Include="Assets\Imported\Image Effects %28Pro Only%29\_Sources\Shaders\_BloomAndFlares\MobileBloom.shader" />
+    <None Include="Assets\Imported\Image Effects %28Pro Only%29\_Sources\Shaders\GlowCompose.shader" />
+    <None Include="Assets\Imported\Image Effects %28Pro Only%29\_Sources\Shaders\GlowEffectDownsample.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -221,5 +220,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  
 </Project>

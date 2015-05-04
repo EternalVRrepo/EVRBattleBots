@@ -40,11 +40,4 @@ public class TalentTree : ScriptableObject
 			TalentsChosen.Add (t);
 		}
 	}
-
-	public void UpdateTalents(List<Talent> newTalents) {
-		TalentsChosen.Clear ();
-		foreach (Talent t in newTalents) {
-			TalentsChosen.Add (t);
-		}
-	}
 }
