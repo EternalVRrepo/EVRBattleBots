@@ -29,6 +29,7 @@ public class CombatManager : MonoBehaviour {
 	}
 	public List<PlayerControlledBoardUnit> CurrentParty = new List<PlayerControlledBoardUnit>();
 	public List<NonPlayerControlledBoardUnit> CurrentEnemies = new List<NonPlayerControlledBoardUnit>();
+	public PlayerControlledBoardUnit CurrentlySelectedUnit;
 	public static CombatManager instance;
 
 	protected bool PowerUpMenuOpen;
@@ -37,12 +38,7 @@ public class CombatManager : MonoBehaviour {
 	protected int HexTargetMask;
 	protected Hexagon CurrentlySelectedHexagon;
 	[SerializeField]
-	protected PlayerControlledBoardUnit CurrentlySelectedUnit;
 	protected CombatAIManager AIManager;
-	protected TemplateManager templateManager {
-		get { return GetComponent<TemplateManager>(); }
-	}
-
 	private delegate void CurrentPhaseState();
 	private CurrentPhaseState currentPhaseStateMethod;
 	private int currentMoveDistance;
@@ -138,6 +134,7 @@ public class CombatManager : MonoBehaviour {
 	/// </summary>
 	void StartTurn(PlayerControlledBoardUnit nextUnit) {
 		CurrentlySelectedUnit = nextUnit as PlayerControlledBoardUnit;
+		BoardManager.instance.StartTurn();
 		CurrentlySelectedUnit.StartTurn();
 		currentAbility = null;
 
@@ -202,6 +199,8 @@ public class CombatManager : MonoBehaviour {
 	/// </summary>
 	void EnterStateEndOfTurn() {
 		currentPhaseStateMethod = new CurrentPhaseState(StateEndOfTurn);
+		CurrentlySelectedUnit.EndTurn();
+		BoardManager.instance.EndTurn ();
 		CurrentPhase = PhaseState.EndOfTurn;
 	}
 
@@ -293,20 +292,20 @@ public class CombatManager : MonoBehaviour {
 		}
 
 		if (Input.GetButtonDown ("Ability1")) { //Choose ability 1
-			currentAbility = CurrentlySelectedUnit.AbilityActivator.ActivateAbility(0);
-			EnterStateTargetAttack ();
+			if ((currentAbility = CurrentlySelectedUnit.AbilityActivator.ActivateAbility(0)) != null)
+				EnterStateTargetAttack ();
 		}
 		else if (Input.GetButtonDown ("Ability2")) { //Choose ability 2
-			currentAbility = CurrentlySelectedUnit.AbilityActivator.ActivateAbility (1);
-			EnterStateTargetAttack ();
+			if ((currentAbility = CurrentlySelectedUnit.AbilityActivator.ActivateAbility(1)) != null)
+				EnterStateTargetAttack ();
 		}
 		else if (Input.GetButtonDown ("Ability3")) { //Choose ability 3
-			currentAbility = CurrentlySelectedUnit.AbilityActivator.ActivateAbility (2);
-			EnterStateTargetAttack ();
+			if ((currentAbility = CurrentlySelectedUnit.AbilityActivator.ActivateAbility(2)) != null)
+				EnterStateTargetAttack ();
 		}
 		else if (Input.GetButtonDown ("Ability4")) { //Choose ability 4
-			currentAbility = CurrentlySelectedUnit.AbilityActivator.ActivateAbility (3);
-			EnterStateTargetAttack ();
+			if ((currentAbility = CurrentlySelectedUnit.AbilityActivator.ActivateAbility(3)) != null)
+				EnterStateTargetAttack ();
 		}
 	}
 
@@ -314,9 +313,8 @@ public class CombatManager : MonoBehaviour {
 	/// State called to select a target with an attack
 	/// </summary>
 	void StateTargetAttack() {
-
 		if (Input.GetButtonDown ("Ability1") || Input.GetKeyDown (KeyCode.Mouse0)) {
-			if (!templateManager.TemplateInUse) { 
+			if (!TemplateManager.instance.TemplateInUse) { 
 				Hexagon h = RaycastHexagon ();
 				if (h != null && h.InLOS()) {
 					if (CurrentlySelectedUnit.AbilityActivator.CheckValidTarget(h)) {
@@ -326,8 +324,18 @@ public class CombatManager : MonoBehaviour {
 				}
 			}
 			else {
-				EnterStateWaiting();
-				StartCoroutine ("UseAbility");
+				if (currentAbility.RequireSourceHexagon) {
+					Hexagon h = RaycastHexagon ();
+					if (h != null) {
+						currentAbility.SourceHexagon = h;
+						EnterStateWaiting();
+						StartCoroutine ("UseAbility");
+					}
+				}
+				else {
+					EnterStateWaiting();
+					StartCoroutine ("UseAbility");
+				}
 			}
 		}
 
@@ -358,7 +366,6 @@ public class CombatManager : MonoBehaviour {
 	/// State where the logic for the next turn is decided
 	/// </summary>
 	void StateEndOfTurn() {
-		CurrentlySelectedUnit.EndTurn();
 		int i = CurrentParty.IndexOf (CurrentlySelectedUnit);
 		i++;
 		if (CurrentParty.Count == i) {
@@ -423,7 +430,7 @@ public class CombatManager : MonoBehaviour {
 	/// <summary>
 	/// Raycasts to find/select a hexagon
 	/// </summary>
-	Hexagon RaycastHexagon() {
+	public Hexagon RaycastHexagon() {
 		RaycastHit hit;
 		Ray ray = RaycastCamera.ScreenPointToRay(Input.mousePosition); //Create a ray from camera  mouse position
 		if (Physics.Raycast (ray, out hit, 100, HexTargetMask)) //If an object is found

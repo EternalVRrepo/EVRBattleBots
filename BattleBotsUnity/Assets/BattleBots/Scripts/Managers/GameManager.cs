@@ -116,25 +116,27 @@ public class GameManager : MonoBehaviour {
 		//TODO: debug stuff for combat so we have a party, shouldnt be here
 		PartyUnit newUnit = ScriptableObject.CreateInstance<PartyUnit>();
 		newUnit.UnitPrefab = Resources.Load ("Characters/Hero") as GameObject;
-		newUnit.MovementDistance = 3;
-		newUnit.Health = 60;
-		newUnit.UnitClass = PlayerControlledBoardUnit.PlayerClass.Warrior;
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/SonicStrike")) as AbilityDescription);
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/TestHeal")) as AbilityDescription);
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/TestStun")) as AbilityDescription);
+		newUnit.MovementDistance = 4;
+		newUnit.Health = 150;
+		newUnit.UnitClass = PlayerControlledBoardUnit.PlayerClass.Support;
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/Support/ElectromagneticField")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/Support/ConcussiveBlast")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/Support/StaticShell")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/Support/PulseForce")) as AbilityDescription);
 		newUnit.currentLevel = 1;
-		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree>("TalentTrees/MeleeTree")) as TalentTree;
+		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree>("TalentTrees/WarriorTree")) as TalentTree;
 		CurrentParty.Add (newUnit);
 		newUnit = ScriptableObject.CreateInstance<PartyUnit>();
 		newUnit.UnitPrefab = Resources.Load ("Characters/Hero") as GameObject;
 		newUnit.MovementDistance = 4;
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/TestDamageSlow")) as AbilityDescription);
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/TestHeal")) as AbilityDescription);
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/TestStun")) as AbilityDescription);
-		newUnit.Health = 65;
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/Wizard/RadiantEnergy")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/Wizard/CircuitBreak")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/Wizard/StaticGrip")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/Wizard/FluxBlast")) as AbilityDescription);
+		newUnit.Health = 120;
 		newUnit.UnitClass = PlayerControlledBoardUnit.PlayerClass.Wizard;
 		newUnit.currentLevel = 1;
-		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree>("TalentTrees/RangedTree")) as TalentTree;
+		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree>("TalentTrees/WizardTree")) as TalentTree;
 		CurrentParty.Add (newUnit);
 
 		CurrentPowerUps.Add(Instantiate(Resources.Load<PowerUp>("PowerUps/MoveSpeed")) as PowerUp);
@@ -151,7 +153,7 @@ public class GameManager : MonoBehaviour {
 			if (gameState != GameState.CharacterCustomization)
 				SetGameState (GameState.CharacterCustomization);
 			else if (gameState == GameState.CharacterCustomization )
-		         FinishCustomizationMenu ();
+		        FinishCustomizationMenu ();
 		}
 	}
 
@@ -213,14 +215,14 @@ public class GameManager : MonoBehaviour {
 				EnemyUnitInfo newUnit = ScriptableObject.CreateInstance<EnemyUnitInfo>();
 				newUnit.UnitPrefab = Resources.Load ("EnemyUnitPrefabTest") as GameObject;
 				newUnit.MovementDistance = 3;
-				newUnit.Health = 80;
+				newUnit.Health = 400;
 				newUnit.AIType = CombatAIManager.AIType.Melee;
 				newUnit.ListOfAbilities.Add(Resources.Load<AbilityDescription>("Abilities/EnemyAbilities/Bite"));
 				enemies.Add (newUnit);
 				newUnit = ScriptableObject.CreateInstance<EnemyUnitInfo>();
 				newUnit.UnitPrefab = Resources.Load ("EnemyUnitPrefabTest") as GameObject;
 				newUnit.MovementDistance = 3;
-				newUnit.Health = 80;
+				newUnit.Health = 400;
 				newUnit.AIType = CombatAIManager.AIType.Melee;
 				newUnit.ListOfAbilities.Add(Resources.Load<AbilityDescription>("Abilities/EnemyAbilities/Bite"));
 				enemies.Add (newUnit);

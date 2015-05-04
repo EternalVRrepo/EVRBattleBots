@@ -51,6 +51,7 @@ public class CombatAIManager : MonoBehaviour {
 		}
 
 		currentUnit = enemies[enemyIndex];
+		BoardManager.instance.StartTurn();
 		currentUnit.StartTurn();
 		enemyIndex++;
 
@@ -65,16 +66,18 @@ public class CombatAIManager : MonoBehaviour {
 	/// Decides where to move a unit
 	/// </summary>
 	IEnumerator MoveUnit() {
-		List<Hexagon> path = GetBestPath();
-		if (path != null) {
-			int i = 0;
-			Hexagon curr = null;
-			while (currentUnit.remainingMoveDistance >= 0 && i < path.Count-1) { //Count-1 because the path leads ontop of another unit, so stop 1 short
-				curr = path[i];
-				currentUnit.IssueMovement (curr);
-				yield return new WaitForSeconds(0.74f);
-				currentUnit.remainingMoveDistance--;
-				i++;
+		if (currentUnit.CanMove()) {
+			List<Hexagon> path = GetBestPath();
+			if (path != null) {
+				int i = 0;
+				Hexagon curr = null;
+				while (currentUnit.remainingMoveDistance >= 0 && i < path.Count-1) { //Count-1 because the path leads ontop of another unit, so stop 1 short
+					curr = path[i];
+					currentUnit.IssueMovement (curr);
+					yield return new WaitForSeconds(0.74f);
+					currentUnit.remainingMoveDistance--;
+					i++;
+				}
 			}
 		}
 		StartCoroutine ("SelectAbility");
@@ -103,7 +106,7 @@ public class CombatAIManager : MonoBehaviour {
 		}
 
 		if (AbilitySelected == null || AbilityTarget == null) { //No ability to use
-			HandleNextUnit ();
+			EndTurn ();
 		}
 		else StartCoroutine ("TargetAbility");
 		yield return null;
@@ -165,11 +168,17 @@ public class CombatAIManager : MonoBehaviour {
 	IEnumerator TargetAbility() {
 		if (AbilitySelected != null) { //If we have an ability to use
 			AbilityTarget.ReceiveAbilityHit(AbilitySelected);
-			Debug.Log ("Hit " + AbilityTarget.CurrentlyOccupiedHexagon + " with " + AbilitySelected.name);
+//			Debug.Log ("Hit " + AbilityTarget.CurrentlyOccupiedHexagon + " with " + AbilitySelected.name);
 		}
 
-		HandleNextUnit();
+		EndTurn ();
 		yield return null;
+	}
+
+	void EndTurn () {
+		currentUnit.EndTurn ();
+		BoardManager.instance.EndTurn ();
+		HandleNextUnit ();
 	}
 
 	/// <summary>

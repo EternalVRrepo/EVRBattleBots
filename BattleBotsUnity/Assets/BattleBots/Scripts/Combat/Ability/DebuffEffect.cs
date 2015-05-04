@@ -23,11 +23,16 @@ public class DebuffEffect : StatusEffect {
 		Stun,
 		Silence,
 		Root,
-		UnstableStatic
+		StaticGrip,
+		UnstableStatic,
+		Enfeeble,
 	}
 
 	public float Damage;
 	public float SlowPercent;
+	public int StaticGripDamagePerHex; 
+
+	public bool RequireUnstableStatic;
 
 	public DebuffEffect() {}
 
@@ -43,5 +48,15 @@ public class DebuffEffect : StatusEffect {
 		Damage = e.Damage;
 		SlowPercent = e.SlowPercent;
 	}
-	
+
+	/// <summary>
+	/// New unstable static effect
+	/// </summary>
+	public DebuffEffect(string name, Debuff debuffType, int damage, int duration) {
+		EffectName = name;
+		DebuffType = debuffType;
+		Duration = duration;
+		EffectDurationType = EffectDuration.OverTime;
+		Damage = damage;
+	}
 }

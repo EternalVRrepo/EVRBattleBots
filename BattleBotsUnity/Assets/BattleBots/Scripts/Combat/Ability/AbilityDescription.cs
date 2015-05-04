@@ -19,23 +19,27 @@ public class AbilityDescription : ScriptableObject {
 
 	public string DisplayName = ""; //Name of this ability 
 	public string TooltipText = ""; 
+	public Texture AbilityIcon;
+	public Texture newTexture;
 	public TargetType AbilityTargetType;
 	public enum TargetType {
 		TargetSelf,
 		TargetUnit,
 		TargetEnemy,
 		TargetAlly,
+		TargetHexagon,
 		CustomTemplate
 	}
 
 	public TemplateManager.Target TemplateType;
 	public TemplateManager.TargetTemplate Template;
 
-	public int TemplateLength;
-	public int TemplateWidth;
-
+	public int TemplateSize;
 	public bool FriendlyFireEnabled;
-	
+	public bool SelfFireEnabled;
+	public bool RequireSourceHexagon;
+	public Hexagon SourceHexagon;
+
 //	public DamageType AbilityDamageType;
 //	public enum DamageType {
 //		Damage,
@@ -50,6 +54,8 @@ public class AbilityDescription : ScriptableObject {
 //		AreaOverTime
 //	}
 
+	public int Cooldown;
+	public int currentCooldown;
 	public int castRange; //How far from the player this ability can be cast
 //	public int damage; //damage or healing per tick = damage or healing/duration if it is a DoT
 //	public int Duration { //Used for DoT attacks
@@ -65,8 +71,13 @@ public class AbilityDescription : ScriptableObject {
 
 	public int AreaOfEffectDistance; //How far from the target is affected by this ability
 	public int duration;
-	
+	public int HexDuration; //Duration it stays on a hex
+
 	public List<DebuffEffect> debuffs = new List<DebuffEffect>();
 	public List<BuffEffect> buffs = new List<BuffEffect>();
 
+	public void UpdateIcon() {
+		AbilityIcon = newTexture;
+		newTexture = null;
+	}
 }

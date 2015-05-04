@@ -18,9 +18,11 @@ public class TemplateManager : MonoBehaviour {
 
 	public static TemplateManager instance;
 	public bool TemplateInUse;
+	public bool HexTargetting;
 	public Target TemplateTargetType;
 	public BoardUnit CurrentUnit;
 	public List<Hexagon> CurrentTargets;
+	public List<Hexagon> TargetHexagons = new List<Hexagon>();
 
 	protected Vector3 MouseCoords;
 	protected List<GameObject> templates = new List<GameObject>();
@@ -43,32 +45,56 @@ public class TemplateManager : MonoBehaviour {
 		Circle = 0,
 		Line = 1,
 		Cone = 2,
+		none = 3,
 	}
 
 	public enum Target {
 		RadialTied, //Tied to character, choose direction
 		RadialFree, //Follow mouse, choose direction
-		StaticTied, //Static size tied to character
+		StaticTied, //Tied to character static size
 		StaticFree, //Follow mouse, static shape
 		NULL,
 	}
 
 	void Update() {
-		if (TemplateInUse) {
-			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
-			RaycastHit hit;
-
-			if (Physics.Raycast (ray, out hit, Mathf.Infinity, boardLayer))	{
-				if (TemplateTargetType == Target.StaticTied || TemplateTargetType == Target.RadialTied) {
-					template.transform.parent.position = new Vector3(CurrentUnit.transform.position.x, 0, CurrentUnit.transform.position.z);
-					template.transform.parent.LookAt (new Vector3(hit.point.x, 0, hit.point.z));
+		if (TemplateInUse || HexTargetting) {
+			if (HexTargetting) {
+				Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+				RaycastHit hit;
+				if (Physics.Raycast (ray, out hit, Mathf.Infinity, boardLayer))	{
+					if (TargetHexagons.Contains (hit.transform.GetComponent<Hexagon>())) {
+						template.transform.parent.position = hit.transform.position;
+						if (hit.transform.GetComponent<Hexagon>() != CurrentUnit.CurrentlyOccupiedHexagon) {
+							template.transform.parent.LookAt(CurrentUnit.transform.position);
+							template.transform.parent.Rotate (new Vector3(0, 180, 0));
+						}
+					}
 				}
-				else {
-					template.transform.parent.position = new Vector3(hit.point.x, 0, hit.point.z);
-					template.transform.parent.LookAt (new Vector3(CurrentUnit.transform.position.x, 0, CurrentUnit.transform.position.z));
+			}
+			else {
+				Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+				RaycastHit hit;
+				if (Physics.Raycast (ray, out hit, Mathf.Infinity, boardLayer))	{
+					if (TemplateTargetType == Target.StaticTied || TemplateTargetType == Target.RadialTied) {
+						template.transform.parent.position = new Vector3(CurrentUnit.transform.position.x, 0, CurrentUnit.transform.position.z);
+						template.transform.parent.LookAt (new Vector3(hit.point.x, 0, hit.point.z));
+					}
+					else {
+						template.transform.parent.position = new Vector3(hit.point.x, 0, hit.point.z);
+						if (TemplateTargetType != Target.StaticFree) 
+							template.transform.parent.LookAt (new Vector3(CurrentUnit.transform.position.x, 0, CurrentUnit.transform.position.z));
+					}
 				}
 			}
 		}
+	}
+
+	/// <summary>
+	/// Get hits for a template
+	/// </summary>
+	public void TemplateHit(AbilityActivator ab, TargetTemplate template, int range, Hexagon source, Hexagon destination) {
+		Template t = templates[(int)template].GetComponentInChildren<Template>();
+		t.GetHits (ab, range, source, destination);
 	}
 
 	/// <summary>
@@ -87,34 +113,49 @@ public class TemplateManager : MonoBehaviour {
 	/// </summary>
 	public void StartHighlighting(BoardUnit u, AbilityDescription a) {
 		CurrentTargets.Clear ();
-//		GameObject go = Instantiate(TemplatePrefabs[(int)a.Template]) as GameObject;
 		template = templates[(int)a.Template].GetComponentInChildren<Template>(); 
 		TemplateInUse = true;
 		TemplateTargetType = a.TemplateType;
 		CurrentUnit = u;
 		template.Enable();
-		template.SetScale(a.castRange);
+		template.SetScale(a.TemplateSize, a.castRange);
+		CurrentTargets = template.CurrentHighlight;
+	}
+
+	/// <summary>
+	/// Starts highlighting for hex targetting
+	/// </summary>
+	public void StartHexHighlighting(BoardUnit u, AbilityDescription a) {
+		CurrentTargets.Clear ();
+		template = templates[(int)a.Template].GetComponentInChildren<Template>(); 
+		HexTargetting = true;
+		TemplateTargetType = a.TemplateType;
+		CurrentUnit = u;
+		if (a.AbilityTargetType == AbilityDescription.TargetType.TargetHexagon)
+			template.TargetHexagon = true;
+		template.Enable();
+		template.SetScale(a.TemplateSize, a.castRange);
 		CurrentTargets = template.CurrentHighlight;
 	}
 
 	/// <summary>
 	/// Finishes using the template for the ability, returns what units the ability found
 	/// </summary>
-	public List<BoardUnit> FinishAbility() {
-		if (TemplateInUse) {
-			List<BoardUnit> units = new List<BoardUnit>();
+	public List<Hexagon> FinishAbility() {
+		if (TemplateInUse || HexTargetting) {
+			List<Hexagon> units = new List<Hexagon>();
 			foreach (Hexagon h in CurrentTargets) {
-				if (h.OccupiedUnit != null)
-					units.Add(h.OccupiedUnit);
+				units.Add (h);
 			}
 			TemplateInUse = false;
+			HexTargetting = false;
 			TemplateTargetType = Target.NULL;
 			CurrentUnit = null;
 			template.Disable ();
 			template = null;
 			return units;
 		}
-		return new List<BoardUnit>();
+		return new List<Hexagon>();
 	}
 	
 	private void CreateLayerMask() {

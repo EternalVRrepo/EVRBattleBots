@@ -29,4 +29,11 @@ public class TalentTree : ScriptableObject {
 
 		return TalentsChosen[row];
 	}
+
+	public void UpdateTalents(List<Talent> newTalents) {
+		TalentsChosen.Clear ();
+		foreach (Talent t in newTalents) {
+			TalentsChosen.Add (t);
+		}
+	}
 }

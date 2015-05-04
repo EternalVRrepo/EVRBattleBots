@@ -52,6 +52,7 @@
      <Compile Include="Assets\BattleBots\Scripts\Combat\AI\EnemyUnitInfo.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Combat\Ability\AbilityActivator.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Combat\Ability\AbilityDescription.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Combat\Ability\AbilityModifier.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Combat\Ability\BuffEffect.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Combat\Ability\DebuffEffect.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Combat\Ability\StatusEffect.cs" />

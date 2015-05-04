@@ -29,10 +29,6 @@ public class BoardManager : MonoBehaviour {
 	public static Map CurrentMap;					//Map currently being used
 	public static BoardManager instance {
 		get {
-			if (_instance == null) {
-				_instance = GameObject.FindObjectOfType<BoardManager>();
-				DontDestroyOnLoad (_instance);
-			}
 			return _instance;
 		}
 	}
@@ -95,15 +91,8 @@ public class BoardManager : MonoBehaviour {
 	/// 
 	/// </summary>
 	void Awake() {		
-	if (_instance == null) {
 		_instance = this;
-		DontDestroyOnLoad(this);
 	}
-	else {
-		if (this != _instance)
-			Destroy (this.gameObject);
-	}
-}
 
 /// <summary>
 	/// Initialize a map for combat
@@ -190,6 +179,24 @@ public class BoardManager : MonoBehaviour {
 	protected Queue<Hexagon> frontier = new Queue<Hexagon>(); //We need two queues to switch between as we go through each layer of frontier, to keep track of distance
 	protected Queue<Hexagon> distanceQueue = new Queue<Hexagon>();
 	protected List<Hexagon> visited = new List<Hexagon>();
+
+	/// <summary>
+	/// Ends the turn for all the hexagons
+	/// </summary>
+	public void EndTurn() {
+		foreach (Hexagon h in HexagonArray) {
+			h.EndTurn();
+		}
+	}
+
+	/// <summary>
+	/// Starts the turn for all the hexagons
+	/// </summary>
+	public void StartTurn() {
+		foreach (Hexagon h in HexagonArray) {
+			h.StartTurn();
+		}
+	}
 
 	/// <summary>
 	/// Highlights hexagons within currentMoveDistance from currentlyOccupiedHexagon using a Breadth First Search
@@ -407,9 +414,9 @@ public class BoardManager : MonoBehaviour {
 					return true;
 				break;
 			}
-//		case AbilityDescription.TargetType.TargetHexagon: {
-//				return true;
-//			}
+		case AbilityDescription.TargetType.TargetHexagon: {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -448,19 +455,24 @@ public class BoardManager : MonoBehaviour {
 	/// <summary>
 	/// Highlights hexagons for an ability
 	/// </summary>
-	public void HighlightAbility(Hexagon currentHexagon, AbilityDescription ability) {
-		HighlightLOSNeighbors(currentHexagon, ability.castRange, ability.AbilityTargetType);
+	public void HighlightAbility(Hexagon currentHexagon, AbilityDescription ability, bool TemplateUse = false) {
+		int range = ability.castRange;
+		if (CombatManager.instance.CurrentlySelectedUnit.isEnfeebled) {
+			range = Mathf.RoundToInt(ability.castRange*.5f);
+		}
+		HighlightLOSNeighbors(currentHexagon, range, ability.AbilityTargetType, TemplateUse);
 	}
 
 	/// <summary>
 	/// Highlights all the hexagons in a distance of the designated type
 	/// </summary>
-	public void HighlightLOSNeighbors(Hexagon currentlyOccupiedHexagon, int distance, AbilityDescription.TargetType targetType) {
+	public void HighlightLOSNeighbors(Hexagon currentlyOccupiedHexagon, int distance, AbilityDescription.TargetType targetType, bool TemplateUse) {
 		visited.Clear ();
 		frontier.Clear ();
 		distanceQueue.Clear ();
 		frontier.Enqueue (currentlyOccupiedHexagon); //Starting hex
 		visited.Add (currentlyOccupiedHexagon);
+		TemplateManager.instance.TargetHexagons.Clear ();
 		currentlyOccupiedHexagon.DisableLOSCollider();
 
 		Queue<Hexagon> activeQueue = frontier;
@@ -487,9 +499,44 @@ public class BoardManager : MonoBehaviour {
 			if (HexagonCastable (h, targetType)) {
 				h.Highlight();
 				HighlightedHexagons.Add (h);
+				if (TemplateUse) {
+					TemplateManager.instance.TargetHexagons.Add(h);
+				}
 			}
 			else h.EnableLOSCollider(); //If we cant cast on this hex, reenable the collider so we know its not a valid target
 		}
+	}
+
+	public List<Hexagon> GetStaticShellNeighbors(Hexagon currentlyOccupiedHexagon, int distance) {
+		visited.Clear ();
+		frontier.Clear ();
+		distanceQueue.Clear ();
+		frontier.Enqueue (currentlyOccupiedHexagon); //Starting hex
+		visited.Add (currentlyOccupiedHexagon);
+		
+		Queue<Hexagon> activeQueue = frontier;
+		Queue<Hexagon> inactiveQueue = distanceQueue;
+		while (activeQueue.Count > 0 && distance > 0) { //Breadth first search
+			Hexagon curr = activeQueue.Dequeue ();
+			foreach (Hexagon h in GetNeighborsAbilityCast(curr)) {		
+				if (inLOS(currentlyOccupiedHexagon, h) && !visited.Contains (h)) {
+					inactiveQueue.Enqueue (h);
+					visited.Add (h);
+				}
+			}
+			
+			if (activeQueue.Count == 0) { //Switching between active and inactive queues to track distance
+				Queue<Hexagon> t = activeQueue;
+				activeQueue = inactiveQueue;
+				inactiveQueue = t;
+				distance--;
+			}
+		}
+		
+		foreach (Hexagon h in visited) { //Highlight the hexagons we found
+			h.EnableLOSCollider(); //If we cant cast on this hex, reenable the collider so we know its not a valid target
+		}
+		return visited;
 	}
 
 	/// <summary>
@@ -519,7 +566,6 @@ public class BoardManager : MonoBehaviour {
 			h.EnableLOSCollider();
 			h.StopHighlight ();
 		}
-		HighlightedHexagons.Clear ();
 	}
 
 	/// <summary>
@@ -562,6 +608,92 @@ public class BoardManager : MonoBehaviour {
 			NeighborHexList.Add (h);
 
 		return NeighborHexList;
+	}
+
+	/// <summary>
+	/// Attempts to push the character at destination from the source
+	/// </summary>
+	public List<Hexagon> CanPushCharacter(Hexagon source, Hexagon Destination, out bool collision) {
+
+		List<Hexagon> path = GetPath(source, Destination, Destination);
+
+		Hexagon pushSource = path[path.Count-2];
+		int newX;
+		int newY;
+		newX = Destination.HexRow - pushSource.HexRow + Destination.HexRow;
+		newY = Destination.HexColumn - pushSource.HexColumn + Destination.HexColumn;
+
+		if (HexagonMoveable(GetHexagonFromArray (newX,newY), Destination, null)) {
+			path.Add(GetHexagonFromArray(newX, newY));
+			collision = false;
+			return path;
+		}
+		else {
+			collision = true;
+			return path;
+		}
+	}
+
+	/// <summary>
+	/// Gets the knockback hex using a source and distan ce
+	/// </summary>
+	public Hexagon GetKnockbackHex(Hexagon source, Hexagon current, int dist) {
+
+		List<Hexagon> neighbors = GetNeighborsMovement(current);
+		Hexagon end = current;
+		float d = 0;
+		while (dist > 0) {
+			foreach (Hexagon h in neighbors) {
+				float distance = Vector3.Distance (h.transform.position, source.transform.position);
+				if (distance > d) {
+					d = distance;
+					end = h;
+				}
+			}
+			neighbors = GetNeighborsMovement(end);
+			dist--;
+		}
+
+		return end;
+	}
+
+	/// <summary>
+	/// Gets the hex to pull to
+	/// </summary>
+	public Hexagon GetPullinHex(Hexagon source, Hexagon current, int dist) {
+		
+		List<Hexagon> neighbors = GetNeighborsMovement(current);
+		Hexagon end = current;
+		float d = 10;
+		while (dist > 0) {
+			foreach (Hexagon h in neighbors) {
+				float distance = Vector3.Distance (h.transform.position, source.transform.position);
+				if (distance < d) {
+					d = distance;
+					end = h;
+				}
+			}
+			neighbors = GetNeighborsMovement(end);
+			dist--;
+		}
+		
+		return end;
+	}
+
+	public Hexagon StaticGripHex(Hexagon start, Hexagon finish) {
+
+		if (finish.OccupiedUnit == null)
+			return finish;
+
+		Hexagon end = null;
+		List<Hexagon> neighbors = GetNeighborsMovement(finish);
+		float d = int.MaxValue;
+		foreach (Hexagon h in neighbors) {
+			if (DistanceBetweenHexagons(start, h) < d)
+				end = h;
+		}
+
+		return end;
 	}
 
 	#endregion

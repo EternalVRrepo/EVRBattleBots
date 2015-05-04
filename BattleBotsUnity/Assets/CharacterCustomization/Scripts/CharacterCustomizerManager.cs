@@ -54,7 +54,7 @@ public class CharacterCustomizerManager : MonoBehaviour
 		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/TestHeal")) as AbilityDescription);
 		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/TestStun")) as AbilityDescription);
 		newUnit.currentLevel = 1;
-		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree>("TalentTrees/MeleeTree")) as TalentTree;
+		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree>("TalentTrees/WarriorTree")) as TalentTree;
 		currentParty.Add (newUnit);
 		newUnit = ScriptableObject.CreateInstance<PartyUnit>();
 		newUnit.UnitPrefab = Resources.Load ("Characters/Hero") as GameObject;
@@ -65,7 +65,7 @@ public class CharacterCustomizerManager : MonoBehaviour
 		newUnit.Health = 65;
 		newUnit.UnitClass = PlayerControlledBoardUnit.PlayerClass.Wizard;
 		newUnit.currentLevel = 1;
-		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree>("TalentTrees/RangedTree")) as TalentTree;
+		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree>("TalentTrees/WizardTree")) as TalentTree;
 		currentParty.Add (newUnit);
 	}
 

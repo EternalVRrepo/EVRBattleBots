@@ -16,6 +16,7 @@ using System.Collections;
 public class Talent {
 
 	public string TalentName;
+	public string Description;
 	public Texture TalentTexture;
 
 	public TalentType ThisTalentType;

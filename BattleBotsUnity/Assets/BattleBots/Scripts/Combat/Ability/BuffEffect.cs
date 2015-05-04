@@ -25,9 +25,12 @@ public class BuffEffect : StatusEffect {
 		PercentDamageIncrease,
 		PercentHealingIncrease,
 		FullHeal,
-		RemoveDebuffs
+		RemoveDebuffs,
+		ApplyForceField,
+		StaticShell
 	}
 
+	public int StaticShellDistance;
 	public float amount;
 
 	public BuffEffect() {}
@@ -39,6 +42,7 @@ public class BuffEffect : StatusEffect {
 
 		BuffType = e.BuffType;
 		amount = e.amount;
+		StaticShellDistance = e.StaticShellDistance;
 	}
 
 	public BuffEffect (PowerUp p) {

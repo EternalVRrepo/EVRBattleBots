@@ -24,6 +24,7 @@ public class StatusEffect {
 		OverTime
 	}
 	public int Duration;
+	public int HexDuration;
 
 //	/// <summary>
 //	/// 0 Arg constructor for adding status effects in editor

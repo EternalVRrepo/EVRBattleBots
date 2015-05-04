@@ -13,6 +13,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class Hexagon : MonoBehaviour {
@@ -26,6 +27,7 @@ public class Hexagon : MonoBehaviour {
 	public int HexColumn;							//The column in the grid this hexagon occupies
 	public int CurrentDistance = -1;				//Current distance for board manager from the currently selected hexagon
 	public SpawnType CurrentSpawnType;				//What kind of spawning used on this hexagon
+	public List<StatusEffect> HexEffects;			//What effects are currently on this hexagon
 	public int z {									//Z coordinate derived from x and y to get cubic coordinates
 		get {
 			return (-HexRow - HexColumn);
@@ -46,6 +48,11 @@ public class Hexagon : MonoBehaviour {
 		get {
 //			return transform.position + new Vector3(0, renderer.bounds.size.y/2, 0);
 			return transform.position + new Vector3(0, .02f, 0);
+		}
+	}
+	public bool ForceFielded {
+		set {
+			SetForceField(value);
 		}
 	}
 
@@ -81,6 +88,58 @@ public class Hexagon : MonoBehaviour {
 	void Start() {
 		if (gameObject.layer != 10) {
 			Debug.LogError ("Hexagon prefab must be assigned Layer 10 with the name \"Hexagon\"");
+		}
+	}
+
+	public void StartTurn() {
+		if (OccupiedUnit != null)
+			OccupiedUnit.ApplyHexStatusEffects();
+	}
+
+	/// <summary>
+	/// end of turn we reduce duration of all effects
+	/// </summary>
+	public void EndTurn() {
+		for (int i = 0; i < HexEffects.Count; i++) {
+			StatusEffect e = HexEffects [i];
+			e.HexDuration--;
+			if (e.HexDuration <= 0) {
+				if (e is BuffEffect && ((BuffEffect)e).BuffType == BuffEffect.Buff.ApplyForceField) {
+					ForceFielded = false;
+				}
+				HexEffects.RemoveAt (i);
+				i--;
+			}
+		}
+	}
+
+	public void ReceiveAbilityHit(AbilityDescription a, List<AbilityModifier> mods) {
+
+		foreach (StatusEffect e in a.buffs) {
+
+			if (((BuffEffect)e).BuffType == BuffEffect.Buff.ApplyForceField) {
+				ForceFielded = true;
+			}
+
+			e.HexDuration = a.HexDuration;
+			HexEffects.Add (e);
+		}
+		foreach (StatusEffect e in a.debuffs) {
+			e.HexDuration = a.HexDuration;
+			HexEffects.Add (e);
+		}
+	}
+
+	HexType type;
+	protected void SetForceField(bool b) {
+		if (b) {
+			type = CurrentHexType;
+			CurrentHexType = HexType.WalledImpassable;
+			Debug.Log ("walled " + name);
+		}
+		else {
+			CurrentHexType = type;
+			Debug.Log ("No longer walled " + name);
 		}
 	}
 

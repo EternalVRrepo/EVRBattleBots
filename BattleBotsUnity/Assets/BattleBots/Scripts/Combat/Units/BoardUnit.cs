@@ -24,6 +24,9 @@ public abstract class BoardUnit : MonoBehaviour {
 	public bool MovementIsDirty; //Whether this units movement has been altered and needs to be recalculated (move speed buff/remove slow/etc)
 	public bool AbilityUseIsDirty; //If this unit has been altered and can now cast abilities
 	public bool alive;
+	public bool isEnfeebled {
+		get { return enfeebled; }
+	}
 	public List<DebuffEffect> debuffs = new List<DebuffEffect>();
 	public List<BuffEffect> buffs = new List<BuffEffect>();
 	public Hexagon CurrentlyOccupiedHexagon {
@@ -57,6 +60,10 @@ public abstract class BoardUnit : MonoBehaviour {
 	protected bool rooted;
 	protected bool silenced;
 	protected bool hasUnstableStatic;
+	protected bool hasStaticGrip;
+	protected bool enfeebled;
+	protected bool hasStaticShell;
+	protected Hexagon staticGripStart;
 	protected int currentAmountSlowed;
 	
 	abstract public void Spawn(Hexagon hex);
@@ -65,10 +72,36 @@ public abstract class BoardUnit : MonoBehaviour {
 	/// <summary>
 	/// Receives an ability hit and applies status effects
 	/// </summary>
-	public void ReceiveAbilityHit(AbilityDescription ability) {
+	public void ReceiveAbilityHit(AbilityDescription ability, List<AbilityModifier> modifiers = null) {
+
+		if (modifiers != null) {
+			foreach (AbilityModifier mod in modifiers) {
+				if (mod.ModifierType == AbilityModifier.Modifier.RemoveStunEffect) {
+					for (int i = 0; i < ability.debuffs.Count; i++) {
+						DebuffEffect e = ability.debuffs [i];
+						if (e.DebuffType == DebuffEffect.Debuff.Stun) {
+							ability.debuffs.RemoveAt (i);
+							i--;
+						}
+					}
+				}
+			}
+		}
+
+		for (int i = 0; i < ability.debuffs.Count; i++) {
+			DebuffEffect effect = ability.debuffs [i];
+			if (effect.RequireUnstableStatic && !hasUnstableStatic) {
+				ability.debuffs.RemoveAt (i);
+				i--;
+			}
+			else if (effect.RequireUnstableStatic && hasUnstableStatic) {
+				RemoveUnstableStatic();
+			}
+		}
+
 		foreach(DebuffEffect effect in ability.debuffs) {		
 			if (effect.DebuffType == DebuffEffect.Debuff.Damage) {
-				ApplyDamage((int)effect.Damage);
+				ApplyDamage((int)effect.Damage, modifiers);
 			}
 			else if (effect.DebuffType == DebuffEffect.Debuff.Slow) {
 				ApplySlow(effect.SlowPercent);
@@ -85,8 +118,17 @@ public abstract class BoardUnit : MonoBehaviour {
 			else if (effect.DebuffType == DebuffEffect.Debuff.UnstableStatic) {
 				ApplyUnstableStatic();
 			}
+			else if(effect.DebuffType == DebuffEffect.Debuff.Enfeeble) {
+				ApplyEnfeeble();
+			}
+			else if (effect.DebuffType == DebuffEffect.Debuff.StaticGrip) {
+				HandleStaticGrip(effect);
+			}
 		
 			if (effect.EffectDurationType == StatusEffect.EffectDuration.OverTime) {
+				if (debuffs.Contains (effect)) {
+					debuffs.Remove (effect);
+				}
 				debuffs.Add (new DebuffEffect(effect));
 			}
 		}
@@ -112,10 +154,25 @@ public abstract class BoardUnit : MonoBehaviour {
 			else if (effect.BuffType == (BuffEffect.Buff.MovementIncrease)) {
 				ApplyMovementIncrease(Mathf.RoundToInt(effect.amount));
 			}
+			else if (effect.BuffType == BuffEffect.Buff.StaticShell) {
+				HandleStaticShell(effect);
+			}
 			if (effect.EffectDurationType == StatusEffect.EffectDuration.OverTime) {
+				if (buffs.Contains (effect)) 
+					buffs.Remove (effect);
 				buffs.Add (new BuffEffect(effect));
 			}
 		}
+	}
+
+	public void ReceiveStaticShellHit(BuffEffect e) {
+		ApplyDamage ((int)e.amount);
+		debuffs.Add (new DebuffEffect("Unstable Static", DebuffEffect.Debuff.UnstableStatic, 25, 2));
+		ApplyUnstableStatic();
+	}
+
+	protected void ApplyEnfeeble() {
+		enfeebled = true;
 	}
 
 	/// <summary>
@@ -150,7 +207,14 @@ public abstract class BoardUnit : MonoBehaviour {
 	/// <summary>
 	/// Applies the damage.
 	/// </summary>
-	protected void ApplyDamage(int amount) {
+	protected void ApplyDamage(int amount, List<AbilityModifier> modifiers = null) {
+
+		if (modifiers != null) {
+			foreach (AbilityModifier mod in modifiers) {
+				if (mod.ModifierType == AbilityModifier.Modifier.Damage)
+					amount = Mathf.RoundToInt (amount*mod.ModifierAmount);
+			}
+		}
 
 		AbsorbAmount -= amount; //Take damage from absorb first, its ok if it goes negative
 
@@ -159,7 +223,7 @@ public abstract class BoardUnit : MonoBehaviour {
 
 		CurrentHealth += AbsorbAmount; //If we took more damage than we had absorb, add the remaining damage from absorb
 		AbsorbAmount = 0; //Reset absorb amount to 0 
-		if (CurrentHealth < 0)
+		if (CurrentHealth <= 0)
 			Die();
 	}
 
@@ -195,6 +259,7 @@ public abstract class BoardUnit : MonoBehaviour {
 	/// Applies stun.
 	/// </summary>
 	protected void ApplyStun() {
+
 		stunned = true;
 	}
 
@@ -272,6 +337,17 @@ public abstract class BoardUnit : MonoBehaviour {
 		hasUnstableStatic = false;
 	}
 
+	protected void RemoveEnfeeble() {
+		for (int i = 0; i < debuffs.Count; i++) {
+			DebuffEffect e = debuffs [i];
+			if (e.DebuffType == DebuffEffect.Debuff.Enfeeble) {
+				debuffs.Remove (e);
+				i--;
+			}
+		}
+		enfeebled = false;
+	}
+
 	/// <summary>
 	/// This unit dies
 	/// </summary>
@@ -295,13 +371,100 @@ public abstract class BoardUnit : MonoBehaviour {
 	/// End of the turn for the player, can apply any status effects that work at end of turn 
 	/// </summary>
 	public void EndTurn() {
+		AbilityActivator.EndTurn();
 		DecrementDebuffs(); //First reduce duration on debuffs/remove timed out ones
 		DecrementBuffs();
+
+		//Check if we can remove any debuffs now
 		TryRemoveStun();
 		TryRemoveSilence();
 		TryRemoveUnstableStatic();
 		TryRemoveSlow();
 		TryRemoveRoot();
+		TryRemoveEnfeeble();
+	}
+
+	/// <summary>
+	/// Applies the hex status effects.
+	/// </summary>
+	public void ApplyHexStatusEffects() {
+		foreach (StatusEffect e in CurrentlyOccupiedHexagon.HexEffects) {
+			if (e.EffectDurationType == StatusEffect.EffectDuration.OverTime) {
+				if (e is BuffEffect) {
+					BuffEffect b = e as BuffEffect;
+
+					if (b.BuffType == BuffEffect.Buff.RemoveDebuffs) {
+						debuffs.Clear ();
+						RemoveStuns();
+						RemoveSlows();
+						RemoveRoots();
+						RemoveSilences ();
+						RemoveUnstableStatic();
+					}
+					else if (b.BuffType == BuffEffect.Buff.Absorb) {
+						ApplyAbsorb((int)b.amount);
+					}
+					else if (b.BuffType == BuffEffect.Buff.FullHeal) {
+						ApplyHeal(int.MaxValue);
+					}
+					else if (b.BuffType == BuffEffect.Buff.Heal) {
+						ApplyHeal ((int)b.amount);
+					}
+					else if (b.BuffType == (BuffEffect.Buff.MovementIncrease)) {
+						ApplyMovementIncrease(Mathf.RoundToInt(b.amount));
+					}
+					if (b.EffectDurationType == StatusEffect.EffectDuration.OverTime) {
+						if (buffs.Contains (b)) 
+							buffs.Remove (b);
+						buffs.Add (new BuffEffect(b));
+					}
+				}
+				else if (e is DebuffEffect) {
+					DebuffEffect d = e as DebuffEffect;
+
+					if (d.DebuffType == DebuffEffect.Debuff.Damage) {
+						ApplyDamage((int)d.Damage);
+					}
+					else if (d.DebuffType == DebuffEffect.Debuff.Slow) {
+						ApplySlow(d.SlowPercent);
+					}
+					else if (d.DebuffType == DebuffEffect.Debuff.Stun) {
+						ApplyStun ();
+					}
+					else if (d.DebuffType == DebuffEffect.Debuff.Silence) {
+						ApplySilence();
+					}
+					else if (d.DebuffType == DebuffEffect.Debuff.Root) {
+						ApplyRoot();
+					}
+					else if (d.DebuffType == DebuffEffect.Debuff.UnstableStatic) {
+						ApplyUnstableStatic();
+					}
+					else if (d.DebuffType == DebuffEffect.Debuff.Enfeeble) {
+						ApplyEnfeeble();
+					}
+					
+					if (d.EffectDurationType == StatusEffect.EffectDuration.OverTime) {
+						if (debuffs.Contains (d))
+							debuffs.Remove (d);
+						debuffs.Add(new DebuffEffect(d));
+					}
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// Tries the remove enfeeble.
+	/// </summary>
+	protected void TryRemoveEnfeeble() {
+		enfeebled = false;
+		foreach (DebuffEffect e in debuffs) {
+			if (e.DebuffType == DebuffEffect.Debuff.Enfeeble) {
+				enfeebled = true;
+				return;
+			}
+		}
 	}
 
 	/// <summary>
@@ -457,7 +620,44 @@ public abstract class BoardUnit : MonoBehaviour {
 			else if (effect.DebuffType == DebuffEffect.Debuff.UnstableStatic) {
 				ApplyUnstableStatic();
 			}
+			else if (effect.DebuffType == DebuffEffect.Debuff.Enfeeble) {
+				ApplyEnfeeble();
+			}
+			else if (effect.DebuffType == DebuffEffect.Debuff.StaticGrip) {
+				HandleStaticGrip(effect);
+			}
 		}	
+	}
+
+	/// <summary>
+	/// Handles the static grip effect
+	/// </summary>
+	void HandleStaticGrip(DebuffEffect e) {
+		if (!hasStaticGrip) {
+			staticGripStart = CurrentlyOccupiedHexagon;
+			hasStaticGrip = true;
+		}
+		ApplySlow (.5f);
+		if (e.Duration == 1) { //Proccing stage
+			float d = BoardManager.instance.DistanceBetweenHexagons(staticGripStart, CurrentlyOccupiedHexagon);
+			ApplyDamage ((int)d*(int)e.StaticGripDamagePerHex);
+			Hexagon h = BoardManager.instance.StaticGripHex(CurrentlyOccupiedHexagon, staticGripStart);
+			if (h != null) 
+				IssueMovement (h);
+			staticGripStart = null;
+			hasStaticGrip = false;
+		}
+	}
+
+	void HandleStaticShell(BuffEffect e) {
+		if (!hasStaticShell) {
+			hasStaticShell = true;
+		}
+
+		if (e.Duration == 1) {
+			hasStaticShell = false;
+			AbilityActivator.ActivateStaticShell(e);
+		}
 	}
 
 	/// <summary>
@@ -472,6 +672,7 @@ public abstract class BoardUnit : MonoBehaviour {
 				RemoveRoots();
 				RemoveSilences ();
 				RemoveUnstableStatic();
+				RemoveEnfeeble();
 			}
 			else if (effect.BuffType == BuffEffect.Buff.Absorb) {
 				ApplyAbsorb((int)effect.amount);
@@ -482,10 +683,31 @@ public abstract class BoardUnit : MonoBehaviour {
 			else if (effect.BuffType == BuffEffect.Buff.Heal) {
 				ApplyHeal ((int)effect.amount);
 			}
+			else if (effect.BuffType == BuffEffect.Buff.StaticShell) {
+				HandleStaticShell (effect);
+			}
 			else if (effect.BuffType == (BuffEffect.Buff.MovementIncrease)) {
 				ApplyMovementIncrease(Mathf.RoundToInt(effect.amount));
 			}
 		}
+	}
+
+	/// <summary>
+	/// KnockBack the unit from a source a certain distance
+	/// </summary>
+	public void KnockBack(Hexagon source, int distance) {
+		Hexagon h = BoardManager.instance.GetKnockbackHex(source, CurrentlyOccupiedHexagon, distance);
+		if (h != null)
+			IssueMovement (h);
+	}
+
+	/// <summary>
+	/// Pull unit towards something
+	/// </summary>
+	public void PullIn(Hexagon source, int distance) {
+		Hexagon h = BoardManager.instance.GetPullinHex(source, CurrentlyOccupiedHexagon, distance);
+		if (h != null)
+			IssueMovement (h);
 	}
 	
 	/// <summary>
