@@ -162,10 +162,10 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	void Update ()
 	{
-		if (Input.GetKeyDown (KeyCode.Y) || Input.GetButtonDown ("Shoot") && gameState != GameState.Combat) {
+		if (Input.GetKeyDown (KeyCode.Y) || Input.GetAxis ("DebugDown") < 0 && gameState != GameState.Combat) {
 			SetGameState (GameState.Combat);
 		} else if (Input.GetButtonDown ("Start")) {
-			if (gameState != GameState.CharacterCustomization)
+			if (gameState != GameState.CharacterCustomization)	
 				SetGameState (GameState.CharacterCustomization);
 			else if (gameState == GameState.CharacterCustomization)
 				FinishCustomizationMenu ();
