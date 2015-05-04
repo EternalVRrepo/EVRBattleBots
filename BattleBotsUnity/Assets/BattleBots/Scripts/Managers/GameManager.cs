@@ -134,24 +134,24 @@ public class GameManager : MonoBehaviour
 		newUnit.MovementDistance = 4;
 		newUnit.Health = 150;
 		newUnit.UnitClass = PlayerControlledBoardUnit.PlayerClass.Support;
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/Support/ElectromagneticField")) as AbilityDescription);
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/Support/ConcussiveBlast")) as AbilityDescription);
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/Support/StaticShell")) as AbilityDescription);
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/Support/PulseForce")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/ElectromagneticField")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/ConcussiveBlast")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/StaticShell")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/PulseForce")) as AbilityDescription);
 		newUnit.currentLevel = 1;
-		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree>("TalentTrees/WarriorTree")) as TalentTree;
+		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree> ("TalentTrees/WarriorTree")) as TalentTree;
 		CurrentParty.Add (newUnit);
 		newUnit = ScriptableObject.CreateInstance<PartyUnit> ();
 		newUnit.UnitPrefab = Resources.Load ("Characters/Hero") as GameObject;
 		newUnit.MovementDistance = 4;
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/Wizard/RadiantEnergy")) as AbilityDescription);
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/Wizard/CircuitBreak")) as AbilityDescription);
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/Wizard/StaticGrip")) as AbilityDescription);
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription>("Abilities/Wizard/FluxBlast")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Wizard/RadiantEnergy")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Wizard/CircuitBreak")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Wizard/StaticGrip")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Wizard/FluxBlast")) as AbilityDescription);
 		newUnit.Health = 120;
 		newUnit.UnitClass = PlayerControlledBoardUnit.PlayerClass.Wizard;
 		newUnit.currentLevel = 1;
-		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree>("TalentTrees/WizardTree")) as TalentTree;
+		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree> ("TalentTrees/WizardTree")) as TalentTree;
 		CurrentParty.Add (newUnit);
 
 		CurrentPowerUps.Add (Instantiate (Resources.Load<PowerUp> ("PowerUps/MoveSpeed")) as PowerUp);
@@ -162,13 +162,13 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	void Update ()
 	{
-		if (Input.GetKeyDown (KeyCode.Y) && gameState != GameState.Combat) {
+		if (Input.GetKeyDown (KeyCode.Y) || Input.GetButtonDown ("Shoot") && gameState != GameState.Combat) {
 			SetGameState (GameState.Combat);
 		} else if (Input.GetButtonDown ("Start")) {
 			if (gameState != GameState.CharacterCustomization)
 				SetGameState (GameState.CharacterCustomization);
-			else if (gameState == GameState.CharacterCustomization )
-		        FinishCustomizationMenu ();
+			else if (gameState == GameState.CharacterCustomization)
+				FinishCustomizationMenu ();
 		}
 	}
 

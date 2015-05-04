@@ -63,7 +63,7 @@ public class OVRGamepadController : MonoBehaviour
 	};
 
 	/// <summary>
-	/// The default Unity input name for each gamepad Axis.
+	/// The default Android Unity input name for each gamepad Axis.
 	/// </summary>
 	public static string[] AndroidAxisNames = new string[(int)Axis.Max]
 	{
@@ -76,7 +76,7 @@ public class OVRGamepadController : MonoBehaviour
 	};
 
 	/// <summary>
-	/// The default Unity input name for each gamepad Button.
+	/// The default Android Unity input name for each gamepad Button.
 	/// </summary>
     public static string[] AndroidButtonNames = new string[(int)Button.Max]
 	{
