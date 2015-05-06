@@ -10,7 +10,6 @@ public class MyHeroController3rdPerson : MonoBehaviour
 {
 	public float forwardSpeed = 3f, jumpSpeed = 15f;
 	public Transform CenterEyeAnchor;
-	public Transform OVRCamera, OVRCenterAnchor;
 	public Transform cameraRig;
 	float airSpeed;
 //	float airSpeed, backwardSpeed, strafeSpeed;
@@ -27,10 +26,14 @@ public class MyHeroController3rdPerson : MonoBehaviour
 	
 	void Start ()
 	{
+		CenterEyeAnchor = GameObject.Find ("CenterEyeAnchor").transform;
+		cameraRig = GameObject.Find("OVRCameraRig").transform;
+
+
 		//Get Components
 		character = transform.GetComponent<CharacterController> ();
 		animator = transform.GetComponentInChildren<Animator> ();
-		Debug.Log (animator.gameObject);
+//		Debug.Log (animator.gameObject);
 
 		//Set Speeds
 		airSpeed = forwardSpeed * 0.8f;

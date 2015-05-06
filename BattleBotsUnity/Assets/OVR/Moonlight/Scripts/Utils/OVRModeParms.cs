@@ -94,7 +94,7 @@ public class OVRModeParms : MonoBehaviour
 		{
 			//*************************
 			// Dynamically change VrModeParms cpu and gpu level.
-			// NOTE: Reset will cause 1 frame of flicker as it leaves
+			// NOTE: Reset will cause 1 frame of flicker as it leavesI
 			// and re-enters Vr mode.
 			//*************************
 #if (UNITY_ANDROID && !UNITY_EDITOR)

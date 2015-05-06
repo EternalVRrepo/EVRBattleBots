@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -53,9 +53,9 @@ public class CharacterCustomizerManager : MonoBehaviour
 
 		CheckForCurrentAndLastSelectedCharacter ();
 
-		if (Input.GetKeyDown (KeyCode.Alpha1)) {
+		if (Input.GetButtonDown ("L1")) {
 			CyclePartyBack ();
-		} else if (Input.GetKeyDown (KeyCode.Alpha2)) {
+		} else if (Input.GetButtonDown ("R1")) {
 			CyclePartyForward ();
 		}
 	}

@@ -1,4 +1,4 @@
-﻿/////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
 //
 //	AbilityDescriptionEditor.cs
 //	© EternalVR, All Rights Reserved
@@ -34,10 +34,13 @@ public class AbilityDescriptionEditor : Editor {
 		EditorGUILayout.LabelField ("Tooltip");
 		abilityEditor.TooltipText = EditorGUILayout.TextArea(abilityEditor.TooltipText);
 
+//		if (abilityEditor.AbilityIcon != null) 
+//			GUILayout.Label (abilityEditor.AbilityIcon);
+
 		EditorGUILayout.BeginHorizontal ();
-		EditorGUILayout.LabelField("Drag New Materials Here", GUILayout.MaxWidth (200));
+		EditorGUILayout.LabelField("Drag New Sprite Here", GUILayout.MaxWidth (200));
 		EditorGUILayout.PropertyField (serializedObject.FindProperty ("newTexture"), GUIContent.none); 
-		if (abilityEditor.newTexture != null)
+		if (Event.current.type == EventType.Repaint && abilityEditor.newTexture != null)  //repaint only to avoid layout errors
 			abilityEditor.UpdateIcon ();
 		EditorGUILayout.EndHorizontal ();
 
@@ -131,6 +134,7 @@ public class AbilityDescriptionEditor : Editor {
 		}
 		if (abilityEditor.buffs.Count > 0)
 			ShowBuffList ();
+		serializedObject.ApplyModifiedProperties();
 		serializedObject.Update ();
 		EditorUtility.SetDirty (abilityEditor); //Have to set dirty or it wont update
 	}

@@ -39,10 +39,10 @@
 	<Reference Include="System.Core" />
 	<Reference Include="System.Xml.Linq" />
 	<Reference Include="UnityEngine">
-	  <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>D:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>D:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
@@ -59,6 +59,11 @@
      <Compile Include="Assets\BattleBots\Scripts\Combat\Ability\Template.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Combat\Map.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Combat\MapEditor.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Combat\UI\Abilities.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Combat\UI\CombatUIManager.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Combat\UI\Icon.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Combat\UI\Phases.cs" />
+     <Compile Include="Assets\BattleBots\Scripts\Combat\UI\SelectedCharacter.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Combat\Units\BoardUnit.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Combat\Units\NonPlayerControlledBoardUnit.cs" />
      <Compile Include="Assets\BattleBots\Scripts\Combat\Units\PlayerControlledBoardUnit.cs" />
@@ -217,19 +222,19 @@
      <None Include="Assets\ProCore\ProBuilder\About\Credits.txt" />
      <None Include="Assets\Plugins\Android\res\values-v14\styles.xml" />
  <Reference Include="UnityEngine.UI">
- <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.3/UnityEngine.UI.dll</HintPath>
+ <HintPath>D:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.3/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="ProBuilderCore">
- <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/ProBuilder/Classes/ProBuilderCore.dll</HintPath>
+ <HintPath>D:/Coding/GitHub/BattleBots/BattleBotsUnity/Assets/ProCore/ProBuilder/Classes/ProBuilderCore.dll</HintPath>
  </Reference>
  <Reference Include="ProBuilderMeshOps">
- <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/ProBuilder/Classes/ProBuilderMeshOps.dll</HintPath>
+ <HintPath>D:/Coding/GitHub/BattleBots/BattleBotsUnity/Assets/ProCore/ProBuilder/Classes/ProBuilderMeshOps.dll</HintPath>
  </Reference>
  <Reference Include="ProCore">
- <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/Shared/Code/ProCore.dll</HintPath>
+ <HintPath>D:/Coding/GitHub/BattleBots/BattleBotsUnity/Assets/ProCore/Shared/Code/ProCore.dll</HintPath>
  </Reference>
  <Reference Include="SixBySeven">
- <HintPath>D:/- Unity Projects/Github Repo/Development/BattleBotsUnity/Assets/Imported/ProCore/Shared/Code/SixBySeven.dll</HintPath>
+ <HintPath>D:/Coding/GitHub/BattleBots/BattleBotsUnity/Assets/ProCore/Shared/Code/SixBySeven.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

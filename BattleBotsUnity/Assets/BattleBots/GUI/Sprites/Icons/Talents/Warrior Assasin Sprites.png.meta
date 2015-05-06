@@ -1,0 +1,223 @@
+fileFormatVersion: 2
+guid: 22b79f483e201004eb016f8ad372b605
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Warrior Assasin Sprites_0
+    21300002: Warrior Assasin Sprites_1
+    21300004: Warrior Assasin Sprites_2
+    21300006: Warrior Assasin Sprites_3
+    21300008: Warrior Assasin Sprites_4
+    21300010: Warrior Assasin Sprites_5
+    21300012: Warrior Assasin Sprites_6
+    21300014: Warrior Assasin Sprites_7
+    21300016: Warrior Assasin Sprites_8
+    21300018: Warrior Assasin Sprites_9
+    21300020: Warrior Assasin Sprites_10
+    21300022: Warrior Assasin Sprites_11
+    21300024: Warrior Assasin Sprites_12
+    21300026: Warrior Assasin Sprites_13
+    21300028: Warrior Assasin Sprites_14
+    21300030: Warrior Assasin Sprites_15
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 200
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Warrior Assasin Sprites_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 603
+        width: 194
+        height: 201
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Warrior Assasin Sprites_1
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 603
+        width: 194
+        height: 201
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Warrior Assasin Sprites_2
+      rect:
+        serializedVersion: 2
+        x: 388
+        y: 603
+        width: 194
+        height: 201
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Warrior Assasin Sprites_3
+      rect:
+        serializedVersion: 2
+        x: 582
+        y: 603
+        width: 194
+        height: 201
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Warrior Assasin Sprites_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 402
+        width: 194
+        height: 201
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Warrior Assasin Sprites_5
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 402
+        width: 194
+        height: 201
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Warrior Assasin Sprites_6
+      rect:
+        serializedVersion: 2
+        x: 388
+        y: 402
+        width: 194
+        height: 201
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Warrior Assasin Sprites_7
+      rect:
+        serializedVersion: 2
+        x: 582
+        y: 402
+        width: 194
+        height: 201
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Warrior Assasin Sprites_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 201
+        width: 194
+        height: 201
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Warrior Assasin Sprites_9
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 201
+        width: 194
+        height: 201
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Warrior Assasin Sprites_10
+      rect:
+        serializedVersion: 2
+        x: 388
+        y: 201
+        width: 194
+        height: 201
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Warrior Assasin Sprites_11
+      rect:
+        serializedVersion: 2
+        x: 582
+        y: 201
+        width: 194
+        height: 201
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Warrior Assasin Sprites_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 194
+        height: 201
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Warrior Assasin Sprites_13
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 0
+        width: 194
+        height: 201
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Warrior Assasin Sprites_14
+      rect:
+        serializedVersion: 2
+        x: 388
+        y: 0
+        width: 194
+        height: 201
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Warrior Assasin Sprites_15
+      rect:
+        serializedVersion: 2
+        x: 582
+        y: 0
+        width: 194
+        height: 201
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 

@@ -19,8 +19,8 @@ public class AbilityDescription : ScriptableObject {
 
 	public string DisplayName = ""; //Name of this ability 
 	public string TooltipText = ""; 
-	public Texture AbilityIcon;
-	public Texture newTexture;
+	public Sprite AbilityIcon;
+	public Sprite newTexture;
 	public TargetType AbilityTargetType;
 	public enum TargetType {
 		TargetSelf,
@@ -77,7 +77,8 @@ public class AbilityDescription : ScriptableObject {
 	public List<BuffEffect> buffs = new List<BuffEffect>();
 
 	public void UpdateIcon() {
+		if (newTexture == null || newTexture == AbilityIcon)
+			return;
 		AbilityIcon = newTexture;
-		newTexture = null;
 	}
 }

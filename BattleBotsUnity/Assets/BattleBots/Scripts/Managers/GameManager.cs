@@ -13,6 +13,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -44,9 +45,12 @@ public class GameManager : MonoBehaviour
 	public GameState gameState { get; private set; }
 	public delegate void OnStateChangeHandler ();
 	public event OnStateChangeHandler OnStateChange;
-
-	protected List<EnemyUnitInfo> enemies = new List<EnemyUnitInfo> ();
+	public Vector3 OpenWorldPosition;
+	public GameObject OpenWorldCharacterPrefab;
 	
+	protected List<EnemyUnitInfo> enemies = new List<EnemyUnitInfo> ();
+	protected GameObject openWorldCharacter;
+
 	private static GameManager _instance = null;
 
 	/// <summary>
@@ -106,6 +110,9 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	public void SetGameState (GameState newState)
 	{
+		if (gameState == GameState.OpenWorld) {
+			OpenWorldPosition = openWorldCharacter.transform.position;
+		}
 		this.gameState = newState;
 		if (OnStateChange != null) {
 			OnStateChange ();
@@ -128,6 +135,9 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	void Start ()
 	{
+		gameState = GameState.OpenWorld;
+		openWorldCharacter = Instantiate (OpenWorldCharacterPrefab, new Vector3(0, 0, -35), Quaternion.identity) as GameObject;
+		
 		//TODO: debug stuff for combat so we have a party, shouldnt be here
 		PartyUnit newUnit = ScriptableObject.CreateInstance<PartyUnit> ();
 		newUnit.UnitPrefab = Resources.Load ("Characters/Hero") as GameObject;
@@ -162,7 +172,7 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	void Update ()
 	{
-		if (Input.GetKeyDown (KeyCode.Y) || Input.GetAxis ("DebugDown") < 0 && gameState != GameState.Combat) {
+		if ((Input.GetKeyDown (KeyCode.Y) || Input.GetAxis ("DebugDown") > 0) && gameState != GameState.Combat) {
 			SetGameState (GameState.Combat);
 		} else if (Input.GetButtonDown ("Start")) {
 			if (gameState != GameState.CharacterCustomization)	
@@ -214,7 +224,8 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	protected void OpenWorldLoaded ()
 	{
-
+		openWorldCharacter = Instantiate(OpenWorldCharacterPrefab) as GameObject;
+		openWorldCharacter.transform.position = OpenWorldPosition;
 	}
 
 	/// <summary>
@@ -222,8 +233,12 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	void OnLevelWasLoaded (int level)
 	{
+		if (_instance != this) //Object that is destroyed will still call this 
+			return;
+
 		if (Application.loadedLevelName == "CombatTest") {
 			combatManager = GameObject.Find ("CombatManager").GetComponent<CombatManager> ();
+			combatManager.debug = false;
 			BoardManager.instance.InitializeMapForCombat (0);
 
 			GameObject mapEditor = GameObject.Find ("MapEditor");

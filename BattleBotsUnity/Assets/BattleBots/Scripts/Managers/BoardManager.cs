@@ -136,6 +136,9 @@ public class BoardManager : MonoBehaviour {
 				go.name = "HexPos: " + hex.HexRow + " " + hex.HexColumn; 
 			}
 		}
+		Center = (HexagonArray[0].transform.position + HexagonArray[HexagonArray.Length-1].transform.position) / 2;
+		radius = Mathf.Max (Vector3.Distance (HexagonArray[0].transform.position, HexagonArray[HexagonArray.Length-1].transform.position), 
+		                    Vector3.Distance(HexagonArray[GridHexColumns-1].transform.position, HexagonArray[HexagonArray.Length-GridHexColumns].transform.position));
 	}
 
 	/// <summary>
@@ -175,7 +178,9 @@ public class BoardManager : MonoBehaviour {
 	#region CombatMethods
 
 	public List<Hexagon> HighlightedHexagons = new List<Hexagon>(); //List of hexagons being highlighted right now
-	
+	public Vector3 Center;
+	public float radius;
+
 	protected Queue<Hexagon> frontier = new Queue<Hexagon>(); //We need two queues to switch between as we go through each layer of frontier, to keep track of distance
 	protected Queue<Hexagon> distanceQueue = new Queue<Hexagon>();
 	protected List<Hexagon> visited = new List<Hexagon>();

@@ -74,7 +74,7 @@ public class OVRPlayerController : MonoBehaviour
 	public float GravityModifier = 0.379f;
 	
 	/// <summary>
-	/// If true, each OVRPlayerController will use the player's physical height.
+	/// If true, the OVRPlayerController will use the player's profile data for height, eye depth, etc.
 	/// </summary>
 	public bool useProfileData = true;
 
@@ -86,25 +86,13 @@ public class OVRPlayerController : MonoBehaviour
 	private float FallSpeed = 0.0f;
 	private OVRPose? InitialPose;
 	private float InitialYRotation = 0.0f;
-#if UNITY_ANDROID
-	private float MoveScaleMultiplier = 2.0f;
-#else
 	private float MoveScaleMultiplier = 1.0f;
-#endif
 	private float RotationScaleMultiplier = 1.0f;
 	private bool  SkipMouseRotation = false;
 	private bool  HaltUpdateMovement = false;
 	private bool prevHatLeft = false;
 	private bool prevHatRight = false;
 	private float SimulationRate = 60f;
-
-	void Start()
-	{
-		// Add eye-depth as a camera offset from the player controller
-		var p = CameraRig.transform.localPosition;
-		p.z = OVRManager.profile.eyeDepth;
-		CameraRig.transform.localPosition = p;
-	}
 
 	void Awake()
 	{
@@ -153,8 +141,6 @@ public class OVRPlayerController : MonoBehaviour
 		{
 			if (InitialPose == null)
 			{
-				// Save the initial pose so it can be recovered if useProfileData
-				// is turned off later.
 				InitialPose = new OVRPose()
 				{
 					position = CameraRig.transform.localPosition,
@@ -163,13 +149,12 @@ public class OVRPlayerController : MonoBehaviour
 			}
 
 			var p = CameraRig.transform.localPosition;
-			p.y = OVRManager.profile.eyeHeight - 0.5f * Controller.height
-				+ Controller.center.y;
+			p.y = OVRManager.profile.eyeHeight - 0.5f * Controller.height;
+			p.z = OVRManager.profile.eyeDepth;
 			CameraRig.transform.localPosition = p;
 		}
 		else if (InitialPose != null)
 		{
-			// Return to the initial pose if useProfileData was turned off at runtime
 			CameraRig.transform.localPosition = InitialPose.Value.position;
 			CameraRig.transform.localRotation = InitialPose.Value.orientation;
 			InitialPose = null;
@@ -254,11 +239,9 @@ public class OVRPlayerController : MonoBehaviour
 		// Compute this for key movement
 		float moveInfluence = Acceleration * 0.1f * MoveScale * MoveScaleMultiplier;
 
-#if !UNITY_ANDROID || UNITY_EDITOR
 		// Run!
 		if (dpad_move || Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
 			moveInfluence *= 2.0f;
-#endif
 
 		Quaternion ort = transform.rotation;
 		Vector3 ortEuler = ort.eulerAngles;
@@ -274,10 +257,9 @@ public class OVRPlayerController : MonoBehaviour
 		if (moveRight)
 			MoveThrottle += ort * (transform.lossyScale.x * moveInfluence * BackAndSideDampen * Vector3.right);
 
-		Vector3 euler = transform.rotation.eulerAngles;
-
-#if !UNITY_ANDROID || UNITY_EDITOR
 		bool curHatLeft = OVRGamepadController.GPC_GetButton(OVRGamepadController.Button.LeftShoulder);
+
+		Vector3 euler = transform.rotation.eulerAngles;
 
 		if (curHatLeft && !prevHatLeft)
 			euler.y -= RotationRatchet;
@@ -297,7 +279,6 @@ public class OVRPlayerController : MonoBehaviour
 
 		if (Input.GetKeyDown(KeyCode.E))
 			euler.y += RotationRatchet;
-#endif
 
 		float rotateInfluence = SimulationRate * Time.deltaTime * RotationAmount * RotationScaleMultiplier;
 

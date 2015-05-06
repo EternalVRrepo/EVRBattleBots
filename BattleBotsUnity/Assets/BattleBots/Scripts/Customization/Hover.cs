@@ -73,19 +73,19 @@ public class Hover : MonoBehaviour
 		if (target) {
 			if (hType == hoverType.characterSelection && !platformManager.isActive) {
 				//Trigger Events
-				if (timer > 2f || Input.GetMouseButtonDown (0)) {
+				if (timer > 2f || Input.GetMouseButtonDown (0) || Input.GetButtonDown ("Ability1")) {
 					SetCharacterSelection ();
 				}
 			}
 
 			if (hType == hoverType.talentsWindow) {
-				if (timer > 2f || Input.GetMouseButtonDown (0)) {
+				if (timer > 2f || Input.GetMouseButtonDown (0) || Input.GetButtonDown ("Ability1")) {
 					ToggleTalentWindow ();
 				}
 			}
 
 			if (hType == hoverType.talents) {
-				if (timer > 2f || Input.GetMouseButtonDown (0)) {
+				if (timer > 2f || Input.GetMouseButtonDown (0) || Input.GetButtonDown ("Ability1")) {
 					talentIcon.Select (true);
 				}
 			}

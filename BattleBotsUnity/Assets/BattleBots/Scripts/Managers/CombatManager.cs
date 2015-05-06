@@ -31,9 +31,19 @@ public class CombatManager : MonoBehaviour
 	}
 	public List<PlayerControlledBoardUnit> CurrentParty = new List<PlayerControlledBoardUnit> ();
 	public List<NonPlayerControlledBoardUnit> CurrentEnemies = new List<NonPlayerControlledBoardUnit> ();
-	public PlayerControlledBoardUnit CurrentlySelectedUnit;
+	public PlayerControlledBoardUnit CurrentlySelectedUnit {
+		get {
+			return currentlySelectedUnit;
+		}
+		set {
+			CombatUIManager.instance.SetCurrentUnit(value);
+			currentlySelectedUnit = value;
+		}
+	}
+	public bool debug;
 	public static CombatManager instance;
 
+	protected PlayerControlledBoardUnit currentlySelectedUnit;
 	protected bool PowerUpMenuOpen;
 	protected AbilityDescription currentAbility;
 	public Transform CenterEyeAnchor;
@@ -66,6 +76,10 @@ public class CombatManager : MonoBehaviour
 
 		if (CenterEyeAnchor == null) 
 			Debug.LogError ("No Camera Found for CenterEyeAnchor in CombatManager.cs");
+
+		if (debug) {
+			DebugSetup();
+		}
 	}
 
 	/// <summary>
@@ -79,6 +93,34 @@ public class CombatManager : MonoBehaviour
 			Debug.LogError ("No Current Combat State, most likely not initialized from GameManager");
 
 		PowerUpInput (); //Check for input to use powerups
+
+		CameraMovementInput();
+	}
+
+	/// <summary>
+	/// Handle camera movement from the user
+	/// </summary>
+	void CameraMovementInput() {
+
+		if (Input.GetButton("L1")) {
+			OVRManager.instance.yPos -= 1.6f*Time.deltaTime;
+		}
+		else if (Input.GetButton("R1")) {
+			OVRManager.instance.yPos += 1.6f*Time.deltaTime;
+		}
+		OVRManager.instance.yPos = Mathf.Clamp (OVRManager.instance.yPos, 4, 8);
+		
+		Vector3 movement = new Vector3(Input.GetAxis ("Horizontal") * .25f, 0, Input.GetAxis ("Vertical") * .25f);
+		if (movement != Vector3.zero || OVRManager.instance.transform.position.y != OVRManager.instance.yPos) {
+			Vector3 newPos;
+			Vector3 forward = CenterEyeAnchor.transform.forward * movement.z;
+			Vector3 right = CenterEyeAnchor.transform.right * movement.x;
+			newPos = forward + right + OVRManager.instance.transform.position;
+//			Vector3 newPos = OVRManager.instance.transform.position + movement;
+			Vector3 offset = newPos - BoardManager.instance.Center;
+			offset.y = OVRManager.instance.yPos;
+			OVRManager.instance.transform.position = BoardManager.instance.Center + Vector3.ClampMagnitude(offset, BoardManager.instance.radius);
+		}
 	}
 
 	/// <summary>
@@ -145,6 +187,7 @@ public class CombatManager : MonoBehaviour
 	void StartTurn (PlayerControlledBoardUnit nextUnit)
 	{
 		CurrentlySelectedUnit = nextUnit as PlayerControlledBoardUnit;
+		CombatUIManager.instance.SelectCharacter(nextUnit.transform);
 		BoardManager.instance.StartTurn ();
 		CurrentlySelectedUnit.StartTurn ();
 		currentAbility = null;
@@ -161,6 +204,7 @@ public class CombatManager : MonoBehaviour
 	void EnterStateMovementSelection ()
 	{
 		currentPhaseStateMethod = new CurrentPhaseState (StateMovementSelection);
+		CombatUIManager.instance.StartMovementPhase();
 		CurrentPhase = PhaseState.SelectMovement;
 		currentMoveDistance = CurrentlySelectedUnit.remainingMoveDistance;
 		if (CurrentlySelectedUnit.CanMove ())
@@ -184,6 +228,7 @@ public class CombatManager : MonoBehaviour
 	{
 		currentPhaseStateMethod = new CurrentPhaseState (StateSelectAttack);
 
+		CombatUIManager.instance.StartSelectAttackPhase();
 		CurrentlySelectedUnit.AbilityActivator.FinishAbility ();
 		BoardManager.instance.FinishMovement ();
 
@@ -196,6 +241,9 @@ public class CombatManager : MonoBehaviour
 	void EnterStateTargetAttack ()
 	{
 		currentPhaseStateMethod = new CurrentPhaseState (StateTargetAttack);
+
+		CombatUIManager.instance.StartTargetAttackPhase();
+
 		CurrentPhase = PhaseState.TargetAttack;
 	}
 
@@ -229,6 +277,8 @@ public class CombatManager : MonoBehaviour
 	{
 		currentPhaseStateMethod = new CurrentPhaseState (StateEnemyTurn);
 
+		CombatUIManager.instance.StartEnemyTurnPhase();
+		CurrentlySelectedUnit = null;
 		AIManager.StartEnemyTurn ();
 
 		CurrentPhase = PhaseState.EnemyTurn;
@@ -314,17 +364,29 @@ public class CombatManager : MonoBehaviour
 		}
 
 		if (Input.GetButtonDown ("Ability1")) { //Choose ability 1
-			if ((currentAbility = CurrentlySelectedUnit.AbilityActivator.ActivateAbility (0)) != null)
+			if ((currentAbility = CurrentlySelectedUnit.AbilityActivator.ActivateAbility (0)) != null) {
+				CombatUIManager.instance.PressButton(0, true);
 				EnterStateTargetAttack ();
+			}
+			else CombatUIManager.instance.PressButton(0, false);
 		} else if (Input.GetButtonDown ("Ability2")) { //Choose ability 2
-			if ((currentAbility = CurrentlySelectedUnit.AbilityActivator.ActivateAbility (1)) != null)
+			if ((currentAbility = CurrentlySelectedUnit.AbilityActivator.ActivateAbility (1)) != null) {
+				CombatUIManager.instance.PressButton(1, true);
 				EnterStateTargetAttack ();
+			}
+			else CombatUIManager.instance.PressButton(1, false);
 		} else if (Input.GetButtonDown ("Ability3")) { //Choose ability 3
-			if ((currentAbility = CurrentlySelectedUnit.AbilityActivator.ActivateAbility (2)) != null)
+			if ((currentAbility = CurrentlySelectedUnit.AbilityActivator.ActivateAbility (2)) != null) {
+				CombatUIManager.instance.PressButton(2, true);
 				EnterStateTargetAttack ();
+			}
+			else CombatUIManager.instance.PressButton(2, false);
 		} else if (Input.GetButtonDown ("Ability4")) { //Choose ability 4
-			if ((currentAbility = CurrentlySelectedUnit.AbilityActivator.ActivateAbility (3)) != null)
+			if ((currentAbility = CurrentlySelectedUnit.AbilityActivator.ActivateAbility (3)) != null) {
+				CombatUIManager.instance.PressButton(3, true);
 				EnterStateTargetAttack ();
+			}
+			else CombatUIManager.instance.PressButton(3, false);
 		}
 	}
 
@@ -390,6 +452,7 @@ public class CombatManager : MonoBehaviour
 		int i = CurrentParty.IndexOf (CurrentlySelectedUnit);
 		i++;
 		if (CurrentParty.Count == i) {
+			CombatUIManager.instance.SelectCharacter(null);
 			EnterStateEnemyTurn ();
 		} else
 			StartTurn (CurrentParty [i]);
@@ -460,7 +523,7 @@ public class CombatManager : MonoBehaviour
 		Ray ray = new Ray (CenterEyeAnchor.transform.position, CenterEyeAnchor.transform.forward);
 		if (Physics.Raycast (ray, out hit, 100, HexTargetMask)) { //If an object is found
 			if (hit.collider.GetComponent<Hexagon> ()) {
-				Debug.Log (hit.transform.name);
+//				Debug.Log (hit.transform.name);
 				return hit.collider.GetComponent<Hexagon> (); //Return the game object as a GameObject
 			} else
 				return null;
@@ -484,5 +547,61 @@ public class CombatManager : MonoBehaviour
 		int Layer1 = 10; //Hexagon
 		int LayerMask1 = 1 << Layer1;
 		HexTargetMask = LayerMask1; //... | LayerMask2 | LayerMask3;
+	}
+
+	/// <summary>
+	/// Setup in debug mode so we dont require initialization from the GameManager
+	/// </summary>
+	void DebugSetup() {
+		BoardManager.instance.InitializeMapForCombat (0);
+		
+		GameObject mapEditor = GameObject.Find ("MapEditor");
+		if (mapEditor != null)
+			Destroy (mapEditor);
+		
+		List<PartyUnit> CurrentParty = new List<PartyUnit>();
+		PartyUnit newUnit = ScriptableObject.CreateInstance<PartyUnit> ();
+		newUnit.UnitPrefab = Resources.Load ("Characters/Hero") as GameObject;
+		newUnit.MovementDistance = 4;
+		newUnit.Health = 150;
+		newUnit.UnitClass = PlayerControlledBoardUnit.PlayerClass.Support;
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/ElectromagneticField")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/ConcussiveBlast")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/StaticShell")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/PulseForce")) as AbilityDescription);
+		newUnit.currentLevel = 1;
+		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree> ("TalentTrees/WarriorTree")) as TalentTree;
+		CurrentParty.Add (newUnit);
+		newUnit = ScriptableObject.CreateInstance<PartyUnit> ();
+		newUnit.UnitPrefab = Resources.Load ("Characters/Hero") as GameObject;
+		newUnit.MovementDistance = 4;
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Wizard/RadiantEnergy")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Wizard/CircuitBreak")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Wizard/StaticGrip")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Wizard/FluxBlast")) as AbilityDescription);
+		newUnit.Health = 120;
+		newUnit.UnitClass = PlayerControlledBoardUnit.PlayerClass.Wizard;
+		newUnit.currentLevel = 1;
+		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree> ("TalentTrees/WizardTree")) as TalentTree;
+		CurrentParty.Add (newUnit);
+		
+		
+		List<EnemyUnitInfo> enemies = new List<EnemyUnitInfo> ();
+		EnemyUnitInfo newEnemy = ScriptableObject.CreateInstance<EnemyUnitInfo> ();
+		newEnemy.UnitPrefab = Resources.Load ("EnemyUnitPrefabTest") as GameObject;
+		newEnemy.MovementDistance = 3;
+		newEnemy.Health = 400;
+		newEnemy.AIType = CombatAIManager.AIType.Melee;
+		newEnemy.ListOfAbilities.Add (Resources.Load<AbilityDescription> ("Abilities/EnemyAbilities/Bite"));
+		enemies.Add (newEnemy);
+		newEnemy = ScriptableObject.CreateInstance<EnemyUnitInfo> ();
+		newEnemy.UnitPrefab = Resources.Load ("EnemyUnitPrefabTest") as GameObject;
+		newEnemy.MovementDistance = 3;
+		newEnemy.Health = 400;
+		newEnemy.AIType = CombatAIManager.AIType.Melee;
+		newEnemy.ListOfAbilities.Add (Resources.Load<AbilityDescription> ("Abilities/EnemyAbilities/Bite"));
+		enemies.Add (newEnemy);
+		
+		SetupCombat (0, CurrentParty, enemies);
 	}
 }

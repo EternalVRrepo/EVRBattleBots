@@ -27,7 +27,7 @@ public class Template : MonoBehaviour {
 
 		transform.localScale = new Vector3(1,1,1);
 		renderer.enabled = false;
-		transform.parent.position = new Vector3(100,100,100);
+		transform.parent.position = new Vector3(2000,2000,2000);
 		CurrentHighlight.Clear ();
 		VisualTemplate = false;
 		TargetHexagon = false;
