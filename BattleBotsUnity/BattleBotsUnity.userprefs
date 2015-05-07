@@ -1,8 +1,14 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="..\..\..\Unity 4.6 VR Development\A-Sprint 4\Assets\BattleBots\Scripts\Managers\GameManager.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\BattleBots\Scripts\Combat\UI\Phases.cs">
     <Files>
-      <File FileName="..\..\..\Unity 4.6 VR Development\A-Sprint 4\Assets\BattleBots\Scripts\Managers\GameManager.cs" Line="165" Column="119" />
+      <File FileName="Assets\BattleBots\Scripts\Pathfinding\AStarSearch.cs" Line="1" Column="1" />
+      <File FileName="Assets\BattleBots\Scripts\Managers\CombatManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\BattleBots\Scripts\Managers\TemplateManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\OVR\Scripts\OVRManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\BattleBots\Scripts\Player\Controllers\MyHeroController3rdPerson.cs" Line="1" Column="1" />
+      <File FileName="Assets\BattleBots\Scripts\Combat\UI\CombatUIManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\BattleBots\Scripts\Combat\UI\Phases.cs" Line="19" Column="19" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
