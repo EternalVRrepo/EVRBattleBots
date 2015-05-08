@@ -22,10 +22,6 @@ public class NonPlayerControlledBoardUnit : BoardUnit {
 	public override void IssueMovement(Hexagon h) {
 		MoveToHexagon (h);
 	}
-	
-	public override void Spawn(Hexagon h) {
-		AddToHexagon (h);
-	}
 
 	/// <summary>
 	/// Initialize the unit based  on a PartyUnit

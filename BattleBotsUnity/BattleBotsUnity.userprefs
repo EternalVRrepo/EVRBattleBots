@@ -1,8 +1,16 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="..\..\..\Unity 4.6 VR Development\A-Sprint 4\Assets\BattleBots\Scripts\Managers\GameManager.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\BattleBots\Scripts\Combat\UI\AbilityTooltip.cs">
     <Files>
-      <File FileName="..\..\..\Unity 4.6 VR Development\A-Sprint 4\Assets\BattleBots\Scripts\Managers\GameManager.cs" Line="165" Column="119" />
+      <File FileName="Assets\BattleBots\Scripts\Combat\QTE\QTEManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\BattleBots\Scripts\Combat\Ability\AbilityActivator.cs" Line="1" Column="1" />
+      <File FileName="Assets\BattleBots\Scripts\Managers\CombatManager.cs" Line="282" Column="36" />
+      <File FileName="Assets\BattleBots\Scripts\Combat\UI\CombatUIManager.cs" Line="22" Column="37" />
+      <File FileName="Assets\BattleBots\Scripts\Managers\GameManager.cs" Line="142" Column="56" />
+      <File FileName="Assets\BattleBots\Scripts\Combat\Units\BoardUnit.cs" Line="198" Column="28" />
+      <File FileName="Assets\BattleBots\Scripts\Combat\UI\HealthBar.cs" Line="16" Column="59" />
+      <File FileName="Assets\BattleBots\Scripts\Combat\UI\AbilityTooltip.cs" Line="34" Column="28" />
+      <File FileName="Assets\BattleBots\Scripts\Combat\UI\Icon.cs" Line="40" Column="35" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

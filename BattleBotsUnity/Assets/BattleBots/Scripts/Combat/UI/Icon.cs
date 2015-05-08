@@ -37,7 +37,7 @@ public class Icon : MonoBehaviour {
 	}
 
 	public void PressButton(bool s) {
-		Debug.Log (name + " pressed");
+//		Debug.Log (name + " pressed");
 		if (pressing) {
 			image.color = normalColor;
 			Cooldown.color = cooldownColor;

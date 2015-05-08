@@ -41,8 +41,18 @@ public class CombatManager : MonoBehaviour
 		}
 	}
 	public bool debug;
+	public GameObject HealthBarPrefab;
 	public static CombatManager instance;
+	public AbilityTooltip abilityTooltip {
+		get {
+			if (_abilityTooltip == null) {
+				_abilityTooltip = GameObject.Find("AbilityTooltip").GetComponent<AbilityTooltip>();
+			}
+			return _abilityTooltip;
+		}
+	}
 
+	private AbilityTooltip _abilityTooltip;
 	protected PlayerControlledBoardUnit currentlySelectedUnit;
 	protected bool PowerUpMenuOpen;
 	protected AbilityDescription currentAbility;
@@ -110,7 +120,7 @@ public class CombatManager : MonoBehaviour
 		}
 		OVRManager.instance.yPos = Mathf.Clamp (OVRManager.instance.yPos, 4, 8);
 		
-		Vector3 movement = new Vector3(Input.GetAxis ("Horizontal") * .25f, 0, Input.GetAxis ("Vertical") * .25f);
+		Vector3 movement = new Vector3(Input.GetAxis ("Horizontal") * .15f, 0, Input.GetAxis ("Vertical") * .15f);
 		if (movement != Vector3.zero || OVRManager.instance.transform.position.y != OVRManager.instance.yPos) {
 			Vector3 newPos;
 			Vector3 forward = CenterEyeAnchor.transform.forward * movement.z;
@@ -228,6 +238,7 @@ public class CombatManager : MonoBehaviour
 	{
 		currentPhaseStateMethod = new CurrentPhaseState (StateSelectAttack);
 
+		abilityTooltip.displayed = false;
 		CombatUIManager.instance.StartSelectAttackPhase();
 		CurrentlySelectedUnit.AbilityActivator.FinishAbility ();
 		BoardManager.instance.FinishMovement ();
@@ -242,6 +253,8 @@ public class CombatManager : MonoBehaviour
 	{
 		currentPhaseStateMethod = new CurrentPhaseState (StateTargetAttack);
 
+		abilityTooltip.SetAbility(currentlySelectedUnit.AbilityActivator.AbilityInProgress);
+		abilityTooltip.displayed = true;
 		CombatUIManager.instance.StartTargetAttackPhase();
 
 		CurrentPhase = PhaseState.TargetAttack;
@@ -250,14 +263,15 @@ public class CombatManager : MonoBehaviour
 	/// <summary>
 	/// Set current state to performing a QTE
 	/// </summary>
-	void EnterStateAttackQTE ()
-	{
-		currentPhaseStateMethod = new CurrentPhaseState (StateAttackQTE);
-
-		CurrentlySelectedUnit.AbilityActivator.FinishAbility ();
-
-		CurrentPhase = PhaseState.AttackQTE;
-	}
+//	void EnterStateAttackQTE ()
+//	{
+//		currentPhaseStateMethod = new CurrentPhaseState (StateAttackQTE);
+//
+//		QTEManager.instance.StartQTE();
+//		CurrentlySelectedUnit.AbilityActivator.FinishAbility ();
+//
+//		CurrentPhase = PhaseState.AttackQTE;
+//	}
 
 	/// <summary>
 	/// Set current state to the end of turn state
@@ -265,6 +279,7 @@ public class CombatManager : MonoBehaviour
 	void EnterStateEndOfTurn ()
 	{
 		currentPhaseStateMethod = new CurrentPhaseState (StateEndOfTurn);
+		abilityTooltip.displayed = false;
 		CurrentlySelectedUnit.EndTurn ();
 		BoardManager.instance.EndTurn ();
 		CurrentPhase = PhaseState.EndOfTurn;
@@ -433,16 +448,20 @@ public class CombatManager : MonoBehaviour
 		while (CurrentlySelectedUnit.AbilityActivator.isCasting) {
 			yield return null;
 		}
-		EnterStateAttackQTE ();
+		EnterStateEndOfTurn();
+//		EnterStateAttackQTE ();
 	}
 
 	/// <summary>
 	/// State where you perform a QTE
 	/// </summary>
-	void StateAttackQTE ()
-	{
-		EnterStateEndOfTurn ();
-	}
+//	void StateAttackQTE ()
+//	{
+//		if (QTEManager.instance.inProgress) {
+//			return;
+//		}
+//		EnterStateEndOfTurn ();
+//	}
 
 	/// <summary>
 	/// State where the logic for the next turn is decided
@@ -496,6 +515,7 @@ public class CombatManager : MonoBehaviour
 			go.AddComponent <AbilityActivator> ();
 			PlayerControlledBoardUnit bu = go.GetComponent<PlayerControlledBoardUnit> ();
 			bu.Initialize (unit);
+			bu.healthBarPrefab = HealthBarPrefab;
 			go.name = bu.UnitClass.ToString ();
 			bu.Spawn (BoardManager.instance.GetHexagonFromArray ((int)map.PlayerSpawns [currentParty.IndexOf (unit)].x, (int)map.PlayerSpawns [currentParty.IndexOf (unit)].y));
 			CurrentParty.Add (bu);
@@ -507,6 +527,7 @@ public class CombatManager : MonoBehaviour
 			go.AddComponent<AbilityActivator> ();
 			NonPlayerControlledBoardUnit bu = go.GetComponent<NonPlayerControlledBoardUnit> ();
 			bu.Initialize (unit);
+			bu.healthBarPrefab = HealthBarPrefab;
 			bu.Spawn (BoardManager.instance.GetHexagonFromArray ((int)map.EnemySpawns [listEnemies.IndexOf (unit)].x, (int)map.EnemySpawns [listEnemies.IndexOf (unit)].y));
 			CurrentEnemies.Add (bu);
 		}

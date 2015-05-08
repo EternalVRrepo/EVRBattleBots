@@ -54,6 +54,6 @@ public class CombatUIManager : MonoBehaviour {
 //		transform.rotation = Quaternion.Euler(35, GameObject.Find("TrackingSpace").transform.rotation.y, 0);
 		transform.eulerAngles = new Vector3 (0, centerEyeAnchor.eulerAngles.y, 0f);
 		transform.position = new Vector3 (centerEyeAnchor.position.x, transform.position.y, centerEyeAnchor.position.z);
-		
+		phases.transform.eulerAngles = new Vector3(centerEyeAnchor.eulerAngles.x, 0, centerEyeAnchor.eulerAngles.z);
 	}
 }

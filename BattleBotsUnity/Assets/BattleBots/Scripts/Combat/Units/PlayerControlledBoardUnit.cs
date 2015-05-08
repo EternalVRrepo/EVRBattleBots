@@ -30,11 +30,6 @@ public class PlayerControlledBoardUnit : BoardUnit
 		MoveToHexagon (h);
 	}
 
-	public override void Spawn (Hexagon h)
-	{
-		AddToHexagon (h);
-	}
-
 	/// <summary>
 	/// Initialize the unit based  on a PartyUnit
 	/// </summary>

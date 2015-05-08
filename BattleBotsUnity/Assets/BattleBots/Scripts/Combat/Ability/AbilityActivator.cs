@@ -26,7 +26,10 @@ public class AbilityActivator : MonoBehaviour {
 	}
 	
 	public List<AbilityDescription> ListOfAbilities = new List<AbilityDescription>();
-	
+
+//	public List<BoardUnit> UnitsToHit = new List<BoardUnit>(); //Units to be hit once the QTE finishes
+	public List<AbilityModifier> mods = new List<AbilityModifier>(); //Mods to hit with
+
 	/// <summary>
 	/// Activates an ability 
 	/// </summary>
@@ -36,6 +39,8 @@ public class AbilityActivator : MonoBehaviour {
 			return null;
 
 		AbilityInProgress = ListOfAbilities[abilityNumber];
+//		UnitsToHit.Clear (); //Reset units we are gonna hit
+		mods.Clear ();
 
 		if (AbilityInProgress.AbilityTargetType != AbilityDescription.TargetType.CustomTemplate) {
 			BoardManager.instance.HighlightAbility(GetComponent<BoardUnit>().CurrentlyOccupiedHexagon, AbilityInProgress, true);
@@ -64,9 +69,13 @@ public class AbilityActivator : MonoBehaviour {
 	IEnumerator CastAbility(List<Hexagon> hits) {
 		castingAbility = true;
 		List<BoardUnit> unitsHit = new List<BoardUnit>();
-		yield return new WaitForSeconds(1f);
 
-		List<AbilityModifier> mods = new List<AbilityModifier>();
+		QTEManager.instance.StartQTE();
+		while (QTEManager.instance.inProgress) {
+			yield return null;
+		}
+
+//		List<AbilityModifier> mods = new List<AbilityModifier>();
 		if (GetComponent<BoardUnit>().isEnfeebled) {
 			mods.Add (new AbilityModifier(AbilityModifier.Modifier.Damage, .5f));
 		}
@@ -111,7 +120,8 @@ public class AbilityActivator : MonoBehaviour {
 					targetHexagon.OccupiedUnit.KnockBack (GetComponent<BoardUnit>().CurrentlyOccupiedHexagon, 1);
 				}
 			}
-			targetHexagon.ReceiveAbilityHit(AbilityInProgress, mods);
+//			targetHexagon.ReceiveAbilityHit(AbilityInProgress, mods);
+
 			castingAbility = false;
 		}
 		else StartCoroutine ("CastSingleTargetAbility");
@@ -151,10 +161,10 @@ public class AbilityActivator : MonoBehaviour {
 	public IEnumerator CastSingleTargetAbility() {
 		waiting = true;
 		targets = null;
-		List<AbilityModifier> mods = new List<AbilityModifier>();
-		if (GetComponent<BoardUnit>().isEnfeebled) {
-			mods.Add (new AbilityModifier(AbilityModifier.Modifier.Damage, .5f));
-		}
+//		List<AbilityModifier> mods = new List<AbilityModifier>();
+//		if (GetComponent<BoardUnit>().isEnfeebled) {
+//			mods.Add (new AbilityModifier(AbilityModifier.Modifier.Damage, .5f));
+//		}
 		switch(AbilityInProgress.DisplayName) {
 			case "SonicStrike": {
 				targetHexagon.OccupiedUnit.ReceiveAbilityHit(AbilityInProgress, mods);

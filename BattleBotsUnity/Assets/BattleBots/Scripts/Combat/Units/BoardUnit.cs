@@ -19,6 +19,8 @@ public abstract class BoardUnit : MonoBehaviour {
 	public int MaxHealth;
 	public int CurrentHealth;
 	public int AbsorbAmount;
+	public HealthBar healthBar;
+	public GameObject healthBarPrefab;
 	public int MoveDistance; //How far we can move in 1 turn
 	public int remainingMoveDistance; //How far left we can move this turn
 	public bool MovementIsDirty; //Whether this units movement has been altered and needs to be recalculated (move speed buff/remove slow/etc)
@@ -65,9 +67,15 @@ public abstract class BoardUnit : MonoBehaviour {
 	protected bool hasStaticShell;
 	protected Hexagon staticGripStart;
 	protected int currentAmountSlowed;
-	
-	abstract public void Spawn(Hexagon hex);
+
 	abstract public void IssueMovement(Hexagon hex);
+
+	public void Spawn (Hexagon h) {
+		AddToHexagon (h);
+		GameObject go = Instantiate (healthBarPrefab) as GameObject;
+		healthBar = go.GetComponent<HealthBar>();
+		healthBar.SetUnit(this);
+	}
 
 	/// <summary>
 	/// Receives an ability hit and applies status effects
@@ -353,6 +361,7 @@ public abstract class BoardUnit : MonoBehaviour {
 	/// </summary>
 	protected void Die() {
 		alive = false;
+		healthBar.gameObject.SetActive (false);
 		CombatManager.instance.KillUnit(this);
 		currentlyOccupiedHexagon.RemoveUnit (this);
 		gameObject.SetActive (false);
