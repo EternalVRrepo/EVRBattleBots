@@ -46,8 +46,8 @@ Shader "Shader Forge/DiffuseEmissive" {
             fixed4 frag(VertexOutput i) : COLOR {
 ////// Lighting:
 ////// Emissive:
-                float2 node_181 = i.uv0;
-                float4 node_2 = tex2D(_Diffuse,TRANSFORM_TEX(node_181.rg, _Diffuse));
+                float2 node_174 = i.uv0;
+                float4 node_2 = tex2D(_Diffuse,TRANSFORM_TEX(node_174.rg, _Diffuse));
                 float3 emissive = (node_2.rgb*((1.0 - node_2.a)+(node_2.a*_EmissiveTint.rgb)));
                 float3 finalColor = emissive;
 /// Final Color:
