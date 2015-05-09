@@ -44,9 +44,9 @@ public class CombatUIManager : MonoBehaviour {
 		phases.StartSelectAttackPhase();
 	}
 
-	public void StartTargetAttackPhase() {
-		phases.StartTargetAttackPhase();
-	}
+//	public void StartTargetAttackPhase() {
+//		phases.StartTargetAttackPhase();
+//	}
 
 	public void StartEnemyTurnPhase() {
 		phases.StartEnemyTurnPhase();

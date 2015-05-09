@@ -6,7 +6,7 @@ public class Phases : MonoBehaviour {
 
 	public Sprite MovePhaseSprite;
 	public Sprite SelectAttackPhaseSprite;
-	public Sprite TargetAttackPhaseSprite;
+//	public Sprite TargetAttackPhaseSprite;
 	public Sprite EnemyTurnPhaseSprite;
 
 	public Image image;
@@ -38,15 +38,15 @@ public class Phases : MonoBehaviour {
 		StartCoroutine ("PhasePopup");
 	}
 	
-	public void StartTargetAttackPhase() {
-		if (popupInProgress) {
-			image.color = clearColor;
-			StopCoroutine ("PhasePopup");
-		}
-
-		image.sprite = TargetAttackPhaseSprite;
-		StartCoroutine ("PhasePopup");
-	}
+//	public void StartTargetAttackPhase() {
+//		if (popupInProgress) {
+//			image.color = clearColor;
+//			StopCoroutine ("PhasePopup");
+//		}
+//
+//		image.sprite = TargetAttackPhaseSprite;
+//		StartCoroutine ("PhasePopup");
+//	}
 
 	public void StartEnemyTurnPhase() {
 		if (popupInProgress) {
