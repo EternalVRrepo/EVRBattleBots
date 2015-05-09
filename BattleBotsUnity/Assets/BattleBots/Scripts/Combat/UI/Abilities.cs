@@ -28,6 +28,10 @@ public class Abilities : MonoBehaviour {
 	}
 
 	public void PressButton(int i, bool s) {
+		foreach (Icon ic in icons) {
+			ic.StopPress();
+		}
+
 		icons[i].PressButton(s);
 	}
 }

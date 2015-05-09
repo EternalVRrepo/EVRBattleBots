@@ -23,7 +23,7 @@ public class CombatManager : MonoBehaviour
 		Waiting,
 		SelectMovement,
 		SelectAttack,
-		TargetAttack,
+//		TargetAttack,
 		AttackQTE,
 		EndOfTurn,
 		EnemyTurn,
@@ -173,8 +173,8 @@ public class CombatManager : MonoBehaviour
 		if (CurrentPhase == PhaseState.SelectAttack)
 			return true;
 
-		if (CurrentPhase == PhaseState.TargetAttack) 
-			return true;
+//		if (CurrentPhase == PhaseState.TargetAttack) 
+//			return true;
 
 		return false;
 	}
@@ -238,10 +238,17 @@ public class CombatManager : MonoBehaviour
 	{
 		currentPhaseStateMethod = new CurrentPhaseState (StateSelectAttack);
 
-		abilityTooltip.displayed = false;
-		CombatUIManager.instance.StartSelectAttackPhase();
 		CurrentlySelectedUnit.AbilityActivator.FinishAbility ();
 		BoardManager.instance.FinishMovement ();
+		
+		if (CurrentlySelectedUnit.CanCastAbility ()) { //if we are silenced or something, we cant select an ability
+			currentAbility = currentlySelectedUnit.AbilityActivator.ActivateAbility(0);
+			CombatUIManager.instance.PressButton(0, true);
+			abilityTooltip.SetAbility(currentlySelectedUnit.AbilityActivator.AbilityInProgress);
+			abilityTooltip.displayed = true;
+		}
+
+		CombatUIManager.instance.StartSelectAttackPhase();
 
 		CurrentPhase = PhaseState.SelectAttack;
 	}
@@ -249,16 +256,16 @@ public class CombatManager : MonoBehaviour
 	/// <summary>
 	/// Set the current state to select an attack
 	/// </summary>
-	void EnterStateTargetAttack ()
-	{
-		currentPhaseStateMethod = new CurrentPhaseState (StateTargetAttack);
-
-		abilityTooltip.SetAbility(currentlySelectedUnit.AbilityActivator.AbilityInProgress);
-		abilityTooltip.displayed = true;
-		CombatUIManager.instance.StartTargetAttackPhase();
-
-		CurrentPhase = PhaseState.TargetAttack;
-	}
+//	void EnterStateTargetAttack ()
+//	{
+//		currentPhaseStateMethod = new CurrentPhaseState (StateTargetAttack);
+//
+//		abilityTooltip.SetAbility(currentlySelectedUnit.AbilityActivator.AbilityInProgress);
+//		abilityTooltip.displayed = true;
+//		CombatUIManager.instance.StartTargetAttackPhase();
+//
+//		CurrentPhase = PhaseState.TargetAttack;
+//	}
 
 	/// <summary>
 	/// Set current state to performing a QTE
@@ -280,6 +287,7 @@ public class CombatManager : MonoBehaviour
 	{
 		currentPhaseStateMethod = new CurrentPhaseState (StateEndOfTurn);
 		abilityTooltip.displayed = false;
+		currentlySelectedUnit.AbilityActivator.FinishAbility();
 		CurrentlySelectedUnit.EndTurn ();
 		BoardManager.instance.EndTurn ();
 		CurrentPhase = PhaseState.EndOfTurn;
@@ -323,7 +331,7 @@ public class CombatManager : MonoBehaviour
 		if (CurrentlySelectedUnit.MovementIsDirty)
 			EnterStateMovementSelection ();
 
-		if (Input.GetButtonDown ("Ability1") || Input.GetKeyDown (KeyCode.Mouse0)) {
+		if (Input.GetButtonDown ("Confirm") || Input.GetKeyDown (KeyCode.Mouse0)) {
 			Hexagon h = RaycastHexagon ();
 
 			if (h == null)
@@ -370,80 +378,105 @@ public class CombatManager : MonoBehaviour
 	/// </summary>
 	void StateSelectAttack ()
 	{
-
-		if (Input.GetButtonDown ("Cancel") || Input.GetKeyDown (KeyCode.Escape)) {
+		if (Input.GetButtonDown ("Cancel") || Input.GetKeyDown (KeyCode.Escape)) 
 			EnterStateEndOfTurn ();
-		}
-		if (!CurrentlySelectedUnit.CanCastAbility ()) { //if we are silenced or something, we cant select an ability
+		
+		if (!CurrentlySelectedUnit.CanCastAbility ())  //if we are silenced or something, we cant select an ability
 			return;
+
+		if (Input.GetAxis("AbilityY") > 0 || Input.GetKeyDown (KeyCode.Alpha1)) //Choose ability 1
+			SwitchAbility (0);
+		else if (Input.GetAxis("AbilityX") < 0 || Input.GetKeyDown (KeyCode.Alpha2)) //Choose ability 2
+			SwitchAbility (1);
+		else if (Input.GetAxis("AbilityY") < 0 || Input.GetKeyDown (KeyCode.Alpha3)) //Choose ability 3
+			SwitchAbility (2);
+		else if (Input.GetAxis("AbilityX") > 0 || Input.GetKeyDown (KeyCode.Alpha4))  //Choose ability 4
+			SwitchAbility (3);
+
+
+		if (Input.GetButtonDown ("Confirm") || Input.GetKeyDown (KeyCode.Mouse0)) 
+			CastAbility ();
+	}
+
+	/// <summary>
+	/// Casts the ability.
+	/// </summary>
+	void CastAbility ()
+	{
+		Hexagon h = null;
+		if (!TemplateManager.instance.TemplateInUse || currentAbility.RequireSourceHexagon) {
+			h = RaycastHexagon();
+			if (h == null)
+				return;
+			currentAbility.SourceHexagon = h;
 		}
 
-		if (Input.GetButtonDown ("Ability1")) { //Choose ability 1
-			if ((currentAbility = CurrentlySelectedUnit.AbilityActivator.ActivateAbility (0)) != null) {
-				CombatUIManager.instance.PressButton(0, true);
-				EnterStateTargetAttack ();
-			}
-			else CombatUIManager.instance.PressButton(0, false);
-		} else if (Input.GetButtonDown ("Ability2")) { //Choose ability 2
-			if ((currentAbility = CurrentlySelectedUnit.AbilityActivator.ActivateAbility (1)) != null) {
-				CombatUIManager.instance.PressButton(1, true);
-				EnterStateTargetAttack ();
-			}
-			else CombatUIManager.instance.PressButton(1, false);
-		} else if (Input.GetButtonDown ("Ability3")) { //Choose ability 3
-			if ((currentAbility = CurrentlySelectedUnit.AbilityActivator.ActivateAbility (2)) != null) {
-				CombatUIManager.instance.PressButton(2, true);
-				EnterStateTargetAttack ();
-			}
-			else CombatUIManager.instance.PressButton(2, false);
-		} else if (Input.GetButtonDown ("Ability4")) { //Choose ability 4
-			if ((currentAbility = CurrentlySelectedUnit.AbilityActivator.ActivateAbility (3)) != null) {
-				CombatUIManager.instance.PressButton(3, true);
-				EnterStateTargetAttack ();
-			}
-			else CombatUIManager.instance.PressButton(3, false);
+		if (!TemplateManager.instance.TemplateInUse) {
+			if (h.InLOS () && CurrentlySelectedUnit.AbilityActivator.CheckValidTarget(h)) 
+					StartCoroutine ("UseAbility");
 		}
+		else StartCoroutine("UseAbility");
+	}
+
+	/// <summary>
+	/// Switchs the ability selected
+	/// </summary>
+	protected void SwitchAbility(int i) {
+
+		if (currentlySelectedUnit.AbilityActivator.AbilityInProgress == currentlySelectedUnit.AbilityActivator.ListOfAbilities[i])
+			return;
+
+		CurrentlySelectedUnit.AbilityActivator.FinishAbility ();
+		AbilityDescription t;
+		if ((t = currentlySelectedUnit.AbilityActivator.ActivateAbility(i)) != null) {
+			currentAbility = t;
+			CombatUIManager.instance.PressButton(i, true);
+			abilityTooltip.SetAbility(currentAbility);
+		}
+		else CombatUIManager.instance.PressButton(i, false);
+
 	}
 
 	/// <summary>
 	/// State called to select a target with an attack
 	/// </summary>
-	void StateTargetAttack ()
-	{
-		if (Input.GetButtonDown ("Ability1") || Input.GetKeyDown (KeyCode.Mouse0)) {
-			if (!TemplateManager.instance.TemplateInUse) { 
-				Hexagon h = RaycastHexagon ();
-				if (h != null && h.InLOS ()) {
-					if (CurrentlySelectedUnit.AbilityActivator.CheckValidTarget (h)) {
-						EnterStateWaiting ();
-						StartCoroutine ("UseAbility");
-					}
-				}
-			} else {
-				if (currentAbility.RequireSourceHexagon) {
-					Hexagon h = RaycastHexagon ();
-					if (h != null) {
-						currentAbility.SourceHexagon = h;
-						EnterStateWaiting ();
-						StartCoroutine ("UseAbility");
-					}
-				} else {
-					EnterStateWaiting ();
-					StartCoroutine ("UseAbility");
-				}
-			}
-		}
-
-		if (Input.GetButtonDown ("Cancel")) { //Cancel using this ability
-			EnterStateSelectAttack ();
-		}
-	}
+//	void StateTargetAttack ()
+//	{
+//		if (Input.GetButtonDown ("Confirm") || Input.GetKeyDown (KeyCode.Mouse0)) {
+//			if (!TemplateManager.instance.TemplateInUse) { 
+//				Hexagon h = RaycastHexagon ();
+//				if (h != null && h.InLOS ()) {
+//					if (CurrentlySelectedUnit.AbilityActivator.CheckValidTarget (h)) {
+//						EnterStateWaiting ();
+//						StartCoroutine ("UseAbility");
+//					}
+//				}
+//			} else {
+//				if (currentAbility.RequireSourceHexagon) {
+//					Hexagon h = RaycastHexagon ();
+//					if (h != null) {
+//						currentAbility.SourceHexagon = h;
+//						EnterStateWaiting ();
+//						StartCoroutine ("UseAbility");
+//					}
+//				} else {
+//					EnterStateWaiting ();
+//					StartCoroutine ("UseAbility");
+//				}
+//			}
+//		}
+//
+//		if (Input.GetButtonDown ("Cancel")) { //Cancel using this ability
+//			EnterStateSelectAttack ();
+//		}
+//	}
 
 	/// <summary>
 	/// Uses an ability.
 	/// </summary>
 	IEnumerator UseAbility ()
 	{
+		EnterStateWaiting();
 		CurrentlySelectedUnit.AbilityActivator.ChannelAbility ();
 		while (CurrentlySelectedUnit.AbilityActivator.isCasting) {
 			yield return null;
@@ -585,7 +618,7 @@ public class CombatManager : MonoBehaviour
 		newUnit.UnitPrefab = Resources.Load ("Characters/Hero") as GameObject;
 		newUnit.MovementDistance = 4;
 		newUnit.Health = 150;
-		newUnit.UnitClass = PlayerControlledBoardUnit.PlayerClass.Support;
+		newUnit.UnitClass = PlayerControlledBoardUnit.PlayerClass.Warrior;
 		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/ElectromagneticField")) as AbilityDescription);
 		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/ConcussiveBlast")) as AbilityDescription);
 		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/StaticShell")) as AbilityDescription);

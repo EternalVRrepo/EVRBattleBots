@@ -23,7 +23,7 @@ public class SelectedCharacter : MonoBehaviour
 		if (target != null) {
 			transform.LookAt (OVRManager.instance.transform.position, Vector3.up);
 			transform.position = target.position + Vector3.up * 3.5f;
-			transform.position = new Vector3 (transform.position.x, Mathf.PingPong (Time.time * 0.5f, 0.5f) + 2.5f, transform.position.z);
+			transform.position = new Vector3 (transform.position.x, Mathf.PingPong (Time.time * 0.5f, 0.5f) + 3.35f, transform.position.z);
 		}
 	}
 

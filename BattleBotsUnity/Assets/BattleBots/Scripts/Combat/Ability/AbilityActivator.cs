@@ -75,6 +75,8 @@ public class AbilityActivator : MonoBehaviour {
 			yield return null;
 		}
 
+		EffectManager.instance.CreateEffects(AbilityInProgress, targetHexagon);
+
 //		List<AbilityModifier> mods = new List<AbilityModifier>();
 		if (GetComponent<BoardUnit>().isEnfeebled) {
 			mods.Add (new AbilityModifier(AbilityModifier.Modifier.Damage, .5f));
@@ -133,25 +135,6 @@ public class AbilityActivator : MonoBehaviour {
 				a.currentCooldown--;
 		}
 	}
-
-	/// <summary>
-	/// Casts the ability.
-	/// </summary>
-	//	public void CastAbility() {
-	//		switch(AbilityInProgress.AbilityAbilityType) {
-	//		case AbilityDescription.AbilityType.Area: CastAreaAbility(); break;
-	//		case AbilityDescription.AbilityType.AreaOverTime: CastAreaAbility(true); break;
-	//		case AbilityDescription.AbilityType.SingleTarget: CastSingleTargetAbility(); break;
-	////		case AbilityDescription.AbilityType.SingleTargetOverTime: CastSingleTargetAbility(true); break;
-	//		}
-	//	}
-	
-	/// <summary>
-	/// Casts an area ability
-	/// </summary>
-	//	public void CastAreaAbility(bool overTime = false) {
-	//
-	//	}
 	
 	/// <summary>
 	/// Casts an single target ability.

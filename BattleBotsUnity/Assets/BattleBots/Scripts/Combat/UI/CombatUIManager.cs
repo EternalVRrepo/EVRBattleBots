@@ -7,11 +7,16 @@ public class CombatUIManager : MonoBehaviour {
 	public Transform centerEyeAnchor;
 	public Phases phases;
 	public SelectedCharacter selectedCharacter;
+	public float yCameraDist; //Distance of the UI below the camera
 
 	public static CombatUIManager instance;
 
 	void Awake() {
 		instance = this;
+	}
+
+	void Start() {
+		yCameraDist = OVRManager.instance.yPos - transform.position.y;
 	}
 
 	public void SelectCharacter(Transform t) {
@@ -53,7 +58,7 @@ public class CombatUIManager : MonoBehaviour {
 //		transform.rotation = Quaternion.Euler(35, OVRManager.instance.GetComponent<OVRCameraRig>().centerEyeAnchor.rotation.y, 0);
 //		transform.rotation = Quaternion.Euler(35, GameObject.Find("TrackingSpace").transform.rotation.y, 0);
 		transform.eulerAngles = new Vector3 (0, centerEyeAnchor.eulerAngles.y, 0f);
-		transform.position = new Vector3 (centerEyeAnchor.position.x, transform.position.y, centerEyeAnchor.position.z);
-		phases.transform.eulerAngles = new Vector3(centerEyeAnchor.eulerAngles.x, 0, centerEyeAnchor.eulerAngles.z);
+		transform.position = new Vector3 (centerEyeAnchor.position.x, OVRManager.instance.yPos - yCameraDist, centerEyeAnchor.position.z);
+//		phases.transform.eulerAngles = new Vector3(centerEyeAnchor.eulerAngles.x, 0, centerEyeAnchor.eulerAngles.z);
 	}
 }

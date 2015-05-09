@@ -26,6 +26,14 @@ public class EnemyUnitInfoEditor : Editor {
 		EditorGUILayout.LabelField ("Name:");
 		enemyUnit.name = EditorGUILayout.TextField (enemyUnit.name);
 		EditorGUILayout.EndHorizontal ();
+
+		EditorGUILayout.BeginHorizontal ();
+		EditorGUILayout.LabelField("Drag New Model Prefab Here", GUILayout.MaxWidth (200));
+		EditorGUILayout.PropertyField (serializedObject.FindProperty ("newModel"), GUIContent.none); 
+		if (Event.current.type == EventType.Repaint && enemyUnit.newModel != null)  //repaint only to avoid layout errors
+			enemyUnit.UpdatePrefab ();
+		EditorGUILayout.EndHorizontal ();
+
 		EditorGUILayout.BeginHorizontal ();
 		EditorGUILayout.LabelField ("Health:");
 		enemyUnit.Health = EditorGUILayout.IntField (enemyUnit.Health);
