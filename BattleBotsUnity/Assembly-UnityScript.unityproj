@@ -66,6 +66,7 @@
      <None Include="Assets\ProCore\ProBuilder\Shader\DiffuseVertexColorTransparency.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\LightCone.shader" />
      <None Include="Assets\Imported\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\MobileBloom.shader" />
+     <None Include="Assets\Standard Assets\Particles\Sources\Shaders\Particle Alpha Blend (Queue +100).shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Readme.txt" />
      <None Include="Assets\Imported\Image Effects (Pro Only)\_Sources\Shaders\GlowCompose.shader" />
      <None Include="Assets\Plugins\Android\res\values-ko\assets.xml" />
@@ -139,6 +140,10 @@
  <Reference Include="SixBySeven">
  <HintPath>D:/Coding/GitHub/BattleBots/BattleBotsUnity/Assets/ProCore/Shared/Code/SixBySeven.dll</HintPath>
  </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-UnityScript-firstpass.unityproj">
+      <Project>{FE84165F-5627-9BAF-1C1D-6F696EAED97C}</Project>      <Name>Assembly-UnityScript-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
