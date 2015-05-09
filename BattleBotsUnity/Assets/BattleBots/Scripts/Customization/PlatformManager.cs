@@ -17,7 +17,7 @@ using UnityEngine.UI;
 
 public class PlatformManager : MonoBehaviour
 {
-	public bool debug = true;
+	public bool debug;
 
 	public GameObject TalentWindow;
 
@@ -56,11 +56,13 @@ public class PlatformManager : MonoBehaviour
 		if (unit != null) {
 			CurrentlyDisplayedPartyUnit = unit;
 			
-			if (debug)
+			if (debug) {
 				Debug.Log (string.Format (":Loaded Character:" +
 					"Name: {0} " +
 					"Level: {1} ", unit.name, unit.currentLevel));
-			unit.currentLevel = 5;
+
+				unit.currentLevel = 5;
+			}
 			GameObject obj = Instantiate (unit.UnitPrefab) as GameObject;
 			if (obj.GetComponent<MyHeroController3rdPerson> ())
 				Destroy (obj.GetComponent<MyHeroController3rdPerson> ());
@@ -135,7 +137,7 @@ public class PlatformManager : MonoBehaviour
 		CurrentlyDisplayedPartyUnit.UnitTalentTree.UpdateTalents (currentTalents);
 	}
 
-	void CreateAbiltiyWindow (AbilityDescription[] abilities)
+	void CreateAbilityWindow (AbilityDescription[] abilities)
 	{
 		if (debug)
 			foreach (AbilityDescription a in abilities) {

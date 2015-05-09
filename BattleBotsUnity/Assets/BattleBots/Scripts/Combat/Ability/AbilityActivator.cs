@@ -75,7 +75,7 @@ public class AbilityActivator : MonoBehaviour {
 			yield return null;
 		}
 
-		EffectManager.instance.CreateEffects(AbilityInProgress, targetHexagon);
+		EffectManager.instance.CreateEffects(AbilityInProgress, targetHexagon, hits);
 
 //		List<AbilityModifier> mods = new List<AbilityModifier>();
 		if (GetComponent<BoardUnit>().isEnfeebled) {

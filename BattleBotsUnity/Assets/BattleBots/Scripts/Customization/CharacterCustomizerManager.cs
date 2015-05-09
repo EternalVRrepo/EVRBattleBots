@@ -99,6 +99,7 @@ public class CharacterCustomizerManager : MonoBehaviour
 			platform.transform.position = transform.position + Vector3.right * i * platformOffset;
 
 			Platforms.Add (platform.GetComponent<PlatformManager> ());
+			Platforms[i].debug = isDebug;
 			if (currentParty.Count > i)
 				Platforms [i].GetComponent<PlatformManager> ().Initialize (currentParty [i]);
 			else

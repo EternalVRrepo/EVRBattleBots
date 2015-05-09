@@ -51,6 +51,8 @@
      <Compile Include="Assets\BattleBots\Editor\EnemyUnitInfoEditor.cs" />
      <Compile Include="Assets\BattleBots\Editor\EnemyUnitWindow.cs" />
      <Compile Include="Assets\BattleBots\Editor\MapEditorEditor.cs" />
+     <Compile Include="Assets\BattleBots\Editor\PartyUnitEditor.cs" />
+     <Compile Include="Assets\BattleBots\Editor\PartyUnitWindow.cs" />
      <Compile Include="Assets\BattleBots\Editor\PowerUpEditor.cs" />
      <Compile Include="Assets\BattleBots\Editor\PowerUpWindow.cs" />
      <Compile Include="Assets\BattleBots\Editor\TalentTreeEditor.cs" />

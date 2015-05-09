@@ -25,8 +25,10 @@ public class PartyUnit : ScriptableObject {
 	public PlayerControlledBoardUnit.PlayerClass UnitClass;
 	public int Health;
 	public GameObject UnitPrefab;
+	public GameObject newModel;
 	public int MovementDistance;
 	public List<AbilityDescription> ListOfAbilities = new List<AbilityDescription>();
+	public AbilityDescription newAbility;
 	public int currentXP;
 	public int currentLevel;
 	public TalentTree UnitTalentTree;
@@ -37,5 +39,20 @@ public class PartyUnit : ScriptableObject {
 		while (currentXP >= XPToLevel[currentLevel-1]) {
 			currentLevel++;
 		}
+	}
+
+	public void UpdatePrefab() {
+		if (newModel == null || newModel == UnitPrefab)
+			return;
+		UnitPrefab = newModel;
+	}
+
+	public void AddNewAbility() {
+		if (newAbility == null || ListOfAbilities.Contains (newAbility)) {
+			newAbility = null;
+			return;
+		}
+		ListOfAbilities.Add (newAbility);
+		newAbility = null;
 	}
 }

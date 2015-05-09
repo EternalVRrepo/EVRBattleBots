@@ -44,10 +44,14 @@ public class GameManager : MonoBehaviour
 	}
 	public GameState gameState { get; private set; }
 	public delegate void OnStateChangeHandler ();
+	public delegate void StateInputHandler();
+	public StateInputHandler InputHandler;
 	public event OnStateChangeHandler OnStateChange;
 	public Vector3 OpenWorldPosition;
 	public GameObject OpenWorldCharacterPrefab;
-	
+	public PartyUnit StartingCharacter;
+	public bool levelLoaded;
+
 	protected List<EnemyUnitInfo> enemies = new List<EnemyUnitInfo> ();
 	protected GameObject openWorldCharacter;
 
@@ -66,7 +70,11 @@ public class GameManager : MonoBehaviour
 				Destroy (this.gameObject);
 		}
 		OnStateChange += HandleOnStateChange;
-		SetGameState (GameState.MainMenu);
+//		SetGameState (GameState.MainMenu);
+		gameState = GameState.MainMenu;
+		InputHandler = MainMenuInput;
+		levelLoaded = true;
+		CurrentParty.Add(StartingCharacter);
 	}
 
 	/// <summary>
@@ -77,6 +85,7 @@ public class GameManager : MonoBehaviour
 		switch (gameState) {
 		case GameState.Combat:
 			{
+				InputHandler = CombatInput;
 				StartCombat ();
 				break;
 			}
@@ -86,6 +95,8 @@ public class GameManager : MonoBehaviour
 			}
 		case GameState.MainMenu:
 			{
+				InputHandler = MainMenuInput;
+				StartMainMenu();
 				break;
 			}
 		case GameState.NullState:
@@ -94,11 +105,13 @@ public class GameManager : MonoBehaviour
 			}
 		case GameState.OpenWorld:
 			{
+				InputHandler = OpenWorldInput;
 				StartOpenWorld ();
 				break;
 			}
 		case GameState.CharacterCustomization:
 			{
+				InputHandler = CustomizationInput;
 				StartCustomization ();
 				break;
 			}
@@ -119,6 +132,55 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	protected void MainMenuInput() {
+		if (Input.GetButtonDown("Start") || Input.GetButtonDown("Confirm")) {
+			SetGameState(GameState.OpenWorld);
+		}
+	}
+
+	protected void OpenWorldInput() {
+
+		if (Input.GetButtonDown ("Start")) {
+			SetGameState (GameState.CharacterCustomization);
+		}
+
+
+	}
+
+	/// <summary>
+	/// Check if character is out of boudns and position needs to be reset, not a perfect fix but good enough that it wont break the game
+	/// </summary>
+	IEnumerator OutOfBoundsCheck() {
+		while (gameState == GameState.OpenWorld) {
+			if (openWorldCharacter.transform.position.x < -55 || openWorldCharacter.transform.position.x > 55
+			    || openWorldCharacter.transform.position.y < -25 || openWorldCharacter.transform.position.y > 55
+			    || openWorldCharacter.transform.position.z < -55 || openWorldCharacter.transform.position.z > 55) {
+
+				openWorldCharacter.transform.position = new Vector3(0, 0, -20);
+			}
+			yield return new WaitForSeconds(1);
+		}
+	}
+
+	protected void CombatInput() {
+
+	}
+
+	protected void CustomizationInput() {
+		if (Input.GetButtonDown ("Start")) {
+			FinishCustomizationMenu();
+		}
+	}
+	
+	protected void StartMainMenu() {
+
+		Application.LoadLevel("MainMenu");
+	}
+
+	protected void MainMenuLoaded() {
+
+	}
+
 	protected void StartCustomization ()
 	{
 		Application.LoadLevel ("CustomizationMenu");
@@ -135,36 +197,36 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	void Start ()
 	{
-		gameState = GameState.OpenWorld;
-		openWorldCharacter = Instantiate (OpenWorldCharacterPrefab, new Vector3(0, 0, -35), Quaternion.identity) as GameObject;
-		
-		//TODO: debug stuff for combat so we have a party, shouldnt be here
-		PartyUnit newUnit = ScriptableObject.CreateInstance<PartyUnit> ();
-		newUnit.UnitPrefab = Resources.Load ("Characters/Hero") as GameObject;
-		newUnit.MovementDistance = 4;
-		newUnit.Health = 150;
-		newUnit.UnitClass = PlayerControlledBoardUnit.PlayerClass.Support;
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/ElectromagneticField")) as AbilityDescription);
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/ConcussiveBlast")) as AbilityDescription);
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/StaticShell")) as AbilityDescription);
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/PulseForce")) as AbilityDescription);
-		newUnit.currentLevel = 1;
-		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree> ("TalentTrees/WarriorTree")) as TalentTree;
-		CurrentParty.Add (newUnit);
-		newUnit = ScriptableObject.CreateInstance<PartyUnit> ();
-		newUnit.UnitPrefab = Resources.Load ("Characters/Hero") as GameObject;
-		newUnit.MovementDistance = 4;
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Wizard/RadiantEnergy")) as AbilityDescription);
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Wizard/CircuitBreak")) as AbilityDescription);
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Wizard/StaticGrip")) as AbilityDescription);
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Wizard/FluxBlast")) as AbilityDescription);
-		newUnit.Health = 120;
-		newUnit.UnitClass = PlayerControlledBoardUnit.PlayerClass.Wizard;
-		newUnit.currentLevel = 1;
-		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree> ("TalentTrees/WizardTree")) as TalentTree;
-		CurrentParty.Add (newUnit);
-
-		CurrentPowerUps.Add (Instantiate (Resources.Load<PowerUp> ("PowerUps/MoveSpeed")) as PowerUp);
+//		gameState = GameState.OpenWorld;
+//		openWorldCharacter = Instantiate (OpenWorldCharacterPrefab, new Vector3(0, 0, -35), Quaternion.identity) as GameObject;
+//		
+//		//TODO: debug stuff for combat so we have a party, shouldnt be here
+//		PartyUnit newUnit = ScriptableObject.CreateInstance<PartyUnit> ();
+//		newUnit.UnitPrefab = Resources.Load ("Characters/Hero") as GameObject;
+//		newUnit.MovementDistance = 4;
+//		newUnit.Health = 150;
+//		newUnit.UnitClass = PlayerControlledBoardUnit.PlayerClass.Support;
+//		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/ElectromagneticField")) as AbilityDescription);
+//		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/ConcussiveBlast")) as AbilityDescription);
+//		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/StaticShell")) as AbilityDescription);
+//		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/PulseForce")) as AbilityDescription);
+//		newUnit.currentLevel = 1;
+//		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree> ("TalentTrees/WarriorTree")) as TalentTree;
+//		CurrentParty.Add (newUnit);
+//		newUnit = ScriptableObject.CreateInstance<PartyUnit> ();
+//		newUnit.UnitPrefab = Resources.Load ("Characters/Hero") as GameObject;
+//		newUnit.MovementDistance = 4;
+//		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Wizard/RadiantEnergy")) as AbilityDescription);
+//		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Wizard/CircuitBreak")) as AbilityDescription);
+//		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Wizard/StaticGrip")) as AbilityDescription);
+//		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Wizard/FluxBlast")) as AbilityDescription);
+//		newUnit.Health = 120;
+//		newUnit.UnitClass = PlayerControlledBoardUnit.PlayerClass.Wizard;
+//		newUnit.currentLevel = 1;
+//		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree> ("TalentTrees/WizardTree")) as TalentTree;
+//		CurrentParty.Add (newUnit);
+//
+//		CurrentPowerUps.Add (Instantiate (Resources.Load<PowerUp> ("PowerUps/MoveSpeed")) as PowerUp);
 	}
 
 	/// <summary>
@@ -174,12 +236,14 @@ public class GameManager : MonoBehaviour
 	{
 		if ((Input.GetKeyDown (KeyCode.Y) || Input.GetAxis ("DebugDown") > 0) && gameState != GameState.Combat) {
 			SetGameState (GameState.Combat);
-		} else if (Input.GetButtonDown ("Start")) {
-			if (gameState != GameState.CharacterCustomization)	
-				SetGameState (GameState.CharacterCustomization);
-			else if (gameState == GameState.CharacterCustomization)
-				FinishCustomizationMenu ();
+		} 
+
+		if (levelLoaded) {
+			if (InputHandler != null) 
+				InputHandler();
+			else Debug.LogError("InputHandler null state");
 		}
+		
 	}
 
 	protected void StartOpenWorld ()
@@ -226,6 +290,7 @@ public class GameManager : MonoBehaviour
 	{
 		openWorldCharacter = Instantiate(OpenWorldCharacterPrefab) as GameObject;
 		openWorldCharacter.transform.position = OpenWorldPosition;
+		StartCoroutine("OutOfBoundsCheck");
 	}
 
 	/// <summary>
@@ -235,6 +300,8 @@ public class GameManager : MonoBehaviour
 	{
 		if (_instance != this) //Object that is destroyed will still call this 
 			return;
+
+		levelLoaded = true;
 
 		if (Application.loadedLevelName == "CombatTest") {
 			combatManager = GameObject.Find ("CombatManager").GetComponent<CombatManager> ();
@@ -267,6 +334,8 @@ public class GameManager : MonoBehaviour
 			CustomizationMenuLoaded ();
 		} else if (Application.loadedLevelName == "OpenWorld") {
 			OpenWorldLoaded ();
+		} else if (Application.loadedLevelName == "MainMenu") {
+			MainMenuLoaded();
 		}
 	}
 }
