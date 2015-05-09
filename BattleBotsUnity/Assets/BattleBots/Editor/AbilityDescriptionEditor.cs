@@ -44,6 +44,13 @@ public class AbilityDescriptionEditor : Editor {
 			abilityEditor.UpdateIcon ();
 		EditorGUILayout.EndHorizontal ();
 
+		EditorGUILayout.BeginHorizontal ();
+		EditorGUILayout.LabelField("Drag New Effect Here", GUILayout.MaxWidth (200));
+		EditorGUILayout.PropertyField (serializedObject.FindProperty ("newPrefab"), GUIContent.none); 
+		if (Event.current.type == EventType.Repaint && abilityEditor.newPrefab != null)  //repaint only to avoid layout errors
+			abilityEditor.UpdatePrefab ();
+		EditorGUILayout.EndHorizontal ();
+
 //		EditorGUILayout.BeginHorizontal();
 //		abilityEditor.AbilityDamageType = (AbilityDescription.DamageType)EditorGUILayout.EnumPopup("Ability Target Type", abilityEditor.AbilityDamageType);
 //		EditorGUILayout.EndHorizontal ();

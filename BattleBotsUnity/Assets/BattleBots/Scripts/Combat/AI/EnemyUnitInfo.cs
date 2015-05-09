@@ -20,10 +20,11 @@ public class EnemyUnitInfo : ScriptableObject {
 
 	public string Name;
 	public int Health;
-	public GameObject UnitPrefab;
 	public int MovementDistance;
 	public List<AbilityDescription> ListOfAbilities = new List<AbilityDescription>();
 	public CombatAIManager.AIType AIType;
+	public GameObject UnitPrefab;
+	public GameObject newModel;
 
 	public AbilityDescription newAbility;
 	/// <summary>
@@ -36,5 +37,11 @@ public class EnemyUnitInfo : ScriptableObject {
 		}
 		ListOfAbilities.Add (newAbility);
 		newAbility = null;
+	}
+
+	public void UpdatePrefab() {
+		if (newModel == null || newModel == UnitPrefab)
+			return;
+		UnitPrefab = newModel;
 	}
 }

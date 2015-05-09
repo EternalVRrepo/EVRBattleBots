@@ -21,6 +21,8 @@ public class AbilityDescription : ScriptableObject {
 	public string TooltipText = ""; 
 	public Sprite AbilityIcon;
 	public Sprite newTexture;
+	public GameObject EffectPrefab;
+	public GameObject newPrefab;
 	public TargetType AbilityTargetType;
 	public enum TargetType {
 		TargetSelf,
@@ -76,9 +78,17 @@ public class AbilityDescription : ScriptableObject {
 	public List<DebuffEffect> debuffs = new List<DebuffEffect>();
 	public List<BuffEffect> buffs = new List<BuffEffect>();
 
+
+
 	public void UpdateIcon() {
 		if (newTexture == null || newTexture == AbilityIcon)
 			return;
 		AbilityIcon = newTexture;
+	}
+
+	public void UpdatePrefab() {
+		if (newPrefab == null || newPrefab == EffectPrefab)
+			return;
+		EffectPrefab = newPrefab;
 	}
 }

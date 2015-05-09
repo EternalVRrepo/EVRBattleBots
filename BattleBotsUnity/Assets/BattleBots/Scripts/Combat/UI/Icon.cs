@@ -36,6 +36,12 @@ public class Icon : MonoBehaviour {
 		}
 	}
 
+	public void StopPress() {
+		image.color = normalColor;
+		Cooldown.color = cooldownColor;
+		StopCoroutine("SimulateButtonPress");
+	}
+
 	public void PressButton(bool s) {
 //		Debug.Log (name + " pressed");
 		if (pressing) {
@@ -72,13 +78,13 @@ public class Icon : MonoBehaviour {
 
 		yield return new WaitForSeconds(.2f);
 
-		while (t > 0) {
-			image.color = Color.Lerp(image.color, normalColor, .25f);
-			Cooldown.color = cooldownColor;
-			t -= Time.deltaTime;
-			yield return null;
-		}
-		image.color = normalColor;
+//		while (t > 0) {
+//			image.color = Color.Lerp(image.color, normalColor, .25f);
+//			Cooldown.color = cooldownColor;
+//			t -= Time.deltaTime;
+//			yield return null;
+//		}
+//		image.color = normalColor;
 
 		pressing = false;
 	}
