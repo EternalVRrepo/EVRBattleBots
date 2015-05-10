@@ -32,53 +32,54 @@ public class AbilityDescription : ScriptableObject {
 		TargetHexagon,
 		CustomTemplate
 	}
-
 	public TemplateManager.Target TemplateType;
 	public TemplateManager.TargetTemplate Template;
-
 	public int TemplateSize;
 	public bool FriendlyFireEnabled;
 	public bool SelfFireEnabled;
 	public bool RequireSourceHexagon;
 	public Hexagon SourceHexagon;
-
-//	public DamageType AbilityDamageType;
-//	public enum DamageType {
-//		Damage,
-//		Heal,
-//		Absorb
-//	}
-
-//	public AbilityType AbilityAbilityType;
-//	public enum AbilityType {
-//		SingleTarget,
-//		Area,
-//		AreaOverTime
-//	}
-
 	public int Cooldown;
 	public int currentCooldown;
 	public int castRange; //How far from the player this ability can be cast
-//	public int damage; //damage or healing per tick = damage or healing/duration if it is a DoT
-//	public int Duration { //Used for DoT attacks
-//		get {
-//			if (AbilityAbilityType == AbilityType.AreaOverTime)
-//				return duration;
-//			else return -1;
-//		} 
-//		set {
-//			duration = value;
-//		}
-//	}
-
 	public int AreaOfEffectDistance; //How far from the target is affected by this ability
 	public int duration;
 	public int HexDuration; //Duration it stays on a hex
-
 	public List<DebuffEffect> debuffs = new List<DebuffEffect>();
 	public List<BuffEffect> buffs = new List<BuffEffect>();
 
+	public AbilityDescription(AbilityDescription a) {
+		DisplayName = a.DisplayName;
+		TooltipText = a.TooltipText;
+		AbilityIcon = a.AbilityIcon;
+		newTexture = a.newTexture;
+		EffectPrefab = a.EffectPrefab;
+		newPrefab = a.newPrefab;
+		AbilityTargetType = a.AbilityTargetType;
+		TemplateType = a.TemplateType;
+		Template = a.Template;
+		TemplateSize = a.TemplateSize;
+		FriendlyFireEnabled = a.FriendlyFireEnabled;
+		SelfFireEnabled = a.SelfFireEnabled;
+		RequireSourceHexagon = a.RequireSourceHexagon;
+		SourceHexagon = a.SourceHexagon;
+		Cooldown = a.Cooldown;
+		currentCooldown = a.currentCooldown;
+		castRange = a.castRange;
+		AreaOfEffectDistance = a.AreaOfEffectDistance;
+		duration = a.duration;
+		HexDuration = a.HexDuration;
 
+		foreach (DebuffEffect d in a.debuffs) {
+			DebuffEffect de = new DebuffEffect(d);
+			debuffs.Add(de);
+		}
+		
+		foreach (BuffEffect b in a.buffs) {
+			BuffEffect be = new BuffEffect(b);
+			buffs.Add(be);
+		}
+	}
 
 	public void UpdateIcon() {
 		if (newTexture == null || newTexture == AbilityIcon)

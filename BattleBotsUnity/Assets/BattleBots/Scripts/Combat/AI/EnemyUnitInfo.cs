@@ -25,8 +25,22 @@ public class EnemyUnitInfo : ScriptableObject {
 	public CombatAIManager.AIType AIType;
 	public GameObject UnitPrefab;
 	public GameObject newModel;
-
 	public AbilityDescription newAbility;
+
+	public EnemyUnitInfo(EnemyUnitInfo e) {
+		Name = e.Name;
+		Health = e.Health;
+		MovementDistance = e.MovementDistance;
+		AIType = e.AIType;
+		UnitPrefab = e.UnitPrefab;
+		newModel = e.newModel;
+		newAbility = e.newAbility;
+
+		foreach (AbilityDescription ab in e.ListOfAbilities) {
+			ListOfAbilities.Add(new AbilityDescription(ab));
+		}
+	}
+
 	/// <summary>
 	/// Adds a new ability to the list of abilities
 	/// </summary>

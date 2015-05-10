@@ -72,7 +72,9 @@ public class GameManager : MonoBehaviour
 		OnStateChange += HandleOnStateChange;
 		gameState = GameState.MainMenu;
 		InputHandler = MainMenuInput;
-		CurrentParty.Add(StartingCharacter);
+		PartyUnit p = (ScriptableObject.CreateInstance<PartyUnit>());
+		p.Initialize(StartingCharacter);
+		CurrentParty.Add(p);
 		LevelTransition.OnLevelLoad += OnLevelLoad;
 		
 	}

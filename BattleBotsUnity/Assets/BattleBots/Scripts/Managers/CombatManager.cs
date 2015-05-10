@@ -51,6 +51,7 @@ public class CombatManager : MonoBehaviour
 			return _abilityTooltip;
 		}
 	}
+	public List<EnemyUnitInfo> DebugEnemies = new List<EnemyUnitInfo>();
 
 	private AbilityTooltip _abilityTooltip;
 	protected PlayerControlledBoardUnit currentlySelectedUnit;
@@ -80,12 +81,16 @@ public class CombatManager : MonoBehaviour
 	/// </summary>
 	void Start ()
 	{
+		EnterStateWaiting ();
 		CreateHexLayerMask ();
 //		CenterEyeAnchor = Camera.main;
 		CenterEyeAnchor = GameObject.Find ("CenterEyeAnchor").transform;
 
 		if (CenterEyeAnchor == null) 
 			Debug.LogError ("No Camera Found for CenterEyeAnchor in CombatManager.cs");
+
+		if (GameObject.Find ("GameManager") != null)
+			return;
 
 		if (debug) {
 			DebugSetup();
@@ -99,8 +104,6 @@ public class CombatManager : MonoBehaviour
 	{
 		if (currentPhaseStateMethod != null)
 			currentPhaseStateMethod ();
-		else
-			Debug.LogError ("No Current Combat State, most likely not initialized from GameManager");
 
 		PowerUpInput (); //Check for input to use powerups
 
@@ -535,7 +538,6 @@ public class CombatManager : MonoBehaviour
 		map = BoardManager.instance.Maps [mapIndex];
 		AIManager = gameObject.AddComponent<CombatAIManager> ();
 		AIManager.combatManager = this;
-		EnterStateWaiting ();
 
 		if (listEnemies.Count == 0)
 			Debug.LogError ("No enemies found for combat, lots of errors incoming");
@@ -550,7 +552,7 @@ public class CombatManager : MonoBehaviour
 			bu.Initialize (unit);
 			bu.healthBarPrefab = HealthBarPrefab;
 			go.name = bu.UnitClass.ToString ();
-			bu.Spawn (BoardManager.instance.GetHexagonFromArray ((int)map.PlayerSpawns [currentParty.IndexOf (unit)].x, (int)map.PlayerSpawns [currentParty.IndexOf (unit)].y));
+			bu.Spawn (BoardManager.instance.GetHexagonFromArray ((int)map.PlayerSpawns [currentParty.IndexOf(unit)].x, (int)map.PlayerSpawns [currentParty.IndexOf(unit)].y));
 			CurrentParty.Add (bu);
 		}
 
@@ -638,24 +640,12 @@ public class CombatManager : MonoBehaviour
 		newUnit.currentLevel = 1;
 		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree> ("TalentTrees/WizardTree")) as TalentTree;
 		CurrentParty.Add (newUnit);
-		
-		
-		List<EnemyUnitInfo> enemies = new List<EnemyUnitInfo> ();
-		EnemyUnitInfo newEnemy = ScriptableObject.CreateInstance<EnemyUnitInfo> ();
-		newEnemy.UnitPrefab = Resources.Load ("EnemyUnitPrefabTest") as GameObject;
-		newEnemy.MovementDistance = 3;
-		newEnemy.Health = 400;
-		newEnemy.AIType = CombatAIManager.AIType.Melee;
-		newEnemy.ListOfAbilities.Add (Resources.Load<AbilityDescription> ("Abilities/EnemyAbilities/Bite"));
-		enemies.Add (newEnemy);
-		newEnemy = ScriptableObject.CreateInstance<EnemyUnitInfo> ();
-		newEnemy.UnitPrefab = Resources.Load ("EnemyUnitPrefabTest") as GameObject;
-		newEnemy.MovementDistance = 3;
-		newEnemy.Health = 400;
-		newEnemy.AIType = CombatAIManager.AIType.Melee;
-		newEnemy.ListOfAbilities.Add (Resources.Load<AbilityDescription> ("Abilities/EnemyAbilities/Bite"));
-		enemies.Add (newEnemy);
-		
+
+		List<EnemyUnitInfo> enemies = new List<EnemyUnitInfo>();
+		foreach (EnemyUnitInfo e in DebugEnemies) {
+			enemies.Add(new EnemyUnitInfo(e));
+		}
+
 		SetupCombat (0, CurrentParty, enemies);
 	}
 }

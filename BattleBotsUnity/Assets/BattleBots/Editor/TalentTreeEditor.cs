@@ -32,6 +32,8 @@ public class TalentTreeEditor : Editor
 			EditorGUILayout.LabelField (PlayerControlledBoardUnit.PlayerClass.Wizard.ToString () + "Tree");
 		else if (string.Equals (tree.name, PlayerControlledBoardUnit.PlayerClass.Support.ToString () + "Tree"))
 			EditorGUILayout.LabelField (PlayerControlledBoardUnit.PlayerClass.Support.ToString () + "Tree");
+		else if (string.Equals(tree.name, PlayerControlledBoardUnit.PlayerClass.Assassin.ToString() + "Tree"))
+	         EditorGUILayout.LabelField (PlayerControlledBoardUnit.PlayerClass.Assassin.ToString () + "Tree");
 		else EditorGUILayout.LabelField ("Name the file \"ClassName\" (Warrior/Wizard/Assassin/Support) + \"Tree\"");
 
 		for (int i = 0; i < 5; i++) {
