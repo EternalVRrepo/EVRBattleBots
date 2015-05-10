@@ -9,6 +9,7 @@ public class CharacterCustomizerManager : MonoBehaviour
 	public string tooltipTextName;
 	public string tooltipTextDescription;
 	public bool displayTooltip;
+	public bool init;
 
 	public PlatformManager currentlySelectedCharacter;
 	public PlatformManager lastSelectedCharacter;
@@ -30,17 +31,25 @@ public class CharacterCustomizerManager : MonoBehaviour
 	/// Initialize the specified party for the customization manager
 	public void Initialize (List<PartyUnit> party)
 	{
-		isDebug = false; //Dont want to add stuff if we are actually initializing
+		isDebug = false;
+		init = true;
 		currentParty = party;
+		GenerateCustomizationPlatforms ();
+		SetFirstSelected ();
 	}
 
 	void Start ()
 	{
-		if (isDebug) 
-			SetupParty ();
+		if (GameObject.Find ("GameManager") != null)
+			return;
 
-		GenerateCustomizationPlatforms ();
-		SetFirstSelected ();
+		if (isDebug) { 
+			GenerateCustomizationPlatforms ();
+			SetFirstSelected ();
+			SetupParty ();
+			init = true;
+		}
+
 	}
 	
 	//============================================================================
@@ -49,6 +58,9 @@ public class CharacterCustomizerManager : MonoBehaviour
 
 	void Update ()
 	{
+		if (!init)
+			return;
+
 		moveCharacterToCamera (); 
 
 		CheckForCurrentAndLastSelectedCharacter ();
