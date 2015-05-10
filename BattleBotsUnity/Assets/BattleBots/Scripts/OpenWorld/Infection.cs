@@ -15,15 +15,26 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Infection : MonoBehaviour {
+public class Infection : MonoBehaviour
+{
+	public bool collisionTriggersBattle = true;
 
-	public List<EnemyUnitInfo> enemies = new List<EnemyUnitInfo>();
+	public List<EnemyUnitInfo> enemies = new List<EnemyUnitInfo> ();
 
 	/// <summary>
 	/// Interact with this instance, intiate combat
 	/// </summary>
-	public void Interact() {
-		GameManager.instance.StartCombat(enemies);
+	public void Interact ()
+	{
+		GameManager.instance.StartCombat (enemies);
 	}
 
+	void OnCollisionEnter (Collision collision)
+	{
+		if (collisionTriggersBattle) {
+			if (collider.tag == "Player") {
+				Interact ();
+			}
+		}
+	}
 }

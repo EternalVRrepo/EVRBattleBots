@@ -39,10 +39,10 @@
 	<Reference Include="System.Core" />
 	<Reference Include="System.Xml.Linq" />
 	<Reference Include="UnityEngine">
-	  <HintPath>D:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>D:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
@@ -51,6 +51,7 @@
      <Compile Include="Assets\Imported\Image Effects (Pro Only)\FastBloom.js" />
      <Compile Include="Assets\Imported\Image Effects (Pro Only)\PostEffectsBase.js" />
      <Compile Include="Assets\Imported\Image Effects (Pro Only)\PostEffectsHelper.js" />
+     <Compile Include="Assets\Imported\Standard Assets\Particles\Legacy Particles\TimedObjectDestructor.js" />
      <None Include="Assets\Plugins\donotdelete.txt" />
      <None Include="Assets\Imported\Shaders\Toon Shading\Sources\Shaders\Toony-Basic.shader" />
      <None Include="Assets\BattleBots\Shaders\Data.shader" />
@@ -61,7 +62,7 @@
      <None Include="Assets\Plugins\x86_64\donotdelete.txt" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\LightCone.shader" />
      <None Include="Assets\Imported\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\MobileBloom.shader" />
-     <None Include="Assets\Standard Assets\Particles\Sources\Shaders\Particle Alpha Blend (Queue +100).shader" />
+     <None Include="Assets\Imported\Standard Assets\Particles\Sources\Shaders\Particle Alpha Blend (Queue +100).shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Readme.txt" />
      <None Include="Assets\Imported\Image Effects (Pro Only)\_Sources\Shaders\GlowCompose.shader" />
      <None Include="Assets\Plugins\Android\res\values-ko\assets.xml" />
@@ -115,12 +116,8 @@
      <None Include="Assets\Plugins\Android\res\values-it\strings.xml" />
      <None Include="Assets\Plugins\Android\res\values-v14\styles.xml" />
  <Reference Include="UnityEngine.UI">
- <HintPath>D:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.3/UnityEngine.UI.dll</HintPath>
+ <HintPath>C:/Program Files (x86)/Unity4.6/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.3/UnityEngine.UI.dll</HintPath>
  </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Assembly-UnityScript-firstpass.unityproj">
-      <Project>{FE84165F-5627-9BAF-1C1D-6F696EAED97C}</Project>      <Name>Assembly-UnityScript-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
