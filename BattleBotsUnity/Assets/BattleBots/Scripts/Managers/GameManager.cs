@@ -1,4 +1,4 @@
-﻿/////////////////////////////////////////////////////////////////////////////////
+﻿ /////////////////////////////////////////////////////////////////////////////////
 //
 //	GameManager.cs
 //	© EternalVR, All Rights Reserved
@@ -273,7 +273,7 @@ public class GameManager : MonoBehaviour
 		} else { //defeat
 
 		}
-		SetGameState (GameState.OpenWorld);
+		LevelTransition.LoadLevel("OpenWorld");
 	}
 
 	/// <summary>
