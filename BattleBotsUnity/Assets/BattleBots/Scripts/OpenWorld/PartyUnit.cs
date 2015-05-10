@@ -33,6 +33,24 @@ public class PartyUnit : ScriptableObject {
 	public int currentLevel;
 	public TalentTree UnitTalentTree;
 
+	public void Initialize(PartyUnit unit) {
+		Name = unit.Name;
+		UnitClass = unit.UnitClass;
+		Health = unit.Health;
+		UnitPrefab = unit.UnitPrefab;
+		newModel = unit.newModel;
+		MovementDistance = unit.MovementDistance;
+		newAbility = unit.newAbility;
+		currentXP = unit.currentXP;
+		currentLevel = unit.currentLevel;
+		UnitTalentTree = unit.UnitTalentTree;
+
+		foreach (AbilityDescription ab in unit.ListOfAbilities) {
+//			AbilityDescription a = ScriptableObject.CreateInstance<AbilityDescription>();
+			ListOfAbilities.Add(new AbilityDescription(ab));
+		}
+	}
+
 	public void AddXP(int amount) {
 		currentXP += amount;
 

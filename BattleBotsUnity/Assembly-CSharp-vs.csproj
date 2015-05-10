@@ -160,7 +160,7 @@
      <None Include="Assets\Plugins\x86_64\donotdelete.txt" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\LightCone.shader" />
      <None Include="Assets\Imported\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\MobileBloom.shader" />
-     <None Include="Assets\Standard Assets\Particles\Sources\Shaders\Particle Alpha Blend (Queue +100).shader" />
+     <None Include="Assets\Imported\Standard Assets\Particles\Sources\Shaders\Particle Alpha Blend (Queue +100).shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Readme.txt" />
      <None Include="Assets\Imported\Image Effects (Pro Only)\_Sources\Shaders\GlowCompose.shader" />
      <None Include="Assets\Plugins\Android\res\values-ko\assets.xml" />
@@ -213,9 +213,6 @@
      <None Include="Assets\BattleBots\Shaders\Dissolve\DissolveShader.shader" />
      <None Include="Assets\Plugins\Android\res\values-it\strings.xml" />
      <None Include="Assets\Plugins\Android\res\values-v14\styles.xml" />
- <Reference Include="Assembly-UnityScript-firstpass">
- <HintPath>D:/Coding/GitHub/BattleBots/BattleBotsUnity/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
- </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.3/UnityEngine.UI.dll</HintPath>
  </Reference>
