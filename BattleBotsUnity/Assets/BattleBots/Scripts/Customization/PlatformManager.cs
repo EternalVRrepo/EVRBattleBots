@@ -68,8 +68,10 @@ public class PlatformManager : MonoBehaviour
 				Destroy (obj.GetComponent<MyHeroController3rdPerson> ());
 			obj.transform.position = UnitAnchorPoint.position;
 			obj.transform.parent = UnitAnchorPoint;
+//			obj.transform.Rotate(new Vector3(0, 180, 0));
+			obj.transform.rotation  = Quaternion.Euler(new Vector3(0, 180, 0));
 			
-			NamePlate.GetComponent<UnitNamePlateGUI> ().Initilize (unit);
+			NamePlate.GetComponent<UnitNamePlateGUI> ().Initialize (unit);
 			CreateTalentTree (unit);
 			
 		} else {

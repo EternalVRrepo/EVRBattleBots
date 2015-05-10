@@ -1,4 +1,4 @@
-﻿/////////////////////////////////////////////////////////////////////////////////
+﻿ /////////////////////////////////////////////////////////////////////////////////
 //
 //	GameManager.cs
 //	© EternalVR, All Rights Reserved
@@ -40,9 +40,10 @@ public class GameManager : MonoBehaviour
 		MainMenu,
 		OpenWorld,
 		Combat,
-		CharacterCustomization
+		CharacterCustomization,
 	}
-	public GameState gameState { get; private set; }
+	public GameState gameState { get{ return _GameState;} private set {_GameState = value;} }
+	public GameState _GameState;
 	public delegate void OnStateChangeHandler ();
 	public delegate void StateInputHandler();
 	public StateInputHandler InputHandler;
@@ -50,7 +51,6 @@ public class GameManager : MonoBehaviour
 	public Vector3 OpenWorldPosition;
 	public GameObject OpenWorldCharacterPrefab;
 	public PartyUnit StartingCharacter;
-	public bool levelLoaded;
 
 	protected List<EnemyUnitInfo> enemies = new List<EnemyUnitInfo> ();
 	protected GameObject openWorldCharacter;
@@ -70,11 +70,25 @@ public class GameManager : MonoBehaviour
 				Destroy (this.gameObject);
 		}
 		OnStateChange += HandleOnStateChange;
-//		SetGameState (GameState.MainMenu);
 		gameState = GameState.MainMenu;
 		InputHandler = MainMenuInput;
-		levelLoaded = true;
 		CurrentParty.Add(StartingCharacter);
+		LevelTransition.OnLevelLoad += OnLevelLoad;
+		
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	void Update ()
+	{
+		if ((Input.GetKeyDown (KeyCode.Y) || Input.GetAxis ("DebugDown") > 0) && gameState != GameState.Combat) {
+			StartCombat();
+		} 
+		
+		if (InputHandler != null) 
+			InputHandler();
+		else Debug.LogError("InputHandler null state");
 	}
 
 	/// <summary>
@@ -86,33 +100,31 @@ public class GameManager : MonoBehaviour
 		case GameState.Combat:
 			{
 				InputHandler = CombatInput;
-				StartCombat ();
 				break;
 			}
 		case GameState.IntroScreen:
 			{
+				InputHandler = null;
 				break;
 			}
 		case GameState.MainMenu:
 			{
 				InputHandler = MainMenuInput;
-				StartMainMenu();
 				break;
 			}
 		case GameState.NullState:
 			{
+				InputHandler = null;
 				break;
 			}
 		case GameState.OpenWorld:
 			{
 				InputHandler = OpenWorldInput;
-				StartOpenWorld ();
 				break;
 			}
 		case GameState.CharacterCustomization:
 			{
 				InputHandler = CustomizationInput;
-				StartCustomization ();
 				break;
 			}
 		}
@@ -123,28 +135,28 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	public void SetGameState (GameState newState)
 	{
-		if (gameState == GameState.OpenWorld) {
-			OpenWorldPosition = openWorldCharacter.transform.position;
-		}
 		this.gameState = newState;
 		if (OnStateChange != null) {
 			OnStateChange ();
 		}
 	}
 
-	protected void MainMenuInput() {
-		if (Input.GetButtonDown("Start") || Input.GetButtonDown("Confirm")) {
-			SetGameState(GameState.OpenWorld);
+	/// <summary>
+	/// Raises the level was loaded event.
+	/// </summary>
+	void OnLevelLoad() {
+		if (_instance != this) //Object that is destroyed will still call this 
+			return;
+		
+		if (Application.loadedLevelName == "CombatTest") {
+			CombatLoaded();
+		} else if (Application.loadedLevelName == "CustomizationMenu") {
+			CustomizationMenuLoaded ();
+		} else if (Application.loadedLevelName == "OpenWorld") {
+			OpenWorldLoaded ();
+		} else if (Application.loadedLevelName == "MainMenu") {
+			MainMenuLoaded();
 		}
-	}
-
-	protected void OpenWorldInput() {
-
-		if (Input.GetButtonDown ("Start")) {
-			SetGameState (GameState.CharacterCustomization);
-		}
-
-
 	}
 
 	/// <summary>
@@ -152,13 +164,30 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	IEnumerator OutOfBoundsCheck() {
 		while (gameState == GameState.OpenWorld) {
-			if (openWorldCharacter.transform.position.x < -55 || openWorldCharacter.transform.position.x > 55
-			    || openWorldCharacter.transform.position.y < -25 || openWorldCharacter.transform.position.y > 55
-			    || openWorldCharacter.transform.position.z < -55 || openWorldCharacter.transform.position.z > 55) {
+			if (openWorldCharacter != null) {
+				if (openWorldCharacter.transform.position.x < -55 || openWorldCharacter.transform.position.x > 55
+				    || openWorldCharacter.transform.position.y < -25 || openWorldCharacter.transform.position.y > 55
+				    || openWorldCharacter.transform.position.z < -55 || openWorldCharacter.transform.position.z > 55) {
 
-				openWorldCharacter.transform.position = new Vector3(0, 0, -20);
+					openWorldCharacter.transform.position = new Vector3(0, -1.6f, -20);
+				}
 			}
 			yield return new WaitForSeconds(1);
+		}
+	}
+
+#region StateInput
+	protected void MainMenuInput() {
+		if (Input.GetButtonDown("Start") || Input.GetButtonDown("Confirm")) {
+			LevelTransition.LoadLevel("OpenWorld");
+		}
+	}
+	
+	protected void OpenWorldInput() {
+		
+		if (Input.GetButtonDown ("Start")) {
+			OpenWorldPosition = openWorldCharacter.transform.position;
+			LevelTransition.LoadLevel("CustomizationMenu");
 		}
 	}
 
@@ -171,93 +200,65 @@ public class GameManager : MonoBehaviour
 			FinishCustomizationMenu();
 		}
 	}
-	
-	protected void StartMainMenu() {
+#endregion
 
-		Application.LoadLevel("MainMenu");
-	}
-
-	protected void MainMenuLoaded() {
-
-	}
-
-	protected void StartCustomization ()
+#region SceneLoaded
+	/// <summary>
+	/// Function for initializing the open world 
+	/// </summary>
+	protected void OpenWorldLoaded ()
 	{
-		Application.LoadLevel ("CustomizationMenu");
+		SetGameState(GameState.OpenWorld);
+		openWorldCharacter = Instantiate(OpenWorldCharacterPrefab) as GameObject;
+		openWorldCharacter.transform.position = OpenWorldPosition;
+		StartCoroutine("OutOfBoundsCheck");
 	}
 
+	/// <summary>
+	/// Called when main menu is loaded
+	/// </summary>
+	protected void MainMenuLoaded() {
+		SetGameState(GameState.MainMenu);
+	}
+
+	/// <summary>
+	/// Called when customization menu is loaded
+	/// </summary>
 	protected void CustomizationMenuLoaded ()
 	{
+		SetGameState(GameState.CharacterCustomization);
 		CharacterCustomizerManager cm = GameObject.Find ("CharacterCustomizerManager").GetComponent<CharacterCustomizerManager> ();
 		cm.Initialize (CurrentParty);
 	}
 
 	/// <summary>
-	/// 
+	/// Called when combat is loaded
 	/// </summary>
-	void Start ()
-	{
-//		gameState = GameState.OpenWorld;
-//		openWorldCharacter = Instantiate (OpenWorldCharacterPrefab, new Vector3(0, 0, -35), Quaternion.identity) as GameObject;
-//		
-//		//TODO: debug stuff for combat so we have a party, shouldnt be here
-//		PartyUnit newUnit = ScriptableObject.CreateInstance<PartyUnit> ();
-//		newUnit.UnitPrefab = Resources.Load ("Characters/Hero") as GameObject;
-//		newUnit.MovementDistance = 4;
-//		newUnit.Health = 150;
-//		newUnit.UnitClass = PlayerControlledBoardUnit.PlayerClass.Support;
-//		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/ElectromagneticField")) as AbilityDescription);
-//		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/ConcussiveBlast")) as AbilityDescription);
-//		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/StaticShell")) as AbilityDescription);
-//		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/PulseForce")) as AbilityDescription);
-//		newUnit.currentLevel = 1;
-//		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree> ("TalentTrees/WarriorTree")) as TalentTree;
-//		CurrentParty.Add (newUnit);
-//		newUnit = ScriptableObject.CreateInstance<PartyUnit> ();
-//		newUnit.UnitPrefab = Resources.Load ("Characters/Hero") as GameObject;
-//		newUnit.MovementDistance = 4;
-//		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Wizard/RadiantEnergy")) as AbilityDescription);
-//		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Wizard/CircuitBreak")) as AbilityDescription);
-//		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Wizard/StaticGrip")) as AbilityDescription);
-//		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Wizard/FluxBlast")) as AbilityDescription);
-//		newUnit.Health = 120;
-//		newUnit.UnitClass = PlayerControlledBoardUnit.PlayerClass.Wizard;
-//		newUnit.currentLevel = 1;
-//		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree> ("TalentTrees/WizardTree")) as TalentTree;
-//		CurrentParty.Add (newUnit);
-//
-//		CurrentPowerUps.Add (Instantiate (Resources.Load<PowerUp> ("PowerUps/MoveSpeed")) as PowerUp);
-	}
-
-	/// <summary>
-	/// 
-	/// </summary>
-	void Update ()
-	{
-		if ((Input.GetKeyDown (KeyCode.Y) || Input.GetAxis ("DebugDown") > 0) && gameState != GameState.Combat) {
-			SetGameState (GameState.Combat);
-		} 
-
-		if (levelLoaded) {
-			if (InputHandler != null) 
-				InputHandler();
-			else Debug.LogError("InputHandler null state");
-		}
+	protected void CombatLoaded() {
+		SetGameState(GameState.Combat);
+		combatManager = GameObject.Find ("CombatManager").GetComponent<CombatManager> ();
+		combatManager.debug = false;
+		BoardManager.instance.InitializeMapForCombat (0);
 		
+		GameObject mapEditor = GameObject.Find ("MapEditor");
+		if (mapEditor != null)
+			Destroy (mapEditor);
+		
+		if (enemies == null || enemies.Count == 0) {
+			DebugEnemies ();
+		}
+		combatManager.SetupCombat (0, CurrentParty, enemies);
 	}
-
-	protected void StartOpenWorld ()
-	{
-		Application.LoadLevel ("OpenWorld");
-	}
-
+#endregion
+	
+#region ExternalStateChanges
 	/// <summary>
 	/// Called to switch to and start combat
 	/// </summary>
 	public void StartCombat (List<EnemyUnitInfo> newEnemies = null)
 	{
 		enemies = newEnemies;
-		Application.LoadLevel ("CombatTest");
+		LevelTransition.LoadLevel("CombatTest");
 	}
 
 	/// <summary>
@@ -272,7 +273,7 @@ public class GameManager : MonoBehaviour
 		} else { //defeat
 
 		}
-		SetGameState (GameState.OpenWorld);
+		LevelTransition.LoadLevel("OpenWorld");
 	}
 
 	/// <summary>
@@ -280,62 +281,29 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	public void FinishCustomizationMenu ()
 	{
-		SetGameState (GameState.OpenWorld);
+		LevelTransition.LoadLevel("OpenWorld");
 	}
+#endregion
 
 	/// <summary>
-	/// Function for initializing the open world 
+	/// Create enemies if none are given
 	/// </summary>
-	protected void OpenWorldLoaded ()
+	void DebugEnemies ()
 	{
-		openWorldCharacter = Instantiate(OpenWorldCharacterPrefab) as GameObject;
-		openWorldCharacter.transform.position = OpenWorldPosition;
-		StartCoroutine("OutOfBoundsCheck");
-	}
-
-	/// <summary>
-	/// Raises the level was loaded event.
-	/// </summary>
-	void OnLevelWasLoaded (int level)
-	{
-		if (_instance != this) //Object that is destroyed will still call this 
-			return;
-
-		levelLoaded = true;
-
-		if (Application.loadedLevelName == "CombatTest") {
-			combatManager = GameObject.Find ("CombatManager").GetComponent<CombatManager> ();
-			combatManager.debug = false;
-			BoardManager.instance.InitializeMapForCombat (0);
-
-			GameObject mapEditor = GameObject.Find ("MapEditor");
-			if (mapEditor != null)
-				Destroy (mapEditor);
-
-			if (enemies == null || enemies.Count == 0) {
-				enemies = new List<EnemyUnitInfo> ();
-				EnemyUnitInfo newUnit = ScriptableObject.CreateInstance<EnemyUnitInfo> ();
-				newUnit.UnitPrefab = Resources.Load ("EnemyUnitPrefabTest") as GameObject;
-				newUnit.MovementDistance = 3;
-				newUnit.Health = 400;
-				newUnit.AIType = CombatAIManager.AIType.Melee;
-				newUnit.ListOfAbilities.Add (Resources.Load<AbilityDescription> ("Abilities/EnemyAbilities/Bite"));
-				enemies.Add (newUnit);
-				newUnit = ScriptableObject.CreateInstance<EnemyUnitInfo> ();
-				newUnit.UnitPrefab = Resources.Load ("EnemyUnitPrefabTest") as GameObject;
-				newUnit.MovementDistance = 3;
-				newUnit.Health = 400;
-				newUnit.AIType = CombatAIManager.AIType.Melee;
-				newUnit.ListOfAbilities.Add (Resources.Load<AbilityDescription> ("Abilities/EnemyAbilities/Bite"));
-				enemies.Add (newUnit);
-			}
-			combatManager.SetupCombat (0, CurrentParty, enemies);
-		} else if (Application.loadedLevelName == "CustomizationMenu") {
-			CustomizationMenuLoaded ();
-		} else if (Application.loadedLevelName == "OpenWorld") {
-			OpenWorldLoaded ();
-		} else if (Application.loadedLevelName == "MainMenu") {
-			MainMenuLoaded();
-		}
+		enemies = new List<EnemyUnitInfo> ();
+		EnemyUnitInfo newUnit = ScriptableObject.CreateInstance<EnemyUnitInfo> ();
+		newUnit.UnitPrefab = Resources.Load ("EnemyUnitPrefabTest") as GameObject;
+		newUnit.MovementDistance = 3;
+		newUnit.Health = 400;
+		newUnit.AIType = CombatAIManager.AIType.Melee;
+		newUnit.ListOfAbilities.Add (Resources.Load<AbilityDescription> ("Abilities/EnemyAbilities/Bite"));
+		enemies.Add (newUnit);
+		newUnit = ScriptableObject.CreateInstance<EnemyUnitInfo> ();
+		newUnit.UnitPrefab = Resources.Load ("EnemyUnitPrefabTest") as GameObject;
+		newUnit.MovementDistance = 3;
+		newUnit.Health = 400;
+		newUnit.AIType = CombatAIManager.AIType.Melee;
+		newUnit.ListOfAbilities.Add (Resources.Load<AbilityDescription> ("Abilities/EnemyAbilities/Bite"));
+		enemies.Add (newUnit);
 	}
 }

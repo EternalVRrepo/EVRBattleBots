@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
@@ -18,7 +18,7 @@ public class UnitNamePlateGUI : MonoBehaviour
 	//============================================================================
 	// Initilization
 	//============================================================================
-	public void Initilize (PartyUnit unit)
+	public void Initialize (PartyUnit unit)
 	{
 		NameText.text = unit.Name;
 		LevelText.text = unit.currentLevel.ToString ();
