@@ -8,6 +8,7 @@ using System.Collections;
 
 public class MyHeroController3rdPerson : MonoBehaviour
 {
+	#region Variables
 	public float forwardSpeed = 3f, jumpSpeed = 15f;
 	public Transform CenterEyeAnchor;
 	public Transform cameraRig;
@@ -23,22 +24,24 @@ public class MyHeroController3rdPerson : MonoBehaviour
 
 	//Used For A Forward Camera Direction Not Influenced By The Roll & Tilt Of Headtracking. 
 	GameObject thirdPersonCameraDummyObject; 
-	
+	#endregion
+
+	//============================================================================
+	// Initilization
+	//============================================================================
+
 	void Start ()
 	{
 		CenterEyeAnchor = GameObject.Find ("CenterEyeAnchor").transform;
-		cameraRig = GameObject.Find("OVRCameraRig").transform;
+		cameraRig = GameObject.Find ("OVRCameraRig").transform;
 
 
 		//Get Components
 		character = transform.GetComponent<CharacterController> ();
 		animator = transform.GetComponentInChildren<Animator> ();
-//		Debug.Log (animator.gameObject);
 
 		//Set Speeds
 		airSpeed = forwardSpeed * 0.8f;
-//		backwardSpeed = forwardSpeed * 0.5f;
-//		strafeSpeed = forwardSpeed * 0.75f;
 
 		//Set Up Rig
 		if (thirdPersonCameraLockPivot == null) {
@@ -55,6 +58,10 @@ public class MyHeroController3rdPerson : MonoBehaviour
 		}	
 	}
 
+	//============================================================================
+	// Update
+	//============================================================================
+
 	void FixedUpdate ()
 	{
 		CameraSetUp ();
@@ -66,8 +73,6 @@ public class MyHeroController3rdPerson : MonoBehaviour
 	{
 		//Keep Pivot On Character's Center
 		thirdPersonCameraLockPivot.transform.position = Vector3.Lerp (thirdPersonCameraLockPivot.transform.position, transform.position + new Vector3 (0, character.height / 2, 0), Time.deltaTime * 10);
-//		cameraRig.rotation = Quaternion.RotateTowards (cameraRig.rotation, transform.rotation, Time.deltaTime);
-
 
 		//Set Up Dummmy Object
 		//Set Position
@@ -76,36 +81,6 @@ public class MyHeroController3rdPerson : MonoBehaviour
 		thirdPersonCameraDummyObject.transform.forward = CenterEyeAnchor.forward;
 
 		thirdPersonCameraDummyObject.transform.eulerAngles = new Vector3 (0, thirdPersonCameraDummyObject.transform.eulerAngles.y, 0); //Removed Roll & Tilt
-
-//		thirdPersonCameraLockPivot.transform.rotation *= Quaternion.Euler (0, CenterEyeAnhor.eulerAngles.y, 0);
-
-	}
-
-	void Update ()
-	{
-		//Collect Data
-		xJoystick = Input.GetAxis ("Horizontal");
-		yJoystick = Input.GetAxis ("Vertical");
-
-		//Animation
-		if (Mathf.Round (xJoystick) != 0 || Mathf.Round (yJoystick) != 0) 
-			animator.SetBool ("Walking", true);
-		else
-			animator.SetBool ("Walking", false);
-
-		//Check for Jump
-		Jump ();
-	}
-
-	/// <summary>
-	/// Tries to interact with whatever its looking at
-	/// </summary>
-	void TryInteract() {
-		if (!character.isGrounded)
-			return;
-
-		//Raycast for an infected object here
-		//InfectedObject.Interact();
 	}
 
 	void Move ()
@@ -136,7 +111,23 @@ public class MyHeroController3rdPerson : MonoBehaviour
 		//Remove velocity after landing
 		if (character.isGrounded)
 			velocity = Vector3.zero;
-	}	
+	}
+
+	void Update ()
+	{
+		//Collect Data
+		xJoystick = Input.GetAxis ("Horizontal");
+		yJoystick = Input.GetAxis ("Vertical");
+		
+		//Animation
+		if (Mathf.Round (xJoystick) != 0 || Mathf.Round (yJoystick) != 0) 
+			animator.SetBool ("Walking", true);
+		else
+			animator.SetBool ("Walking", false);
+		
+		//Check for Jump
+		Jump ();
+	}
 	
 	void Jump ()
 	{
@@ -148,7 +139,7 @@ public class MyHeroController3rdPerson : MonoBehaviour
 				velocity.y = jumpSpeed;
 			}
 		} else {
-			//						//Apply gravity to our velocity to diminish it over time
+			//Apply gravity to our velocity to diminish it over time
 			velocity.y += Physics.gravity.y * Time.deltaTime;
 			
 			//Movement in-air
@@ -156,4 +147,27 @@ public class MyHeroController3rdPerson : MonoBehaviour
 			movement.z *= airSpeed;
 		}
 	}
+	//============================================================================
+	// Events
+	//============================================================================
+
+	void OnControllerColliderHit (ControllerColliderHit hit)
+	{
+		if (hit.gameObject.tag == "Infection") {
+			Debug.Log ("Hit Infected Object: " + hit.gameObject.name);
+			hit.gameObject.GetComponent<Infection> ().Interact ();
+		}
+	}
+
+
+	/// Tries to interact with whatever its looking at
+	void TryInteract ()
+	{
+		if (!character.isGrounded)
+			return;
+		
+		//Raycast for an infected object here
+		//InfectedObject.Interact();
+	}
+	//============================================================================
 }

@@ -28,13 +28,4 @@ public class Infection : MonoBehaviour
 	{
 		GameManager.instance.StartCombat (enemies);
 	}
-
-	void OnCollisionEnter (Collision collision)
-	{
-		if (collisionTriggersBattle) {
-			if (collider.tag == "Player") {
-				Interact ();
-			}
-		}
-	}
 }
