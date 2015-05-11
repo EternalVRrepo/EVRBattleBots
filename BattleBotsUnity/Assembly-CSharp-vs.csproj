@@ -162,6 +162,7 @@
      <None Include="Assets\Imported\Shaders\ShaderForge\Example Assets\Shaders\LightCone.shader" />
      <None Include="Assets\Imported\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\MobileBloom.shader" />
      <None Include="Assets\Imported\Standard Assets\Particles\Sources\Shaders\Particle Alpha Blend (Queue +100).shader" />
+     <None Include="Assets\BattleBots\Shaders\DiffuseEmissiveOLD.shader" />
      <None Include="Assets\Imported\Shaders\ShaderForge\Readme.txt" />
      <None Include="Assets\Imported\Image Effects (Pro Only)\_Sources\Shaders\GlowCompose.shader" />
      <None Include="Assets\Plugins\Android\res\values-ko\assets.xml" />
