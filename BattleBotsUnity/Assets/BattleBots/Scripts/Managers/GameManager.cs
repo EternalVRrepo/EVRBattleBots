@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
 	public Vector3 OpenWorldPosition;
 	public GameObject OpenWorldCharacterPrefab;
 	public PartyUnit StartingCharacter;
+	public string lastOpenWorldLevel;
 
 	protected List<EnemyUnitInfo> enemies = new List<EnemyUnitInfo> ();
 	protected GameObject openWorldCharacter;
@@ -85,7 +86,7 @@ public class GameManager : MonoBehaviour
 	void Update ()
 	{
 		if ((Input.GetKeyDown (KeyCode.Y) || Input.GetAxis ("DebugDown") > 0) && gameState != GameState.Combat) {
-			StartCombat();
+			LevelTransition.LoadLevel("GameMap_08");
 		} 
 		
 		if (InputHandler != null) 
@@ -154,7 +155,7 @@ public class GameManager : MonoBehaviour
 			CombatLoaded();
 		} else if (Application.loadedLevelName == "CustomizationMenu") {
 			CustomizationMenuLoaded ();
-		} else if (Application.loadedLevelName == "OpenWorld") {
+		} else if (Application.loadedLevelName == "OpenWorld" || Application.loadedLevelName == "GameMap_08") {
 			OpenWorldLoaded ();
 		} else if (Application.loadedLevelName == "MainMenu") {
 			MainMenuLoaded();
@@ -212,7 +213,12 @@ public class GameManager : MonoBehaviour
 	{
 		SetGameState(GameState.OpenWorld);
 		openWorldCharacter = Instantiate(OpenWorldCharacterPrefab) as GameObject;
-		openWorldCharacter.transform.position = OpenWorldPosition;
+		if (Application.loadedLevelName == lastOpenWorldLevel) {
+			openWorldCharacter.transform.position = OpenWorldPosition;
+		}
+		else {
+			openWorldCharacter.transform.position = GameObject.Find("SpawnPoint").transform.position;
+		}
 		StartCoroutine("OutOfBoundsCheck");
 
 		if (finishedCombat) {
@@ -230,6 +236,11 @@ public class GameManager : MonoBehaviour
 					PartyUnit p = (ScriptableObject.CreateInstance<PartyUnit>());
 					p.Initialize(lastInfection.partyUnitReward);
 					CurrentParty.Add(p);
+				}
+
+				Debug.Log (lastInfectionName);
+				if (lastInfectionName == "Virus0") {
+					LevelTransition.QueueLoadLevel("GameMap_08");
 				}
 			}
 		}
@@ -309,8 +320,10 @@ public class GameManager : MonoBehaviour
 #endregion
 
 	public void UpdateWorldPos() {
-		if (gameState == GameState.OpenWorld)
+		if (gameState == GameState.OpenWorld) {
+			lastOpenWorldLevel = Application.loadedLevelName;
 			OpenWorldPosition = openWorldCharacter.transform.position;
+		}
 	}
 
 	/// <summary>

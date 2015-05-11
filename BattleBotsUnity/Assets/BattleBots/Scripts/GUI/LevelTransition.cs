@@ -57,6 +57,13 @@ public class LevelTransition : MonoBehaviour {
 	}
 
 	/// <summary>
+	/// Loads the level given
+	/// </summary>
+	public static void QueueLoadLevel(string levelName) {
+		instance.StartCoroutine("QueueFadeLevel", levelName);
+	}
+
+	/// <summary>
 	/// Creates the fade cube and attaches it to the camera
 	/// </summary>
 	private void CreateLeftFadeCube() {
@@ -80,6 +87,16 @@ public class LevelTransition : MonoBehaviour {
 		_RightFadeCube = cube;
 	}
 
+	IEnumerator QueueFadeLevel(string levelName) {
+		float T = Time.time + 10f;
+		while (fading) {
+			if (Time.time > T)
+				yield break;
+
+			yield return null;
+		}
+		StartCoroutine("FadeLevel", levelName);
+	}
 
 	/// <summary>
 	/// Load the level with the fade in and out
