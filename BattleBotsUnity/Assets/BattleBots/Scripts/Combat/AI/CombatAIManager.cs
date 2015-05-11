@@ -51,6 +51,7 @@ public class CombatAIManager : MonoBehaviour {
 		}
 
 		currentUnit = enemies[enemyIndex];
+		currentUnit.animator.SetBool("Idle", true);
 		BoardManager.instance.StartTurn();
 		currentUnit.StartTurn();
 		enemyIndex++;
@@ -71,13 +72,20 @@ public class CombatAIManager : MonoBehaviour {
 			if (path != null) {
 				int i = 0;
 				Hexagon curr = null;
+				currentUnit.animator.SetBool("Walking", true);
 				while (currentUnit.remainingMoveDistance >= 0 && i < path.Count-1) { //Count-1 because the path leads ontop of another unit, so stop 1 short
 					curr = path[i];
 					currentUnit.IssueMovement (curr);
-					yield return new WaitForSeconds(0.74f);
+					currentUnit.transform.LookAt(new Vector3(curr.transform.position.x, currentUnit.transform.position.y, curr.transform.position.z));
+					while (currentUnit.transform.position != curr.transform.position) {
+						currentUnit.transform.position = Vector3.MoveTowards(currentUnit.transform.position, curr.transform.position, 1.35f*Time.deltaTime);
+						yield return null;
+					}
 					currentUnit.remainingMoveDistance--;
 					i++;
 				}
+				currentUnit.animator.SetBool("Walking", false);
+				yield return new WaitForSeconds(.5f);
 			}
 		}
 		StartCoroutine ("SelectAbility");
@@ -128,8 +136,20 @@ public class CombatAIManager : MonoBehaviour {
 		}
 		a = target;
 
+		StartCoroutine("LookAtTarget", target.gameObject);
 
 		return 1;
+	}
+
+	IEnumerator LookAtTarget(GameObject target) {
+		Vector3 dir = (target.transform.position - currentUnit.transform.position).normalized;
+		dir.y = currentUnit.transform.position.y;
+		Quaternion rot = Quaternion.LookRotation(dir);
+
+		while (currentUnit.transform.rotation != rot) {
+			currentUnit.transform.rotation = Quaternion.Slerp(currentUnit.transform.rotation, rot, Time.deltaTime * 2f);
+			yield return null;
+		}
 	}
 
 	/// <summary>
@@ -166,6 +186,8 @@ public class CombatAIManager : MonoBehaviour {
 	/// Decides what to target with the ability
 	/// </summary>
 	IEnumerator TargetAbility() {
+		currentUnit.animator.SetTrigger(currentUnit.Name + AbilitySelected.DisplayName);
+		
 		if (AbilitySelected != null) { //If we have an ability to use
 			AbilityTarget.ReceiveAbilityHit(AbilitySelected);
 //			Debug.Log ("Hit " + AbilityTarget.CurrentlyOccupiedHexagon + " with " + AbilitySelected.name);

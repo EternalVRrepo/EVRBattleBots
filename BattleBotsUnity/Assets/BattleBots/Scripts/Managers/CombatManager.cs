@@ -217,6 +217,8 @@ public class CombatManager : MonoBehaviour
 	void EnterStateMovementSelection ()
 	{
 		currentPhaseStateMethod = new CurrentPhaseState (StateMovementSelection);
+		CurrentlySelectedUnit.animator.SetBool("Idle", false);
+		CurrentlySelectedUnit.animator.SetBool("ReadyIdle", true);
 		CombatUIManager.instance.StartMovementPhase();
 		CurrentPhase = PhaseState.SelectMovement;
 		currentMoveDistance = CurrentlySelectedUnit.remainingMoveDistance;
@@ -289,6 +291,8 @@ public class CombatManager : MonoBehaviour
 	void EnterStateEndOfTurn ()
 	{
 		currentPhaseStateMethod = new CurrentPhaseState (StateEndOfTurn);
+		CurrentlySelectedUnit.animator.SetBool("ReadyIdle", false);
+		CurrentlySelectedUnit.animator.SetBool("Idle", true);
 		abilityTooltip.displayed = false;
 		currentlySelectedUnit.AbilityActivator.FinishAbility();
 		CurrentlySelectedUnit.EndTurn ();
@@ -343,6 +347,7 @@ public class CombatManager : MonoBehaviour
 			if (!BoardManager.instance.CanMove (h)) //Every hexagon should be -1 when not able to be moved to
 				return;
 
+			CurrentlySelectedUnit.animator.SetBool("Walking", true);
 			EnterStateWaiting ();
 			CurrentlySelectedUnit.remainingMoveDistance -= h.CurrentDistance;
 			BoardManager.instance.FinishMovement ();
@@ -364,9 +369,15 @@ public class CombatManager : MonoBehaviour
 		while (curr != h) {
 			curr = path [i];
 			CurrentlySelectedUnit.IssueMovement (curr);
-			yield return new WaitForSeconds (0.74f);
+			CurrentlySelectedUnit.transform.LookAt(new Vector3(curr.transform.position.x, CurrentlySelectedUnit.transform.position.y, curr.transform.position.z));
+			while (CurrentlySelectedUnit.transform.position != curr.transform.position) {
+				CurrentlySelectedUnit.transform.position = Vector3.MoveTowards(CurrentlySelectedUnit.transform.position, curr.transform.position, .9f*Time.deltaTime);
+				yield return null;
+			}
 			i++;
 		}
+		CurrentlySelectedUnit.animator.SetBool("Walking", false);
+
 
 		if (CurrentlySelectedUnit.remainingMoveDistance > 0)
 			EnterStateMovementSelection ();
@@ -480,6 +491,7 @@ public class CombatManager : MonoBehaviour
 	IEnumerator UseAbility ()
 	{
 		EnterStateWaiting();
+		CurrentlySelectedUnit.animator.SetTrigger(CurrentlySelectedUnit.AbilityActivator.AbilityInProgress.DisplayName);
 		CurrentlySelectedUnit.AbilityActivator.ChannelAbility ();
 		while (CurrentlySelectedUnit.AbilityActivator.isCasting) {
 			yield return null;
@@ -643,7 +655,9 @@ public class CombatManager : MonoBehaviour
 
 		List<EnemyUnitInfo> enemies = new List<EnemyUnitInfo>();
 		foreach (EnemyUnitInfo e in DebugEnemies) {
-			enemies.Add(new EnemyUnitInfo(e));
+			EnemyUnitInfo enemy = ScriptableObject.CreateInstance<EnemyUnitInfo>();
+			enemy.Initialize(e);
+			enemies.Add(enemy);
 		}
 
 		SetupCombat (0, CurrentParty, enemies);

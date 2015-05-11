@@ -38,8 +38,10 @@ public class AbilityActivator : MonoBehaviour {
 		if (ListOfAbilities[abilityNumber].currentCooldown > 0)
 			return null;
 
-		AbilityInProgress = ListOfAbilities[abilityNumber];
-//		UnitsToHit.Clear (); //Reset units we are gonna hit
+		AbilityDescription a = ScriptableObject.CreateInstance<AbilityDescription>();
+		a.Initialize(ListOfAbilities[abilityNumber]);
+		AbilityInProgress = a;
+
 		mods.Clear ();
 
 		if (AbilityInProgress.AbilityTargetType != AbilityDescription.TargetType.CustomTemplate) {

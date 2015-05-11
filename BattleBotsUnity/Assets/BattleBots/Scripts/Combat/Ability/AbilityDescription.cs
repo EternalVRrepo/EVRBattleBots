@@ -1,4 +1,4 @@
-﻿/////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
 //
 //	AbilityDescription.cs
 //	© EternalVR, All Rights Reserved
@@ -48,7 +48,7 @@ public class AbilityDescription : ScriptableObject {
 	public List<DebuffEffect> debuffs = new List<DebuffEffect>();
 	public List<BuffEffect> buffs = new List<BuffEffect>();
 
-	public AbilityDescription(AbilityDescription a) {
+	public void Initialize(AbilityDescription a) {
 		DisplayName = a.DisplayName;
 		TooltipText = a.TooltipText;
 		AbilityIcon = a.AbilityIcon;

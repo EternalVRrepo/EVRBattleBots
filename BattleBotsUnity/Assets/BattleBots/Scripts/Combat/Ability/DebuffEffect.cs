@@ -47,6 +47,8 @@ public class DebuffEffect : StatusEffect {
 		DebuffType = e.DebuffType;
 		Damage = e.Damage;
 		SlowPercent = e.SlowPercent;
+		StaticGripDamagePerHex = e.StaticGripDamagePerHex;
+		RequireUnstableStatic = e.RequireUnstableStatic;
 	}
 
 	/// <summary>

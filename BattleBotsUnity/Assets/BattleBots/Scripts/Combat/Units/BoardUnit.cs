@@ -55,6 +55,7 @@ public abstract class BoardUnit : MonoBehaviour {
 			return abilityActivator;
 		}
 	}
+	public Animator animator;
 
 	[SerializeField]
 	private Hexagon currentlyOccupiedHexagon;
@@ -72,15 +73,22 @@ public abstract class BoardUnit : MonoBehaviour {
 
 	public void Spawn (Hexagon h) {
 		AddToHexagon (h);
+		transform.position = h.transform.position + new Vector3(0, .02f, 0);
 		GameObject go = Instantiate (healthBarPrefab) as GameObject;
 		healthBar = go.GetComponent<HealthBar>();
 		healthBar.SetUnit(this);
+		animator = transform.GetComponentInChildren<Animator> ();
+		animator.SetBool("Idle", true);
 	}
 
 	/// <summary>
 	/// Receives an ability hit and applies status effects
 	/// </summary>
-	public void ReceiveAbilityHit(AbilityDescription ability, List<AbilityModifier> modifiers = null) {
+	public void ReceiveAbilityHit(AbilityDescription abilityHit, List<AbilityModifier> modifiers = null) {
+
+//		AbilityDescription ability = new AbilityDescription(abilityHit);
+		AbilityDescription ability = ScriptableObject.CreateInstance<AbilityDescription>();
+		ability.Initialize(abilityHit);
 
 		if (modifiers != null) {
 			foreach (AbilityModifier mod in modifiers) {
@@ -360,11 +368,29 @@ public abstract class BoardUnit : MonoBehaviour {
 	/// This unit dies
 	/// </summary>
 	protected void Die() {
+		StartCoroutine("DeathAnimation");
+
+	}
+
+	IEnumerator DeathAnimation() {
 		alive = false;
 		healthBar.gameObject.SetActive (false);
-		CombatManager.instance.KillUnit(this);
 		currentlyOccupiedHexagon.RemoveUnit (this);
+		this.enabled = false;
+
+		animator.SetTrigger("Death");
+		yield return new WaitForEndOfFrame();
+		float t = 4;
+		while (t > 0) {
+			t -= Time.deltaTime;
+			transform.position = Vector3.MoveTowards(transform.position, 
+			            new Vector3(transform.position.x, 
+			            CurrentlyOccupiedHexagon.transform.position.y - .7f,
+			            transform.position.z), .4f*Time.deltaTime);
+			yield return null;
+		}
 		gameObject.SetActive (false);
+		CombatManager.instance.KillUnit(this);
 	}
 
 	/// <summary>
@@ -569,6 +595,7 @@ public abstract class BoardUnit : MonoBehaviour {
 	/// Determines whether this instance can take turn.
 	/// </summary>
 	public bool CanTakeTurn() {
+
 		if (stunned)
 			return false;
 
@@ -755,6 +782,5 @@ public abstract class BoardUnit : MonoBehaviour {
 	protected void AddToHexagon(Hexagon hex) {
 		hex.AddUnit(this);
 		CurrentlyOccupiedHexagon = hex;
-		transform.position = hex.UnitAnchorPoint;
 	}
 }

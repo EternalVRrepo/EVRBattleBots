@@ -1,4 +1,4 @@
-﻿/////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
 //
 //	EnemyUnitInfo.cs
 //	© EternalVR, All Rights Reserved
@@ -27,7 +27,7 @@ public class EnemyUnitInfo : ScriptableObject {
 	public GameObject newModel;
 	public AbilityDescription newAbility;
 
-	public EnemyUnitInfo(EnemyUnitInfo e) {
+	public void Initialize(EnemyUnitInfo e) {
 		Name = e.Name;
 		Health = e.Health;
 		MovementDistance = e.MovementDistance;
@@ -37,9 +37,13 @@ public class EnemyUnitInfo : ScriptableObject {
 		newAbility = e.newAbility;
 
 		foreach (AbilityDescription ab in e.ListOfAbilities) {
-			ListOfAbilities.Add(new AbilityDescription(ab));
+			AbilityDescription a = ScriptableObject.CreateInstance<AbilityDescription>();
+			a.Initialize(ab);
+			ListOfAbilities.Add(a);
 		}
 	}
+
+	public EnemyUnitInfo() {}
 
 	/// <summary>
 	/// Adds a new ability to the list of abilities

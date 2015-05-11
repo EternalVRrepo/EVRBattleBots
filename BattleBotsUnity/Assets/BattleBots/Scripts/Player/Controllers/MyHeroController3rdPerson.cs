@@ -154,7 +154,7 @@ public class MyHeroController3rdPerson : MonoBehaviour
 	void OnControllerColliderHit (ControllerColliderHit hit)
 	{
 		if (hit.gameObject.tag == "Infection") {
-			Debug.Log ("Hit Infected Object: " + hit.gameObject.name);
+//			Debug.Log ("Hit Infected Object: " + hit.gameObject.name);
 			hit.gameObject.GetComponent<Infection> ().Interact ();
 		}
 	}

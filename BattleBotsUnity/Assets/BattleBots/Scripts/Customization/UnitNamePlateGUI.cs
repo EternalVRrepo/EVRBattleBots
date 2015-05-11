@@ -10,7 +10,7 @@ public class UnitNamePlateGUI : MonoBehaviour
 
 	[HideInInspector]
 	public string
-		name;
+		displayName;
 	[HideInInspector]
 	public int
 		level;

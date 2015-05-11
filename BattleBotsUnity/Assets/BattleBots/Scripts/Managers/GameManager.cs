@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
 		p.Initialize(StartingCharacter);
 		CurrentParty.Add(p);
 		LevelTransition.OnLevelLoad += OnLevelLoad;
-		
+		PlayerPrefs.DeleteAll();
 	}
 
 	/// <summary>
@@ -180,7 +180,7 @@ public class GameManager : MonoBehaviour
 
 #region StateInput
 	protected void MainMenuInput() {
-		if (Input.GetButtonDown("Start") || Input.GetButtonDown("Confirm")) {
+		if (Input.GetButtonDown("Start") || Input.GetButtonDown("Confirm") || Input.GetKeyDown(KeyCode.Mouse0)) {
 			LevelTransition.LoadLevel("OpenWorld");
 		}
 	}
@@ -214,6 +214,25 @@ public class GameManager : MonoBehaviour
 		openWorldCharacter = Instantiate(OpenWorldCharacterPrefab) as GameObject;
 		openWorldCharacter.transform.position = OpenWorldPosition;
 		StartCoroutine("OutOfBoundsCheck");
+
+		if (finishedCombat) {
+			finishedCombat = false;
+			GameObject inf = GameObject.Find(lastInfectionName);
+			if (inf != null)
+				lastInfection = inf.GetComponent<Infection>();
+
+			if (victory) {
+				lastInfection.Clean();
+				foreach (PartyUnit u in CurrentParty) {
+					u.AddXP (lastInfection.xpReward);
+				}
+				if (lastInfection.partyUnitReward != null) {
+					PartyUnit p = (ScriptableObject.CreateInstance<PartyUnit>());
+					p.Initialize(lastInfection.partyUnitReward);
+					CurrentParty.Add(p);
+				}
+			}
+		}
 	}
 
 	/// <summary>
@@ -257,8 +276,10 @@ public class GameManager : MonoBehaviour
 	/// <summary>
 	/// Called to switch to and start combat
 	/// </summary>
-	public void StartCombat (List<EnemyUnitInfo> newEnemies = null)
+	public void StartCombat (List<EnemyUnitInfo> newEnemies = null, Infection i = null)
 	{
+		if (i != null) 
+			lastInfectionName = i.name;
 		enemies = newEnemies;
 		LevelTransition.LoadLevel("CombatTest");
 	}
@@ -266,15 +287,15 @@ public class GameManager : MonoBehaviour
 	/// <summary>
 	/// Finish combat and return to the open world, called from combat manager when its finished
 	/// </summary>
+	public Infection lastInfection;
+	public string lastInfectionName;
+	public bool finishedCombat;
+	public bool victory;
 	public void FinishCombat (bool win)
 	{
-		if (win) { //victory
-			foreach (PartyUnit u in CurrentParty) {
-				u.AddXP (10);
-			}
-		} else { //defeat
+		finishedCombat = true;
+		victory = win;
 
-		}
 		LevelTransition.LoadLevel("OpenWorld");
 	}
 
@@ -287,6 +308,11 @@ public class GameManager : MonoBehaviour
 	}
 #endregion
 
+	public void UpdateWorldPos() {
+		if (gameState == GameState.OpenWorld)
+			OpenWorldPosition = openWorldCharacter.transform.position;
+	}
+
 	/// <summary>
 	/// Create enemies if none are given
 	/// </summary>
@@ -294,14 +320,16 @@ public class GameManager : MonoBehaviour
 	{
 		enemies = new List<EnemyUnitInfo> ();
 		EnemyUnitInfo newUnit = ScriptableObject.CreateInstance<EnemyUnitInfo> ();
-		newUnit.UnitPrefab = Resources.Load ("EnemyUnitPrefabTest") as GameObject;
+		newUnit.Name = "MechromancerMinion";
+		newUnit.UnitPrefab = Resources.Load ("Characters/MechromancerMinion") as GameObject;
 		newUnit.MovementDistance = 3;
 		newUnit.Health = 400;
 		newUnit.AIType = CombatAIManager.AIType.Melee;
 		newUnit.ListOfAbilities.Add (Resources.Load<AbilityDescription> ("Abilities/EnemyAbilities/Bite"));
 		enemies.Add (newUnit);
 		newUnit = ScriptableObject.CreateInstance<EnemyUnitInfo> ();
-		newUnit.UnitPrefab = Resources.Load ("EnemyUnitPrefabTest") as GameObject;
+		newUnit.Name = "MechromancerMinion";
+		newUnit.UnitPrefab = Resources.Load ("Characters/MechromancerMinion") as GameObject;
 		newUnit.MovementDistance = 3;
 		newUnit.Health = 400;
 		newUnit.AIType = CombatAIManager.AIType.Melee;

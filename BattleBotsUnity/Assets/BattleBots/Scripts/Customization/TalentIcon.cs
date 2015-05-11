@@ -7,7 +7,7 @@ public class TalentIcon : MonoBehaviour
 	[HideInInspector]
 	public PlatformManager
 		pm;
-	public string name, description;
+	public string displayName, description;
 	public bool selected {
 		get { 
 			return selectedInstance; 

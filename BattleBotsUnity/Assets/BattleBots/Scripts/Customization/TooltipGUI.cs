@@ -8,14 +8,12 @@ public class TooltipGUI : MonoBehaviour
 	public Text tooltipName;
 	public Text tooltipDescription;
 	public RawImage background;
-	Canvas canvas;
 
-	Color name, description, bg;
+	Color colorName, description, bg;
 
 	void Start ()
 	{
-		canvas = GetComponent<Canvas> ();
-		name = tooltipName.color;
+		colorName = tooltipName.color;
 		description = tooltipDescription.color;
 		bg = background.color;
 		tooltipName.color = Color.clear;
@@ -30,7 +28,7 @@ public class TooltipGUI : MonoBehaviour
 			tooltipDescription.text = ccm.tooltipTextDescription;
 
 			if (ccm.displayTooltip) {
-				tooltipName.color = name;
+				tooltipName.color = colorName;
 				tooltipDescription.color = description;
 				background.color = bg;
 			} else {

@@ -18,6 +18,7 @@ using System.Collections;
 public class NonPlayerControlledBoardUnit : BoardUnit {
 
 	public CombatAIManager.AIType AIType;
+	public string Name;
 
 	public override void IssueMovement(Hexagon h) {
 		MoveToHexagon (h);
@@ -27,6 +28,7 @@ public class NonPlayerControlledBoardUnit : BoardUnit {
 	/// Initialize the unit based  on a PartyUnit
 	/// </summary>
 	public void Initialize(EnemyUnitInfo u) {
+		Name = u.Name;
 		MoveDistance = u.MovementDistance;
 		AbilityActivator.ListOfAbilities = u.ListOfAbilities;
 		MaxHealth = u.Health;

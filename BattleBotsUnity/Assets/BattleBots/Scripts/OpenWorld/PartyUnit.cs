@@ -46,8 +46,9 @@ public class PartyUnit : ScriptableObject {
 		UnitTalentTree = unit.UnitTalentTree;
 
 		foreach (AbilityDescription ab in unit.ListOfAbilities) {
-//			AbilityDescription a = ScriptableObject.CreateInstance<AbilityDescription>();
-			ListOfAbilities.Add(new AbilityDescription(ab));
+			AbilityDescription a = ScriptableObject.CreateInstance<AbilityDescription>();
+			a.Initialize(ab);
+			ListOfAbilities.Add(a);
 		}
 	}
 

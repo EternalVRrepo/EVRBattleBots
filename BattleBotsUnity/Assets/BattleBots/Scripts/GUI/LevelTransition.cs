@@ -28,14 +28,15 @@ public class LevelTransition : MonoBehaviour {
 	public bool fading;
 
 	private static LevelTransition _instance;
-	private GameObject FadeCube {
+	private GameObject LeftFadeCube {
 		get {
-			if (_FadeCube == null)
-				CreateFadeCube();
-			return _FadeCube;
+			if (_LeftFadeCube == null)
+				CreateLeftFadeCube();
+			return _LeftFadeCube;
 		}
 	}
-	private GameObject _FadeCube;
+	private GameObject _LeftFadeCube;
+
 	public Color clear = new Color(0,0,0,0);
 	public Color black = new Color(0,0,0,1);
 
@@ -50,13 +51,13 @@ public class LevelTransition : MonoBehaviour {
 	/// <summary>
 	/// Creates the fade cube and attaches it to the camera
 	/// </summary>
-	private void CreateFadeCube() {
+	private void CreateLeftFadeCube() {
 		GameObject anchor = GameObject.Find ("LeftEyeAnchor");
 		GameObject cube = Instantiate(Resources.Load<GameObject>("Misc/FadeCube")) as GameObject;
 		cube.renderer.material.color = clear;
 		cube.transform.parent = anchor.transform;
 		cube.transform.localPosition = new Vector3(0,0,0);
-		_FadeCube = cube;
+		_LeftFadeCube = cube;
 	}
 
 	/// <summary>
@@ -64,8 +65,9 @@ public class LevelTransition : MonoBehaviour {
 	/// </summary>
 	IEnumerator FadeLevel(string levelName) {
 		fading = true;
-		while (FadeCube.renderer.material.color.a < .99f) {
-			FadeCube.renderer.material.color = Color.Lerp(FadeCube.renderer.material.color, black, .02f);
+		GameManager.instance.UpdateWorldPos();
+		while (LeftFadeCube.renderer.material.color.a < .99f) {
+			LeftFadeCube.renderer.material.color = Color.Lerp(LeftFadeCube.renderer.material.color, black, .026f);
 			yield return null;
 		}
 		Application.LoadLevel(levelName);
@@ -73,15 +75,16 @@ public class LevelTransition : MonoBehaviour {
 			yield return null;
 		}
 		OnLevelLoad();
-		CreateFadeCube();
-		FadeCube.renderer.material.color = black;
+		CreateLeftFadeCube();
+		LeftFadeCube.renderer.material.color = black;
+
 		yield return new WaitForSeconds(.15f);
-		while (FadeCube.renderer.material.color.a > .01f) {
-			FadeCube.renderer.material.color = Color.Lerp(FadeCube.renderer.material.color, clear, .02f);
+		while (LeftFadeCube.renderer.material.color.a > .01f) {
+			LeftFadeCube.renderer.material.color = Color.Lerp(LeftFadeCube.renderer.material.color, clear, .026f);
 			yield return null;
 		}
 		fading = false;
-		FadeCube.renderer.material.color = clear;
+		LeftFadeCube.renderer.material.color = clear;
 		yield return null;
 	}
 }

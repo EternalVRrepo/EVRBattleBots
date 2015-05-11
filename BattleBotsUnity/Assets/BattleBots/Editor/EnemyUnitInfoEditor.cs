@@ -24,7 +24,7 @@ public class EnemyUnitInfoEditor : Editor {
 
 		EditorGUILayout.BeginHorizontal ();
 		EditorGUILayout.LabelField ("Name:");
-		enemyUnit.name = EditorGUILayout.TextField (enemyUnit.name);
+		enemyUnit.Name = EditorGUILayout.TextField (enemyUnit.Name);
 		EditorGUILayout.EndHorizontal ();
 
 		EditorGUILayout.BeginHorizontal ();

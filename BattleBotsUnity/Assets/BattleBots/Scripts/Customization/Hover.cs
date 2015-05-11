@@ -9,7 +9,7 @@ public class Hover : MonoBehaviour
 
 	[HideInInspector]
 	public bool
-		active;
+		isActive;
 
 	[HideInInspector]
 	public Vector3
@@ -65,7 +65,7 @@ public class Hover : MonoBehaviour
 		timer += Time.deltaTime;
 
 		HoverHandler (hit);
-		GlowObjectAnimation (active);
+		GlowObjectAnimation (isActive);
 	}
 
 	void HoverHandler (bool target)
@@ -166,15 +166,15 @@ public class Hover : MonoBehaviour
 			if (CCManager.currentlySelectedCharacter != null) 
 				CCManager.currentlySelectedCharacter.SetWindowsActive (false);
 			CCManager.currentlySelectedCharacter = platformManager;
-			active = true;
+			isActive = true;
 		}
 	}
 
 	void ToggleTalentWindow ()
 	{
-		active = !active;
+		isActive = !isActive;
 		if (platformManager.isActive)
-			platformManager.TalentWindow.SetActive (active);
+			platformManager.TalentWindow.SetActive (isActive);
 		timer = 0;
 	}
 }
