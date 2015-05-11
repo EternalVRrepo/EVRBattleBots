@@ -1,15 +1,9 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\BattleBots\Scripts\Player\Controllers\MyHeroController3rdPerson.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\BattleBots\Scripts\Managers\TemplateManager.cs">
     <Files>
-      <File FileName="Assets\BattleBots\Scripts\Combat\Ability\AbilityActivator.cs" Line="62" Column="32" />
-      <File FileName="Assets\BattleBots\Scripts\Managers\CombatManager.cs" Line="437" Column="39" />
-      <File FileName="Assets\BattleBots\Scripts\Combat\Units\BoardUnit.cs" Line="92" Column="12" />
-      <File FileName="Assets\BattleBots\Scripts\Combat\UI\Abilities.cs" Line="19" Column="23" />
-      <File FileName="Assets\BattleBots\Scripts\OpenWorld\PartyUnit.cs" Line="1" Column="1" />
-      <File FileName="Assets\BattleBots\Scripts\Managers\GameManager.cs" Line="220" Column="1" />
-      <File FileName="Assets\BattleBots\Scripts\OpenWorld\Infection.cs" Line="1" Column="1" />
-      <File FileName="Assets\BattleBots\Scripts\Player\Controllers\MyHeroController3rdPerson.cs" Line="1" Column="1" />
+      <File FileName="Assets\BattleBots\Scripts\Managers\TemplateManager.cs" Line="90" Column="35" />
+      <File FileName="Assets\BattleBots\Scripts\Combat\Ability\AbilityActivator.cs" Line="72" Column="80" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

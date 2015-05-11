@@ -67,6 +67,8 @@ public class CombatAIManager : MonoBehaviour {
 	/// Decides where to move a unit
 	/// </summary>
 	IEnumerator MoveUnit() {
+		yield return new WaitForSeconds(.5f);
+
 		if (currentUnit.CanMove()) {
 			List<Hexagon> path = GetBestPath();
 			if (path != null) {

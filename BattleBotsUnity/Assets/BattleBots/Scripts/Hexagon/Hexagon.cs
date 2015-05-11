@@ -130,6 +130,7 @@ public class Hexagon : MonoBehaviour {
 		}
 	}
 
+
 	HexType type;
 	protected void SetForceField(bool b) {
 		if (b) {

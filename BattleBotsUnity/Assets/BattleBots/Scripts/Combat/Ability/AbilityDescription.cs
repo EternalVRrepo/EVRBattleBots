@@ -47,6 +47,8 @@ public class AbilityDescription : ScriptableObject {
 	public int HexDuration; //Duration it stays on a hex
 	public List<DebuffEffect> debuffs = new List<DebuffEffect>();
 	public List<BuffEffect> buffs = new List<BuffEffect>();
+	public BoardUnit sourceUnit;
+	public Hexagon targetHexagon;
 
 	public void Initialize(AbilityDescription a) {
 		DisplayName = a.DisplayName;

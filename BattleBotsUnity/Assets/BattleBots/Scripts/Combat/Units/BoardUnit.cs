@@ -121,12 +121,18 @@ public abstract class BoardUnit : MonoBehaviour {
 		staticShellEffect = Instantiate(Resources.Load<GameObject>("Abilities/Effects/General/StaticShell")) as GameObject;
 		staticShellEffect.transform.parent = transform;
 		staticShellEffect.transform.localPosition = Vector3.zero;	
+
+		staticGripEffect = Instantiate(Resources.Load<GameObject>("Abilities/Effects/General/StaticGrip")) as GameObject;
+		staticGripEffect.transform.parent = transform;
+		staticGripEffect.transform.localPosition = Vector3.zero;	
 	}
 
 	/// <summary>
 	/// Receives an ability hit and applies status effects
 	/// </summary>
 	public void ReceiveAbilityHit(AbilityDescription abilityHit, List<AbilityModifier> modifiers = null) {
+
+		animator.SetTrigger ("Hit");
 
 //		AbilityDescription ability = new AbilityDescription(abilityHit);
 		AbilityDescription ability = ScriptableObject.CreateInstance<AbilityDescription>();
@@ -431,9 +437,9 @@ public abstract class BoardUnit : MonoBehaviour {
 		currentlyOccupiedHexagon.RemoveUnit (this);
 		this.enabled = false;
 
-		animator.SetTrigger("Death");
+		animator.SetBool("Death", true);
 		yield return new WaitForEndOfFrame();
-		float t = 4;
+		float t = 4 + Random.value;
 		while (t > 0) {
 			t -= Time.deltaTime;
 			transform.position = Vector3.MoveTowards(transform.position, 
@@ -796,8 +802,10 @@ public abstract class BoardUnit : MonoBehaviour {
 	/// </summary>
 	public void KnockBack(Hexagon source, int distance) {
 		Hexagon h = BoardManager.instance.GetKnockbackHex(source, CurrentlyOccupiedHexagon, distance);
-		if (h != null)
+		if (h != null) {
 			IssueMovement (h);
+			transform.position = h.UnitAnchorPoint;
+		}
 	}
 
 	/// <summary>

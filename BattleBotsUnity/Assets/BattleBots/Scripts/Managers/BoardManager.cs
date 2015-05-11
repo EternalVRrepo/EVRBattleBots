@@ -643,7 +643,6 @@ public class BoardManager : MonoBehaviour {
 	/// Gets the knockback hex using a source and distan ce
 	/// </summary>
 	public Hexagon GetKnockbackHex(Hexagon source, Hexagon current, int dist) {
-
 		List<Hexagon> neighbors = GetNeighborsMovement(current);
 		Hexagon end = current;
 		float d = 0;

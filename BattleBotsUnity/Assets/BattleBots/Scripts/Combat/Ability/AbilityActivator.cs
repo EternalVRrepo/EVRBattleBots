@@ -40,7 +40,9 @@ public class AbilityActivator : MonoBehaviour {
 
 		AbilityDescription a = ScriptableObject.CreateInstance<AbilityDescription>();
 		a.Initialize(ListOfAbilities[abilityNumber]);
-		AbilityInProgress = a;
+		a.sourceUnit = GetComponent<BoardUnit>();
+
+		AbilityInProgress = a; 
 
 		mods.Clear ();
 
@@ -67,6 +69,7 @@ public class AbilityActivator : MonoBehaviour {
 		}
 		BoardManager.instance.FinishAbility();
 		StartCoroutine ("CastAbility", TemplateManager.instance.FinishAbility ());
+		GetComponent<BoardUnit>().animator.SetTrigger(AbilityInProgress.DisplayName);
 	}
 	
 	/// <summary>
@@ -242,6 +245,7 @@ public class AbilityActivator : MonoBehaviour {
 	/// </summary>
 	public bool CheckValidTarget(Hexagon hex) {
 		targetHexagon = hex;
+		AbilityInProgress.targetHexagon = hex;
 		
 		if (hex == null)
 			return false;

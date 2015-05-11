@@ -144,9 +144,9 @@ public class CombatManager : MonoBehaviour
 			CyclePowerUpMenu ();
 		}
 		//TODO DEBUG only
-		if (Input.GetKeyDown (KeyCode.A) && PowerUpPhase () && GameManager.instance.CurrentPowerUps.Count > 0) { //Needs to be VR input and choose a power up based on it once popup menu is ready
-			UsePowerUp (GameManager.instance.CurrentPowerUps [0]);
-		}
+//		if (Input.GetKeyDown (KeyCode.A) && PowerUpPhase () && GameManager.instance.CurrentPowerUps.Count > 0) { //Needs to be VR input and choose a power up based on it once popup menu is ready
+//			UsePowerUp (GameManager.instance.CurrentPowerUps [0]);
+//		}
 	}
 
 	/// <summary>
@@ -421,7 +421,10 @@ public class CombatManager : MonoBehaviour
 			h = RaycastHexagon();
 			if (h == null)
 				return;
-			currentAbility.SourceHexagon = h;
+//			currentAbility.SourceHexagon = h;
+			CurrentlySelectedUnit.AbilityActivator.AbilityInProgress.targetHexagon = h;
+			CurrentlySelectedUnit.AbilityActivator.AbilityInProgress.SourceHexagon = CurrentlySelectedUnit.CurrentlyOccupiedHexagon;
+
 		}
 
 		if (!TemplateManager.instance.TemplateInUse) {
@@ -631,10 +634,10 @@ public class CombatManager : MonoBehaviour
 		newUnit.MovementDistance = 4;
 		newUnit.Health = 150;
 		newUnit.UnitClass = PlayerControlledBoardUnit.PlayerClass.Warrior;
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/ElectromagneticField")) as AbilityDescription);
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/ConcussiveBlast")) as AbilityDescription);
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/StaticShell")) as AbilityDescription);
-		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Support/PulseForce")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Warrior/SonicStrike")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Warrior/Debilitate")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Warrior/StaticRush")) as AbilityDescription);
+		newUnit.ListOfAbilities.Add (Instantiate (Resources.Load<AbilityDescription> ("Abilities/Warrior/TectonicSlam")) as AbilityDescription);
 		newUnit.currentLevel = 1;
 		newUnit.UnitTalentTree = Instantiate (Resources.Load<TalentTree> ("TalentTrees/WarriorTree")) as TalentTree;
 		CurrentParty.Add (newUnit);

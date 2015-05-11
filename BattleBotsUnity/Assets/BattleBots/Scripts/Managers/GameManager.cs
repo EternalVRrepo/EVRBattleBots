@@ -85,9 +85,9 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	void Update ()
 	{
-		if ((Input.GetKeyDown (KeyCode.Y) || Input.GetAxis ("DebugDown") > 0) && gameState != GameState.Combat) {
-			LevelTransition.LoadLevel("GameMap_08");
-		} 
+//		if ((Input.GetKeyDown (KeyCode.Y) || Input.GetAxis ("DebugDown") > 0) && gameState != GameState.Combat) {
+//			LevelTransition.LoadLevel("GameMap_08");
+//		} 
 		
 		if (InputHandler != null) 
 			InputHandler();
@@ -172,7 +172,10 @@ public class GameManager : MonoBehaviour
 				    || openWorldCharacter.transform.position.y < -25 || openWorldCharacter.transform.position.y > 55
 				    || openWorldCharacter.transform.position.z < -55 || openWorldCharacter.transform.position.z > 55) {
 
-					openWorldCharacter.transform.position = new Vector3(0, -1.6f, -20);
+					Transform spawn = GameObject.Find("SpawnPoint").transform;
+					if (spawn != null)
+						openWorldCharacter.transform.position = spawn.position;
+					else openWorldCharacter.transform.position = new Vector3(0, 10, 0);
 				}
 			}
 			yield return new WaitForSeconds(1);
@@ -218,6 +221,7 @@ public class GameManager : MonoBehaviour
 		}
 		else {
 			openWorldCharacter.transform.position = GameObject.Find("SpawnPoint").transform.position;
+			OpenWorldPosition = openWorldCharacter.transform.position;
 		}
 		StartCoroutine("OutOfBoundsCheck");
 
@@ -238,9 +242,8 @@ public class GameManager : MonoBehaviour
 					CurrentParty.Add(p);
 				}
 
-				Debug.Log (lastInfectionName);
 				if (lastInfectionName == "Virus0") {
-					LevelTransition.QueueLoadLevel("GameMap_08");
+					LevelTransition.QueueLoadLevel("CustomizationMenu");
 				}
 			}
 		}
@@ -261,6 +264,11 @@ public class GameManager : MonoBehaviour
 		SetGameState(GameState.CharacterCustomization);
 		CharacterCustomizerManager cm = GameObject.Find ("CharacterCustomizerManager").GetComponent<CharacterCustomizerManager> ();
 		cm.Initialize (CurrentParty);
+
+		if (lastInfectionName == "Virus0") {
+			lastOpenWorldLevel = "GameMap_08";
+			OpenWorldPosition = new Vector3(-3.25f, 1.8f, -9f);
+		}
 	}
 
 	/// <summary>
@@ -307,7 +315,7 @@ public class GameManager : MonoBehaviour
 		finishedCombat = true;
 		victory = win;
 
-		LevelTransition.LoadLevel("OpenWorld");
+		LevelTransition.LoadLevel(lastOpenWorldLevel);
 	}
 
 	/// <summary>
@@ -315,7 +323,7 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	public void FinishCustomizationMenu ()
 	{
-		LevelTransition.LoadLevel("OpenWorld");
+		LevelTransition.LoadLevel(lastOpenWorldLevel);
 	}
 #endregion
 
