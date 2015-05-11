@@ -56,16 +56,24 @@ public abstract class BoardUnit : MonoBehaviour {
 		}
 	}
 	public Animator animator;
+	public List<GameObject> effects = new List<GameObject>();
 
 	[SerializeField]
 	private Hexagon currentlyOccupiedHexagon;
 	protected bool stunned;
+	protected GameObject stunEffect;
 	protected bool rooted;
+	protected GameObject rootEffect;
 	protected bool silenced;
+	protected GameObject silenceEffect;
 	protected bool hasUnstableStatic;
+	protected GameObject unstableStaticEffect;
 	protected bool hasStaticGrip;
+	protected GameObject staticGripEffect;
 	protected bool enfeebled;
+	protected GameObject enfeebleEffect;
 	protected bool hasStaticShell;
+	protected GameObject staticShellEffect;
 	protected Hexagon staticGripStart;
 	protected int currentAmountSlowed;
 
@@ -79,6 +87,10 @@ public abstract class BoardUnit : MonoBehaviour {
 		healthBar.SetUnit(this);
 		animator = transform.GetComponentInChildren<Animator> ();
 		animator.SetBool("Idle", true);
+
+		foreach (AbilityDescription ability in AbilityActivator.ListOfAbilities) {
+			ability.currentCooldown = 0;
+		}
 	}
 
 	/// <summary>
@@ -188,6 +200,12 @@ public abstract class BoardUnit : MonoBehaviour {
 	}
 
 	protected void ApplyEnfeeble() {
+		if (enfeebleEffect == null)
+			enfeebleEffect = Resources.Load<GameObject>("Effects/Enfeeble");
+		if (enfeebleEffect != null) {
+			GameObject e = Instantiate (enfeebleEffect) as GameObject;
+			e.transform.parent = transform;
+		}
 		enfeebled = true;
 	}
 
@@ -203,6 +221,12 @@ public abstract class BoardUnit : MonoBehaviour {
 	/// Applies the unstable static.
 	/// </summary>
 	protected void ApplyUnstableStatic() {
+		if (unstableStaticEffect == null)
+			unstableStaticEffect = Resources.Load<GameObject>("Effects/UnstableStatic");
+		if (unstableStaticEffect != null) {
+			GameObject e = Instantiate (unstableStaticEffect) as GameObject;
+			e.transform.parent = transform;
+		}
 		hasUnstableStatic = true;
 	}
 
@@ -210,6 +234,12 @@ public abstract class BoardUnit : MonoBehaviour {
 	/// Applies the root.
 	/// </summary>
 	protected void ApplyRoot() {
+		if (rootEffect == null)
+			rootEffect = Resources.Load<GameObject>("Effects/Root");
+		if (rootEffect != null) {
+			GameObject e = Instantiate (rootEffect) as GameObject;
+			e.transform.parent = transform;
+		}
 		rooted = true;
 	}
 
@@ -217,6 +247,12 @@ public abstract class BoardUnit : MonoBehaviour {
 	/// Applies the silence.
 	/// </summary>
 	protected void ApplySilence() {
+		if (silenceEffect == null)
+			silenceEffect = Resources.Load<GameObject>("Effects/Silence");
+		if (silenceEffect != null) {
+			GameObject e = Instantiate (silenceEffect) as GameObject;
+			e.transform.parent = transform;
+		}
 		silenced = true;
 	}
 
@@ -275,7 +311,12 @@ public abstract class BoardUnit : MonoBehaviour {
 	/// Applies stun.
 	/// </summary>
 	protected void ApplyStun() {
-
+		if (stunEffect == null)
+			stunEffect = Resources.Load<GameObject>("Effects/Stun");
+		if (stunEffect != null) {
+			GameObject e = Instantiate (stunEffect) as GameObject;
+			e.transform.parent = transform;
+		}
 		stunned = true;
 	}
 
@@ -670,6 +711,12 @@ public abstract class BoardUnit : MonoBehaviour {
 	/// </summary>
 	void HandleStaticGrip(DebuffEffect e) {
 		if (!hasStaticGrip) {
+			if (staticGripEffect == null)
+				staticGripEffect = Resources.Load<GameObject>("Effects/StaticGrip");
+			if (staticGripEffect != null) {
+				GameObject ef = Instantiate (staticGripEffect) as GameObject;
+				ef.transform.parent = transform;
+			}
 			staticGripStart = CurrentlyOccupiedHexagon;
 			hasStaticGrip = true;
 		}

@@ -61,8 +61,7 @@ public class CombatManager : MonoBehaviour
 	protected int HexTargetMask;
 	protected Hexagon CurrentlySelectedHexagon;
 	[SerializeField]
-	protected CombatAIManager
-		AIManager;
+	protected CombatAIManager AIManager;
 	private delegate void CurrentPhaseState ();
 	private CurrentPhaseState currentPhaseStateMethod;
 	private int currentMoveDistance;
