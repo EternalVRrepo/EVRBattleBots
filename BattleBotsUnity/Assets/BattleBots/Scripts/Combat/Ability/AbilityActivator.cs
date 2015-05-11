@@ -60,7 +60,11 @@ public class AbilityActivator : MonoBehaviour {
 	/// Animations and such for ability go here
 	/// </summary>
 	public void ChannelAbility() {
-		AbilityInProgress.currentCooldown = AbilityInProgress.Cooldown;
+		foreach (AbilityDescription a in ListOfAbilities) {
+			if (AbilityInProgress.DisplayName == a.DisplayName) {
+				a.currentCooldown = a.Cooldown;
+			}
+		}
 		BoardManager.instance.FinishAbility();
 		StartCoroutine ("CastAbility", TemplateManager.instance.FinishAbility ());
 	}
@@ -133,8 +137,9 @@ public class AbilityActivator : MonoBehaviour {
 
 	public void EndTurn() {
 		foreach (AbilityDescription a in ListOfAbilities) {
-			if (a.currentCooldown > 0)
+			if (a.currentCooldown > 0) {
 				a.currentCooldown--;
+			}
 		}
 	}
 	
@@ -174,14 +179,21 @@ public class AbilityActivator : MonoBehaviour {
 				while (i < path.Count-1) { //Count-1 because the path leads ontop of another unit, so stop 1 short
 					curr = path[i];
 					if (!collision && i == path.Count-2) { //If there was no collision, push them forwards
+						path[path.Count-2].OccupiedUnit.transform.position = path[path.Count-1].transform.position;
 						path[path.Count-2].OccupiedUnit.IssueMovement (path[path.Count-1]);
 						mods.Add (new AbilityModifier(AbilityModifier.Modifier.RemoveStunEffect, 1)); //If we are pushing them we dont stun
 					}
+					GetComponent<Animator>().SetBool("Walking", true);
 					GetComponent<BoardUnit>().IssueMovement (curr);
-					yield return new WaitForSeconds(0.33f);
+					transform.LookAt(new Vector3(curr.transform.position.x, transform.position.y, curr.transform.position.z));
+					while (transform.position != curr.transform.position) {
+						transform.position = Vector3.MoveTowards(transform.position, curr.transform.position, 4.6f*Time.deltaTime);
+						yield return null;
+					}
 					i++;
 				}
 				u.ReceiveAbilityHit(AbilityInProgress, mods);
+				GetComponent<Animator>().SetBool("Walking", false);
 
 				break;
 			}

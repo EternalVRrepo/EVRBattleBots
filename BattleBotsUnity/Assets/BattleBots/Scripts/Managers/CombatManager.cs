@@ -435,7 +435,6 @@ public class CombatManager : MonoBehaviour
 	/// Switchs the ability selected
 	/// </summary>
 	protected void SwitchAbility(int i) {
-
 		if (currentlySelectedUnit.AbilityActivator.AbilityInProgress == currentlySelectedUnit.AbilityActivator.ListOfAbilities[i])
 			return;
 
