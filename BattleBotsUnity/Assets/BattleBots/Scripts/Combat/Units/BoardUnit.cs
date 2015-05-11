@@ -56,10 +56,10 @@ public abstract class BoardUnit : MonoBehaviour {
 		}
 	}
 	public Animator animator;
-	public List<GameObject> effects = new List<GameObject>();
 
 	[SerializeField]
 	private Hexagon currentlyOccupiedHexagon;
+	protected GameObject slowEffect;
 	protected bool stunned;
 	protected GameObject stunEffect;
 	protected bool rooted;
@@ -91,6 +91,36 @@ public abstract class BoardUnit : MonoBehaviour {
 		foreach (AbilityDescription ability in AbilityActivator.ListOfAbilities) {
 			ability.currentCooldown = 0;
 		}
+	}
+
+	void Start() {
+		stunEffect = Instantiate(Resources.Load<GameObject>("Abilities/Effects/General/Stun")) as GameObject;
+		stunEffect.transform.parent = transform;
+		stunEffect.transform.localPosition = Vector3.zero;
+
+		rootEffect = Instantiate(Resources.Load<GameObject>("Abilities/Effects/General/Root")) as GameObject;
+		rootEffect.transform.parent = transform;
+		rootEffect.transform.localPosition = Vector3.zero;
+		
+		silenceEffect = Instantiate(Resources.Load<GameObject>("Abilities/Effects/General/Silence")) as GameObject;
+		silenceEffect.transform.parent = transform;
+		silenceEffect.transform.localPosition = Vector3.zero;
+		
+		slowEffect = Instantiate(Resources.Load<GameObject>("Abilities/Effects/General/Slow")) as GameObject;
+		slowEffect.transform.parent = transform;
+		slowEffect.transform.localPosition = Vector3.zero;
+		
+		unstableStaticEffect = Instantiate(Resources.Load<GameObject>("Abilities/Effects/General/UnstableStatic")) as GameObject;
+		unstableStaticEffect.transform.parent = transform;
+		unstableStaticEffect.transform.localPosition = Vector3.zero;
+		
+		enfeebleEffect = Instantiate(Resources.Load<GameObject>("Abilities/Effects/General/Enfeeble")) as GameObject;
+		enfeebleEffect.transform.parent = transform;
+		enfeebleEffect.transform.localPosition = Vector3.zero;
+        
+		staticShellEffect = Instantiate(Resources.Load<GameObject>("Abilities/Effects/General/StaticShell")) as GameObject;
+		staticShellEffect.transform.parent = transform;
+		staticShellEffect.transform.localPosition = Vector3.zero;	
 	}
 
 	/// <summary>
@@ -200,12 +230,7 @@ public abstract class BoardUnit : MonoBehaviour {
 	}
 
 	protected void ApplyEnfeeble() {
-		if (enfeebleEffect == null)
-			enfeebleEffect = Resources.Load<GameObject>("Effects/Enfeeble");
-		if (enfeebleEffect != null) {
-			GameObject e = Instantiate (enfeebleEffect) as GameObject;
-			e.transform.parent = transform;
-		}
+		enfeebleEffect.SetActive (true);
 		enfeebled = true;
 	}
 
@@ -221,12 +246,7 @@ public abstract class BoardUnit : MonoBehaviour {
 	/// Applies the unstable static.
 	/// </summary>
 	protected void ApplyUnstableStatic() {
-		if (unstableStaticEffect == null)
-			unstableStaticEffect = Resources.Load<GameObject>("Effects/UnstableStatic");
-		if (unstableStaticEffect != null) {
-			GameObject e = Instantiate (unstableStaticEffect) as GameObject;
-			e.transform.parent = transform;
-		}
+		unstableStaticEffect.SetActive(true);
 		hasUnstableStatic = true;
 	}
 
@@ -234,12 +254,7 @@ public abstract class BoardUnit : MonoBehaviour {
 	/// Applies the root.
 	/// </summary>
 	protected void ApplyRoot() {
-		if (rootEffect == null)
-			rootEffect = Resources.Load<GameObject>("Effects/Root");
-		if (rootEffect != null) {
-			GameObject e = Instantiate (rootEffect) as GameObject;
-			e.transform.parent = transform;
-		}
+		rootEffect.SetActive(true);
 		rooted = true;
 	}
 
@@ -247,12 +262,7 @@ public abstract class BoardUnit : MonoBehaviour {
 	/// Applies the silence.
 	/// </summary>
 	protected void ApplySilence() {
-		if (silenceEffect == null)
-			silenceEffect = Resources.Load<GameObject>("Effects/Silence");
-		if (silenceEffect != null) {
-			GameObject e = Instantiate (silenceEffect) as GameObject;
-			e.transform.parent = transform;
-		}
+		silenceEffect.SetActive(true);
 		silenced = true;
 	}
 
@@ -299,6 +309,7 @@ public abstract class BoardUnit : MonoBehaviour {
 	/// Applies the slow.
 	/// </summary>
 	protected void ApplySlow(float percent) {
+		slowEffect.SetActive(true);
 		int newMoveDistance = Mathf.FloorToInt (MoveDistance*(1-percent)); //3 move speed at 30% slow gives 2
 		if (MoveDistance - newMoveDistance > currentAmountSlowed) { //3 - 2 = slowed by 1, if > currentSlow of 0, apply slow
 			currentAmountSlowed = MoveDistance - newMoveDistance; //Current slow amount = 3 - 2 = slowed by 1
@@ -311,12 +322,7 @@ public abstract class BoardUnit : MonoBehaviour {
 	/// Applies stun.
 	/// </summary>
 	protected void ApplyStun() {
-		if (stunEffect == null)
-			stunEffect = Resources.Load<GameObject>("Effects/Stun");
-		if (stunEffect != null) {
-			GameObject e = Instantiate (stunEffect) as GameObject;
-			e.transform.parent = transform;
-		}
+		stunEffect.SetActive (true);
 		stunned = true;
 	}
 
@@ -332,6 +338,7 @@ public abstract class BoardUnit : MonoBehaviour {
 			}
 		}
 
+		slowEffect.SetActive (false);
 		remainingMoveDistance += currentAmountSlowed;
 		currentAmountSlowed = 0;
 		MovementIsDirty = true;
@@ -348,6 +355,7 @@ public abstract class BoardUnit : MonoBehaviour {
 				i--;
 			}
 		}
+		stunEffect.SetActive (false);
 		stunned = false;
 	}
 
@@ -362,6 +370,7 @@ public abstract class BoardUnit : MonoBehaviour {
 				i--;
 			}
 		}
+		rootEffect.SetActive (false);
 		rooted = false;
 		MovementIsDirty = true;
 	}
@@ -377,6 +386,7 @@ public abstract class BoardUnit : MonoBehaviour {
 				i--;
 			}
 		}
+		silenceEffect.SetActive(false);
 		silenced = false;
 	}
 
@@ -391,6 +401,7 @@ public abstract class BoardUnit : MonoBehaviour {
 				i--;
 			}
 		}
+		unstableStaticEffect.SetActive(false);
 		hasUnstableStatic = false;
 	}
 
@@ -402,6 +413,7 @@ public abstract class BoardUnit : MonoBehaviour {
 				i--;
 			}
 		}
+		enfeebleEffect.SetActive(false);
 		enfeebled = false;
 	}
 
@@ -541,6 +553,7 @@ public abstract class BoardUnit : MonoBehaviour {
 				return;
 			}
 		}
+		enfeebleEffect.SetActive(enfeebled);
 	}
 
 	/// <summary>
@@ -554,6 +567,7 @@ public abstract class BoardUnit : MonoBehaviour {
 				return;
 			}
 		}
+		stunEffect.SetActive(stunned);
 	}
 
 	/// <summary>
@@ -567,6 +581,7 @@ public abstract class BoardUnit : MonoBehaviour {
 				return;
 			}
 		}
+		silenceEffect.SetActive(silenced);
 	}
 
 	/// <summary>
@@ -580,6 +595,7 @@ public abstract class BoardUnit : MonoBehaviour {
 				return;
 			}
 		}
+		unstableStaticEffect.SetActive(hasUnstableStatic);
 	}
 
 	protected void TryRemoveSlow() {
@@ -589,6 +605,7 @@ public abstract class BoardUnit : MonoBehaviour {
 				ApplySlow (e.SlowPercent);
 			}
 		}
+		slowEffect.SetActive(currentAmountSlowed > 0);
 	}
 
 	/// <summary>
@@ -597,11 +614,12 @@ public abstract class BoardUnit : MonoBehaviour {
 	protected void TryRemoveRoot() {
 		rooted = false;
 		foreach (DebuffEffect e in debuffs) {
-			if (e.DebuffType == DebuffEffect.Debuff.Slow) {
+			if (e.DebuffType == DebuffEffect.Debuff.Root) {
 				rooted = true;
 				return;
 			}
 		}
+		rootEffect.SetActive(rooted);
 	}
 
 	/// <summary>
@@ -711,12 +729,7 @@ public abstract class BoardUnit : MonoBehaviour {
 	/// </summary>
 	void HandleStaticGrip(DebuffEffect e) {
 		if (!hasStaticGrip) {
-			if (staticGripEffect == null)
-				staticGripEffect = Resources.Load<GameObject>("Effects/StaticGrip");
-			if (staticGripEffect != null) {
-				GameObject ef = Instantiate (staticGripEffect) as GameObject;
-				ef.transform.parent = transform;
-			}
+			staticGripEffect.SetActive (true);
 			staticGripStart = CurrentlyOccupiedHexagon;
 			hasStaticGrip = true;
 		}
@@ -727,6 +740,7 @@ public abstract class BoardUnit : MonoBehaviour {
 			Hexagon h = BoardManager.instance.StaticGripHex(CurrentlyOccupiedHexagon, staticGripStart);
 			if (h != null) 
 				IssueMovement (h);
+			staticGripEffect.SetActive(false);
 			staticGripStart = null;
 			hasStaticGrip = false;
 		}
@@ -734,10 +748,12 @@ public abstract class BoardUnit : MonoBehaviour {
 
 	void HandleStaticShell(BuffEffect e) {
 		if (!hasStaticShell) {
+			staticShellEffect.SetActive (true);
 			hasStaticShell = true;
 		}
 
 		if (e.Duration == 1) {
+			staticShellEffect.SetActive (false);
 			hasStaticShell = false;
 			AbilityActivator.ActivateStaticShell(e);
 		}
